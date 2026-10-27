@@ -4,7 +4,7 @@ Tags: password protection, maintenance mode, coming soon, access control, privac
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,7 +45,7 @@ VaultGate protects an entire WordPress installation while it is being built or k
 * Session duration and an optional "Keep me signed in".
 * Let logged-in users with a chosen capability (administrators, editors, authors or any logged-in user) bypass the gate. Administrators always bypass.
 * IP allowlist with IPv4, IPv6 and CIDR ranges.
-* Optional reverse-proxy header support (only enable it behind a trusted proxy).
+* Optional reverse-proxy header support, restricted to a list of trusted proxy addresses.
 * Path exclusions with `*` wildcards, resolved relative to the installation folder, for health checks or public webhooks.
 * Toggles for REST API, feeds, sitemaps, anonymous AJAX and XML-RPC.
 * Capped, anonymised activity log.
@@ -109,6 +109,10 @@ Yes. Excluded paths are matched relative to the installation folder, so `/robots
 
 Yes. Settings are per site. Network activation is supported; uninstall cleanup runs for each site that opted in.
 
+= Does it work behind a CDN or a reverse proxy? =
+
+Yes. Enable "Trust reverse-proxy headers" and list the proxy addresses under "Trusted proxies". Forwarded headers are only read when the direct peer is on that list, and the `X-Forwarded-For` chain is read from the right, so a visitor cannot invent an address to skip the gate or dodge the rate limiter. Left empty, only a loopback or private peer is trusted — the usual nginx or Docker setup — and behind a CDN every visitor is then seen as the CDN and shares one rate-limit bucket.
+
 = Which PHP versions are supported? =
 
 PHP 8.2 and newer, including PHP 8.3, 8.4 and 8.5.
@@ -122,6 +126,13 @@ It uses semantic HTML, a skip link, visible focus rings, a properly labelled pas
 Yes, it is empty by default. The gate is then a single quiet column: logo, title, password field and button.
 
 == Changelog ==
+
+= 1.1.3 =
+* Security: a spoofed X-Forwarded-For can no longer imitate an allowlisted address or dodge the rate limiter. Forwarded headers are ignored unless the direct peer is a trusted proxy, and the chain is read from the right.
+* Security: CF-Connecting-IP, True-Client-IP and X-Real-IP are no longer read, because a plain proxy passes them through untouched.
+* New "Trusted proxies" setting (IPs/CIDRs). Empty means only a loopback or private peer is trusted.
+* Security: `.` and `..` segments are resolved before the endpoint blocklist and the exclusion list are evaluated.
+* Security: PATH_INFO no longer unblocks a direct endpoint (`/wp-comments-post.php/<anything>`).
 
 = 1.1.2 =
 * The plugin folder is now `VaultGate/`.
@@ -159,6 +170,9 @@ Yes, it is empty by default. The gate is then a single quiet column: logo, title
 * WP-CLI commands and opt-in uninstall cleanup.
 
 == Upgrade Notice ==
+
+= 1.1.3 =
+Security release: forwarded headers are only trusted from a configured proxy, and path normalisation no longer has a traversal gap. Update now if "Trust reverse-proxy headers" is enabled.
 
 = 1.1.2 =
 The plugin folder is renamed VaultGate/. One credit line instead of two, and an eye to show the password. Existing settings are kept.

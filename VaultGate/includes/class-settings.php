@@ -53,6 +53,7 @@ final class Settings {
 			'bypass_capability'  => 'manage_options',
 			'ip_allowlist'       => '',
 			'trust_proxy'        => false,
+			'trusted_proxies'    => '',
 			'protect_rest'       => true,
 			'protect_feeds'      => true,
 			'protect_sitemaps'   => true,
@@ -468,8 +469,9 @@ final class Settings {
 			? $capability
 			: $defaults['bypass_capability'];
 
-		$clean['ip_allowlist']  = self::sanitize_ip_list( self::scalar( $input['ip_allowlist'] ?? '' ) );
-		$clean['exclude_paths'] = self::sanitize_path_list( self::scalar( $input['exclude_paths'] ?? '' ) );
+		$clean['ip_allowlist']    = self::sanitize_ip_list( self::scalar( $input['ip_allowlist'] ?? '' ) );
+		$clean['trusted_proxies'] = self::sanitize_ip_list( self::scalar( $input['trusted_proxies'] ?? '' ) );
+		$clean['exclude_paths']   = self::sanitize_path_list( self::scalar( $input['exclude_paths'] ?? '' ) );
 
 		$clean['max_attempts']    = min( 50, max( 1, absint( self::scalar( $input['max_attempts'] ?? '' ) ) ?: (int) $defaults['max_attempts'] ) );
 		$clean['lockout_minutes'] = min( 1440, max( 1, absint( self::scalar( $input['lockout_minutes'] ?? '' ) ) ?: (int) $defaults['lockout_minutes'] ) );

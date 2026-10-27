@@ -644,7 +644,16 @@ final class Admin {
 						'trust_proxy',
 						__( 'Trust reverse-proxy headers', 'vaultgate' ),
 						(bool) $settings['trust_proxy'],
-						__( 'Only enable this behind a trusted proxy or CDN. It reads X-Forwarded-For and X-Forwarded-Proto; enabling it on a directly exposed server lets visitors spoof their IP.', 'vaultgate' )
+						__( 'Only enable this when a proxy sits in front of WordPress. Headers are ignored unless the direct peer is listed below, or is a loopback or private address.', 'vaultgate' )
+					);
+
+					$this->field_textarea(
+						'trusted_proxies',
+						__( 'Trusted proxies', 'vaultgate' ),
+						(string) $settings['trusted_proxies'],
+						__( 'One IP or CIDR range per line: the addresses of your load balancer or CDN. Leave empty to accept only a loopback or private peer (nginx or Docker on the same machine). Anything else is ignored, which is what stops a visitor from faking an allowed address.', 'vaultgate' ),
+						"10.0.0.0/8\n172.16.0.1",
+						4
 					);
 
 					$this->field_textarea(

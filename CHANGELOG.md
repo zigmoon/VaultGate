@@ -3,6 +3,20 @@
 All notable changes to VaultGate are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.3] — 28 October 2026
+
+### Security
+
+- **Spoofed `X-Forwarded-For` no longer bypasses the gate.** With "trust reverse-proxy headers" enabled, the left-most forwarded address was used — the one an attacker can prepend. Forwarded headers are now ignored unless the direct peer is a configured trusted proxy, and the chain is read from the right. A visitor can no longer imitate an allowlisted address or dodge the rate limiter by inventing one.
+- **New setting: trusted proxies.** A list of IPs/CIDRs for your load balancer or CDN. Empty means only a loopback or private peer is trusted, which covers nginx or Docker on the same machine.
+- **`CF-Connecting-IP`, `True-Client-IP` and `X-Real-IP` are no longer read.** A plain proxy passes those through untouched, so they were only another way to choose your own address.
+- **Path traversal in the request path.** `.` and `..` segments are now resolved before the endpoint blocklist and the exclusion list are evaluated, so `/wp-comments-post.php/x/..` can no longer reach a blocked script, and an exclusion can no longer swallow a different path.
+- **PATH_INFO no longer unblocks a direct endpoint.** `/wp-comments-post.php/<anything>` is routed to the script by Apache and nginx, so it stays blocked, like `/wp-admin/admin-post.php/<anything>`.
+
+### Changed
+
+- The endpoint blocklist compares normalised paths, with or without a trailing slash.
+
 ## [1.1.2] — 27 October 2026
 
 ### Changed
@@ -92,7 +106,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - Opt-in, multisite-aware uninstall cleanup.
 - Reproducible tooling: translations, images and archive with SHA-256 verification.
 
-[1.1.2]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.2
+[1.1.3]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.3
 [1.1.1]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.1
 [1.1.0]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.0
 [1.0.0]: https://github.com/zigmoon/VaultGate/releases/tag/v1.0.0

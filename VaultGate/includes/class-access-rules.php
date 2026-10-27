@@ -17,44 +17,140 @@ final class AccessRules {
 	/**
 	 * Resolves the visitor IP address.
 	 *
-	 * Proxy headers are only read when the administrator explicitly enabled
-	 * "trust proxy", because they are client-controlled otherwise.
+	 * Forwarded headers are only read when the administrator enabled
+	 * "trust proxy" **and** the direct peer (`REMOTE_ADDR`) is a configured
+	 * trusted proxy. The `X-Forwarded-For` chain is then walked from the right
+	 * — the hop closest to us — and the first address that is not itself a
+	 * trusted proxy wins, because every proxy appends to that header and an
+	 * attacker can prepend anything.
 	 *
-	 * @param bool $trust_proxy Whether forwarded headers may be trusted.
+	 * @param bool   $trust_proxy     Whether forwarded headers may be trusted.
+	 * @param string $trusted_proxies Newline-separated IPs/CIDRs of the proxies.
 	 */
-	public static function client_ip( bool $trust_proxy ): string {
-		$candidates = array();
+	public static function client_ip( bool $trust_proxy, string $trusted_proxies = '' ): string {
+		$remote = isset( $_SERVER['REMOTE_ADDR'] ) && is_string( $_SERVER['REMOTE_ADDR'] )
+			? self::canonical( trim( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) )
+			: '';
 
-		if ( $trust_proxy ) {
-			foreach ( array( 'HTTP_X_FORWARDED_FOR', 'HTTP_X_REAL_IP', 'HTTP_CF_CONNECTING_IP' ) as $header ) {
-				if ( empty( $_SERVER[ $header ] ) || ! is_string( $_SERVER[ $header ] ) ) {
-					continue;
-				}
+		if ( ! $trust_proxy || '' === $remote ) {
+			return $remote;
+		}
 
-				foreach ( explode( ',', wp_unslash( $_SERVER[ $header ] ) ) as $candidate ) {
-					$candidate = trim( $candidate, " \t\n\r\0\x0B\"" );
-					if ( filter_var( $candidate, FILTER_VALIDATE_IP ) ) {
-						$candidates[] = $candidate;
-						break;
-					}
+		// Fail closed: an untrusted peer cannot speak for the visitor.
+		if ( ! self::is_trusted_proxy( $remote, $trusted_proxies ) ) {
+			return $remote;
+		}
+
+		// Only `X-Forwarded-For` is read. Single-value headers such as
+		// `CF-Connecting-IP`, `True-Client-IP` or `X-Real-IP` are deliberately
+		// ignored: a plain nginx/Docker/Caddy proxy passes whatever the visitor
+		// sent for headers it does not itself set, so they cannot be trusted.
+
+		$chain = array();
+
+		if ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) && is_string( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+			foreach ( explode( ',', wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) as $hop ) {
+				$hop = self::canonical( trim( $hop, " \t\n\r\0\x0B\"" ) );
+
+				if ( '' !== $hop ) {
+					$chain[] = $hop;
 				}
 			}
 		}
 
-		if ( ! empty( $_SERVER['REMOTE_ADDR'] ) && is_string( $_SERVER['REMOTE_ADDR'] ) ) {
-			$candidates[] = trim( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
-		}
-
-		foreach ( $candidates as $candidate ) {
-			if ( filter_var( $candidate, FILTER_VALIDATE_IP ) ) {
-				$binary    = inet_pton( $candidate );
-				$canonical = false !== $binary ? inet_ntop( $binary ) : false;
-
-				return false !== $canonical ? $canonical : $candidate;
+		foreach ( array_reverse( $chain ) as $hop ) {
+			if ( ! self::is_trusted_proxy( $hop, $trusted_proxies ) ) {
+				return $hop;
 			}
 		}
 
-		return '';
+		// The whole chain is made of trusted proxies: the nearest peer is the
+		// best answer we have.
+		return $remote;
+	}
+
+	/**
+	 * Canonical form of an IP address, or an empty string when it is not one.
+	 *
+	 * @param string $candidate Raw candidate.
+	 */
+	private static function canonical( string $candidate ): string {
+		if ( '' === $candidate || ! filter_var( $candidate, FILTER_VALIDATE_IP ) ) {
+			return '';
+		}
+
+		$binary = inet_pton( $candidate );
+
+		if ( false === $binary ) {
+			return '';
+		}
+
+		$canonical = inet_ntop( $binary );
+
+		return false !== $canonical ? $canonical : '';
+	}
+
+	/**
+	 * Whether an address is one of the configured proxies.
+	 *
+	 * With no list configured, a loopback or private peer is accepted: that is
+	 * the usual nginx/Docker reverse proxy on the same machine, and a remote
+	 * visitor cannot forge `REMOTE_ADDR`.
+	 *
+	 * @param string $ip              Direct peer.
+	 * @param string $trusted_proxies Newline-separated IPs/CIDRs.
+	 */
+	public static function is_trusted_proxy( string $ip, string $trusted_proxies ): bool {
+		if ( '' === trim( $trusted_proxies ) ) {
+			return self::is_private_ip( $ip );
+		}
+
+		return self::ip_matches( $ip, $trusted_proxies );
+	}
+
+	/**
+	 * Whether an address is loopback, link-local or private.
+	 *
+	 * @param string $ip IP address.
+	 */
+	public static function is_private_ip( string $ip ): bool {
+		if ( '' === $ip ) {
+			return false;
+		}
+
+		if ( ! filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Whether a path targets one of the blocked direct endpoints.
+	 *
+	 * A suffix counts as a hit — `/wp-comments-post.php/x` is routed to
+	 * `wp-comments-post.php` by Apache and nginx (PATH_INFO), so the script
+	 * must stay blocked whatever follows its name.
+	 *
+	 * @param string             $path      Normalised request path.
+	 * @param array<int, string> $endpoints Blocked endpoints.
+	 */
+	public static function is_blocked_endpoint( string $path, array $endpoints ): bool {
+		$haystack = '/' . trim( $path, '/' );
+
+		foreach ( $endpoints as $endpoint ) {
+			$endpoint = '/' . trim( (string) $endpoint, '/' );
+
+			if ( '' === $endpoint || '/' === $endpoint ) {
+				continue;
+			}
+
+			if ( $haystack === $endpoint || str_ends_with( $haystack, $endpoint ) || str_contains( $haystack, $endpoint . '/' ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -140,6 +236,12 @@ final class AccessRules {
 	/**
 	 * Path of the current request, decoded and normalised.
 	 *
+	 * Dot segments are resolved here because the web server resolves them
+	 * before routing, while `REQUEST_URI` keeps the raw target: comparing an
+	 * unnormalised path against the endpoint blocklist or the exclusion list
+	 * would let `/wp-comments-post.php/x/..` reach a blocked script, or let an
+	 * excluded prefix swallow a different path.
+	 *
 	 * @param string|null $uri Optional URI instead of the current request.
 	 */
 	public static function request_path( ?string $uri = null ): string {
@@ -159,7 +261,40 @@ final class AccessRules {
 		$path = preg_replace( '#/+#', '/', $path );
 		$path = is_string( $path ) ? $path : '/';
 
-		return '/' . ltrim( $path, '/' );
+		return self::collapse_dot_segments( '/' . ltrim( $path, '/' ) );
+	}
+
+	/**
+	 * Resolves `.` and `..` the way the web server does before routing.
+	 *
+	 * @param string $path Absolute path.
+	 */
+	public static function collapse_dot_segments( string $path ): string {
+		$last     = substr( $path, (int) strrpos( $path, '/' ) + 1 );
+		$trailing = '' === $last || '..' === $last;
+		$segments = explode( '/', $path );
+		$resolved = array();
+
+		foreach ( $segments as $segment ) {
+			if ( '' === $segment || '.' === $segment ) {
+				continue;
+			}
+
+			if ( '..' === $segment ) {
+				array_pop( $resolved );
+				continue;
+			}
+
+			$resolved[] = $segment;
+		}
+
+		$normalised = '/' . implode( '/', $resolved );
+
+		if ( $trailing && '/' !== $normalised ) {
+			$normalised .= '/';
+		}
+
+		return $normalised;
 	}
 
 	/**

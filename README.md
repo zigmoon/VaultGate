@@ -20,8 +20,8 @@
 <p align="center">
   <img alt="WordPress 6.5 to 7.1" src="https://img.shields.io/badge/WordPress-6.5%20%E2%86%92%207.1-0b0d10?style=flat-square">
   <img alt="PHP 8.2 to 8.5" src="https://img.shields.io/badge/PHP-8.2%20%E2%86%92%208.5-0b0d10?style=flat-square">
-  <img alt="Version 1.1.2" src="https://img.shields.io/badge/version-1.1.2-0a66ff?style=flat-square">
-  <img alt="184 assertions" src="https://img.shields.io/badge/tests-184%20assertions-0b0d10?style=flat-square">
+  <img alt="Version 1.1.3" src="https://img.shields.io/badge/version-1.1.3-0a66ff?style=flat-square">
+  <img alt="213 assertions" src="https://img.shields.io/badge/tests-213%20assertions-0b0d10?style=flat-square">
   <img alt="Licence GPL-2.0-or-later" src="https://img.shields.io/badge/licence-GPL--2.0--or--later-0b0d10?style=flat-square">
 </p>
 
@@ -55,14 +55,16 @@ One column, centred from 320 px up. It works without JavaScript; the eye that re
 - **Revocation** — changing the password, toggling protection or pressing "Sign out every visitor" bumps the session version: every issued cookie dies immediately.
 - **Cookie attributes** — `HttpOnly`, `SameSite=Lax`, `Secure` on HTTPS (or behind a trusted proxy), WordPress path and domain.
 - **Brute force** — sliding window per visitor, keyed by an HMAC of the address; escalating lock-out with a live countdown.
+- **Real visitor address** — forwarded headers are ignored unless the direct peer is one of your configured proxies. When it is, the `X-Forwarded-For` chain is read from the right, so a spoofed entry cannot pass for the visitor or dodge the rate limit.
 - **Form** — expiring signed token, hidden honeypot, one generic error message, `303` redirect after POST so a refresh cannot replay it.
+- **Direct endpoints** — `wp-comments-post.php`, `wp-trackback.php`, `wp-signup.php`, `wp-activate.php`, `wp-mail.php` and `wp-admin/admin-post.php` are blocked before WordPress runs, including behind PATH_INFO or a dot-segment path.
 - **Headers** — `no-store`, `noindex, nofollow, noarchive`, `X-Frame-Options: DENY`, `nosniff`, `Referrer-Policy: no-referrer`, restrictive `Permissions-Policy`, and a Content-Security-Policy with a per-request nonce and no `unsafe-inline`.
 - **Admin** — `manage_options`, a nonce on every action, server-side validation, escaped output everywhere, `wp_safe_redirect()` for every redirect.
 - **Least data** — one option array, one hash, one small log with anonymised IP addresses.
 
 ## Install
 
-1. Download `VaultGate-1.1.2.zip` from [Releases](https://github.com/zigmoon/VaultGate/releases/latest).
+1. Download `VaultGate-1.1.3.zip` from [Releases](https://github.com/zigmoon/VaultGate/releases/latest).
 2. **Plugins → Add New → Upload Plugin**, choose the ZIP, install, activate.
 3. **Settings → VaultGate**: set the password, then turn protection on.
 
@@ -94,12 +96,19 @@ The folder must be named `VaultGate`. WordPress 6.5+ and PHP 8.2+ — nothing el
 
 - **Static files.** `wp-content/uploads/...` is served by the web server and never reaches WordPress. Use server authentication for sensitive files.
 - **Page cache.** The gate sends `no-store` and checks the cookie on every request; exclude the site from an external full-page cache while it is locked.
+- **CDN address.** Behind a CDN or load balancer, list its addresses under **Trusted proxies**. Left empty, only a loopback or private peer is trusted, so every visitor is seen as the CDN and shares one rate-limit bucket.
 - **`wp-login.php` stays open.** It is the way back in: administrator sessions always bypass the gate.
 - **One shared password.** Not a user or role manager.
 
 ## Removing it
 
 Deactivating makes the site public again and revokes every issued cookie. Deleting the plugin removes its settings, hash and log — **on by default** — so nothing is left behind. If you ever get stuck: `define( 'VAULTGATE_DISABLED', true );` in `wp-config.php`, or `wp vaultgate disable`.
+
+## Quality
+
+- **Latest WordPress, latest PHP.** WordPress 6.5 → 7.1, PHP 8.2 → 8.5, no deprecated call, no bundled library. Translations load on `init`, as WordPress 6.7+ requires.
+- **213 assertions.** Two suites on PHP 8.3 and 8.5, with no WordPress installation: `174 passed, 0 failed` and `39 passed, 0 failed`.
+- **Checked on a real install.** Every surface probed on WordPress 7.1.3 / PHP 8.3: front, posts, feeds, sitemaps, REST, AJAX, XML-RPC, `robots.txt`, `wp-login.php`, admin, activation and deletion.
 
 ## Development
 
@@ -110,7 +119,7 @@ php tools/build-translations.php  # .pot + fr_FR + es_ES, compiled and verified
 pwsh -File tools/build-zip.ps1    # dist/VaultGate-<version>.zip, hash-verified
 ```
 
-Expected output: `145 passed, 0 failed` and `39 passed, 0 failed`. The suites use a small set of WordPress stubs (`tests/bootstrap.php`): no database, no web server, no WordPress installation needed.
+Expected output: `174 passed, 0 failed` and `39 passed, 0 failed`. The suites use a small set of WordPress stubs (`tests/bootstrap.php`): no database, no web server, no WordPress installation needed.
 
 ## Credits
 

@@ -267,17 +267,83 @@ vg_assert( AccessRules::path_matches( AccessRules::strip_base( '/blog/robots.txt
 vg_same( '/foo bar/', AccessRules::request_path( '/foo%20bar/?x=1' ), 'request path is decoded' );
 vg_same( '/a/b', AccessRules::request_path( '/a//b' ), 'duplicate slashes are collapsed' );
 vg_same( '/', AccessRules::request_path( '' ), 'empty URI becomes root' );
+vg_same( '/wp-comments-post.php/', AccessRules::request_path( '/wp-comments-post.php/x/..' ), 'dot segments cannot hide a blocked endpoint' );
+vg_same( '/wp-admin/admin-post.php', AccessRules::request_path( '/wp-admin/./admin-post.php' ), 'single dot segments are resolved' );
+vg_same( '/etc', AccessRules::request_path( '/a/../../etc' ), 'parent segments clamp at the root' );
+vg_same( '/webhooks/a', AccessRules::request_path( '/webhooks/a/../a' ), 'parent segments resolve inside the path' );
+vg_same( '/webhooks/', AccessRules::request_path( '/webhooks/x/..' ), 'a cancelled segment leaves the parent folder as the server sees it' );
+vg_same( '/', AccessRules::request_path( '/../..' ), 'a path made of parent segments becomes root' );
+vg_same( '/', AccessRules::request_path( '/x/..' ), 'cancelling the only segment yields root' );
+vg_assert(
+	! AccessRules::path_matches( AccessRules::request_path( '/api/x/../../secret' ), '/api/*' ),
+	'an exclusion cannot be triggered by a dot segment'
+);
+vg_assert(
+	AccessRules::path_matches( AccessRules::request_path( '/webhooks/x/..' ), '/webhooks/*' ),
+	'the normalised path is what the exclusion sees'
+);
 
-$_SERVER['REMOTE_ADDR']                 = '203.0.113.10';
-$_SERVER['HTTP_X_FORWARDED_FOR']        = '198.51.100.7, 10.0.0.1';
-$_SERVER['HTTP_X_FORWARDED_PROTO']      = 'https';
+/* ── Client IP: proxy headers are only trusted from a trusted peer ─────── */
+
+$_SERVER = array(
+	'REMOTE_ADDR' => '203.0.113.10',
+	'REQUEST_URI' => '/',
+);
+
+$_SERVER['HTTP_X_FORWARDED_FOR']   = '198.51.100.7, 10.0.0.1';
+$_SERVER['HTTP_X_FORWARDED_PROTO'] = 'https';
+
 vg_same( '203.0.113.10', AccessRules::client_ip( false ), 'proxy headers are ignored by default' );
-vg_same( '198.51.100.7', AccessRules::client_ip( true ), 'first forwarded IP is used when trusted' );
+vg_same( '203.0.113.10', AccessRules::client_ip( true ), 'headers from a public, untrusted peer are ignored' );
+vg_same( '203.0.113.10', AccessRules::client_ip( true, '10.0.0.0/8' ), 'a peer outside the trusted list is ignored' );
 vg_assert( AccessRules::is_https( true ), 'forwarded https is trusted when enabled' );
 vg_assert( ! AccessRules::is_https( false ), 'forwarded https is ignored by default' );
 
-$_SERVER['HTTP_X_FORWARDED_FOR'] = 'not-an-ip';
-vg_same( '203.0.113.10', AccessRules::client_ip( true ), 'invalid forwarded IP falls back to REMOTE_ADDR' );
+// Spoofing: the visitor prepends an allowed address; the proxy appends the real one.
+$_SERVER['REMOTE_ADDR']          = '10.0.0.1';
+$_SERVER['HTTP_X_FORWARDED_FOR'] = '127.0.0.1, 198.51.100.7';
+vg_same( '198.51.100.7', AccessRules::client_ip( true, '10.0.0.0/8' ), 'the appended hop wins over a prepended one' );
+vg_same( '198.51.100.7', AccessRules::client_ip( true ), 'a private peer is a trusted proxy by default' );
+
+// Several trusted proxies: keep walking left until the first untrusted hop.
+$_SERVER['HTTP_X_FORWARDED_FOR'] = '127.0.0.1, 198.51.100.7, 10.0.0.2, 10.0.0.1';
+vg_same( '198.51.100.7', AccessRules::client_ip( true, '10.0.0.0/8' ), 'trusted hops are skipped from the right' );
+
+// A chain of only trusted proxies falls back to the nearest peer.
+$_SERVER['HTTP_X_FORWARDED_FOR'] = '10.0.0.2, 10.0.0.1';
+vg_same( '10.0.0.1', AccessRules::client_ip( true, '10.0.0.0/8' ), 'an all-trusted chain falls back to the peer' );
+
+// Single-value proxy headers are attacker-controlled: a plain nginx proxy
+// passes them through untouched, so they must be ignored.
+$_SERVER['HTTP_X_FORWARDED_FOR']  = '198.51.100.7';
+$_SERVER['HTTP_CF_CONNECTING_IP'] = '203.0.113.99';
+$_SERVER['HTTP_TRUE_CLIENT_IP']   = '203.0.113.98';
+$_SERVER['HTTP_X_REAL_IP']        = '203.0.113.97';
+vg_same( '198.51.100.7', AccessRules::client_ip( true, '10.0.0.0/8' ), 'forged single-value headers are ignored even from a trusted peer' );
+
+unset( $_SERVER['HTTP_CF_CONNECTING_IP'], $_SERVER['HTTP_TRUE_CLIENT_IP'], $_SERVER['HTTP_X_REAL_IP'] );
+$_SERVER['HTTP_X_FORWARDED_FOR'] = 'not-an-ip, 10.0.0.1';
+vg_same( '10.0.0.1', AccessRules::client_ip( true, '10.0.0.0/8' ), 'invalid hops are dropped before matching' );
+
+vg_assert( AccessRules::is_private_ip( '10.1.2.3' ), 'a private IPv4 address is private' );
+vg_assert( AccessRules::is_private_ip( '::1' ), 'loopback IPv6 is private' );
+vg_assert( ! AccessRules::is_private_ip( '198.51.100.7' ), 'a public address is not private' );
+vg_assert( ! AccessRules::is_private_ip( '' ), 'an empty address is not private' );
+
+/* ── Direct endpoints: PATH_INFO cannot hide a blocked script ──────────── */
+
+$vg_endpoints = array( '/wp-comments-post.php', '/wp-admin/admin-post.php' );
+
+vg_assert( AccessRules::is_blocked_endpoint( '/wp-comments-post.php', $vg_endpoints ), 'the script itself is blocked' );
+vg_assert( AccessRules::is_blocked_endpoint( '/wp-comments-post.php/', $vg_endpoints ), 'a trailing slash does not unblock it' );
+vg_assert( AccessRules::is_blocked_endpoint( '/wp-comments-post.php/anything', $vg_endpoints ), 'PATH_INFO does not unblock it' );
+vg_assert( AccessRules::is_blocked_endpoint( '/blog/wp-comments-post.php/anything', $vg_endpoints ), 'a subdirectory does not unblock it' );
+vg_assert( AccessRules::is_blocked_endpoint( '/wp-admin/admin-post.php?x=1', array( '/wp-admin/admin-post.php' ) ) === false, 'a query string is not part of the path' );
+vg_assert( AccessRules::is_blocked_endpoint( '/wp-admin/admin-post.php/extra', $vg_endpoints ), 'admin-post is blocked behind PATH_INFO' );
+vg_assert( ! AccessRules::is_blocked_endpoint( '/', $vg_endpoints ), 'the homepage is not a blocked endpoint' );
+vg_assert( ! AccessRules::is_blocked_endpoint( '/wp-comments-post.php.bak', $vg_endpoints ), 'a look-alike script is not blocked' );
+vg_assert( ! AccessRules::is_blocked_endpoint( '/notes/wp-comments-post.phpx', $vg_endpoints ), 'a longer name is not blocked' );
+vg_assert( ! AccessRules::is_blocked_endpoint( '/about', array( '/' ) ), 'a root endpoint never blocks everything' );
 
 /* -------------------------------------------------------------------------
  * Rate limiter.

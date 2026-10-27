@@ -225,16 +225,7 @@ final class Guard {
 			)
 		);
 
-		$blocked = false;
-
-		foreach ( $endpoints as $endpoint ) {
-			$endpoint = '/' . ltrim( (string) $endpoint, '/' );
-
-			if ( $path === $endpoint || str_ends_with( $path, $endpoint ) ) {
-				$blocked = true;
-				break;
-			}
-		}
+		$blocked = AccessRules::is_blocked_endpoint( $path, $endpoints );
 
 		if ( $blocked && ! $this->is_bypassed() ) {
 			$this->settings->log( 'endpoint_blocked', $this->client_ip() );
@@ -405,7 +396,10 @@ final class Guard {
 	 */
 	private function client_ip(): string {
 		if ( null === $this->ip ) {
-			$ip = AccessRules::client_ip( (bool) $this->settings->get( 'trust_proxy' ) );
+			$ip = AccessRules::client_ip(
+				(bool) $this->settings->get( 'trust_proxy' ),
+				(string) $this->settings->get( 'trusted_proxies', '' )
+			);
 
 			/**
 			 * Filters the visitor IP used for allowlisting and rate limiting.
