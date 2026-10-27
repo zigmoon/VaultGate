@@ -92,12 +92,12 @@ vg_reset();
 $clean = Settings::sanitize(
 	array(
 		'enabled'           => '1',
-		'gate_title'        => '  <b>Hello</b>  ',		'gate_message'      => '<script>alert(1)</script><p>Hi</p>',
+		'gate_title'        => '  <b>Hello</b>  ',
+		'gate_message'      => '<script>alert(1)</script><p>Hi</p>',
+		'logo_id'           => '42',
 		'logo_url'          => 'javascript:alert(1)',
 		'accent'            => '#abc',
 		'theme'             => 'neon',
-		'support_url'       => 'mailto:hi@example.test',
-		'footer_note'       => '<em>bye</em>',
 		'session_days'      => '9999',
 		'remember_enabled'  => '0',
 		'remember_days'     => '0',
@@ -125,16 +125,28 @@ vg_same( 'Hello', $clean['gate_title'], 'title is stripped and trimmed' );
 vg_same( false, str_contains( $clean['gate_message'], '<script' ), 'message script is removed' );
 vg_same( false, str_contains( $clean['gate_message'], 'alert(1)' ), 'message payload is removed' );
 vg_same( '', $clean['logo_url'], 'javascript: logo URL is rejected' );
-vg_same( 'mailto:hi@example.test', $clean['support_url'], 'mailto support URL is kept' );
+vg_same( 42, $clean['logo_id'], 'media logo id is kept as an integer' );
+vg_same( 0, Settings::sanitize( array( 'logo_id' => '-7' ) )['logo_id'], 'negative logo ids are clamped to zero' );
+vg_same( 0, Settings::sanitize( array( 'logo_id' => array( 9 ) ) )['logo_id'], 'array logo ids are rejected' );
+vg_same( '', Settings::sanitize( array( 'gate_message' => '' ) )['gate_message'], 'the message can stay empty' );
 vg_same( '#aabbcc', $clean['accent'], '3-digit hex is expanded' );
-vg_same( 'auto', $clean['theme'], 'unknown theme falls back to auto' );
+vg_same( 'light', $clean['theme'], 'unknown theme falls back to light' );
 vg_same( 365, $clean['session_days'], 'session days are capped' );
 vg_same( 30, $clean['remember_days'], 'an empty duration falls back to the default' );
 vg_same( 5, $clean['max_attempts'], 'an empty attempt count falls back to the default' );
 vg_same( 1, Settings::sanitize( array( 'max_attempts' => '1' ) )['max_attempts'], 'explicit attempt counts are kept' );
 vg_same( 1440, $clean['lockout_minutes'], 'lockout is capped' );
 vg_same( 'read', $clean['bypass_capability'], 'known capability is kept' );
-vg_same( 'bye', $clean['footer_note'], 'footer tags are stripped' );
+vg_same( '#0b0d10', Settings::sanitize( array( 'accent' => 'rebeccapurple' ) )['accent'], 'invalid colours fall back to black' );
+
+vg_same( '#ffffff', Settings::ink_on( '#0b0d10' ), 'white ink on black' );
+vg_same( '#0b0d10', Settings::ink_on( '#f4f4f5' ), 'black ink on white' );
+vg_same( '#f4f4f5', Settings::accent_for_dark( '#0b0d10' ), 'a black accent turns white on the dark theme' );
+vg_same( '#0a66ff', Settings::accent_for_dark( '#0a66ff' ), 'a saturated accent is kept on the dark theme' );
+vg_assert( Settings::luminance( '#ffffff' ) > 0.9, 'white luminance is close to 1' );
+vg_assert( Settings::luminance( '#000000' ) < 0.01, 'black luminance is close to 0' );
+vg_assert( count( Settings::swatches() ) >= 6, 'a palette of at least six presets is offered' );
+vg_same( '#0b0d10', Settings::swatches()[0]['value'], 'the first preset is black' );
 
 vg_assert( str_contains( $clean['ip_allowlist'], '203.0.113.5' ), 'valid IPv4 is kept' );
 vg_assert( str_contains( $clean['ip_allowlist'], '2001:db8::/32' ), 'valid IPv6 range is kept' );
@@ -297,24 +309,26 @@ vg_assert( $limiter->register_failure( '192.0.2.1' ) > 0, 'max_attempts=1 locks 
 vg_reset();
 
 $vg = array(
-	'title'         => 'Private <script>alert(1)</script>',
-	'message'       => '<script>alert(1)</script><p>Welcome &amp; hello</p>',
-	'logo'          => 'https://example.test/logo.png?x=1&y=2',
-	'support'       => 'mailto:hi@example.test',
-	'footer'        => 'Footer & more',
-	'accent'        => '#4f46e5',
-	'accent_ink'    => '#ffffff',
-	'theme'         => 'auto',
-	'nonce'         => 'abc123',
-	'action'        => 'https://example.test/?vaultgate=login',
-	'redirect'      => 'https://example.test/protected?x=1&y=2',
-	'form_token'    => '123.abc',
-	'remember'      => true,
-	'remember_days' => 30,
-	'notice'        => 'Incorrect "password" <b>',
-	'site_name'     => 'Test & Site',
-	'style_url'     => 'https://example.test/gate.css',
-	'script_url'    => 'https://example.test/gate.js',
+	'title'           => 'Private <script>alert(1)</script>',
+	'message'         => '<script>alert(1)</script><p>Welcome &amp; hello</p>',
+	'logo'            => '<img class="vg-logo" src="https://example.test/logo.png?x=1&amp;y=2" alt="Test &amp; Site">',
+	'accent'          => '#0b0d10',
+	'accent_ink'      => '#ffffff',
+	'accent_dark'     => '#f4f4f5',
+	'accent_dark_ink' => '#0b0d10',
+	'theme'           => 'auto',
+	'nonce'           => 'abc123',
+	'action'          => 'https://example.test/?vaultgate=login',
+	'redirect'        => 'https://example.test/protected?x=1&y=2',
+	'form_token'      => '123.abc',
+	'remember'        => true,
+	'remember_days'   => 30,
+	'notice'          => 'Incorrect "password" <b>',
+	'invalid'         => true,
+	'lock_seconds'    => 0,
+	'site_name'       => 'Test & Site',
+	'style_url'       => 'https://example.test/gate.css',
+	'script_url'      => 'https://example.test/gate.js',
 );
 
 ob_start();
@@ -325,8 +339,10 @@ vg_assert( str_contains( $html, '<form' ), 'template renders the form' );
 vg_assert( str_contains( $html, 'name="vaultgate_password"' ), 'template renders the password field' );
 vg_assert( str_contains( $html, 'name="vaultgate_website"' ), 'template renders the honeypot' );
 vg_assert( str_contains( $html, 'name="vaultgate_form_token"' ), 'template renders the signed form token' );
-vg_assert( str_contains( $html, '--vg-accent: #4f46e5' ), 'template injects the accent colour' );
+vg_assert( str_contains( $html, '--vg-accent: #0b0d10' ), 'template injects the accent colour' );
 vg_assert( str_contains( $html, '--vg-accent-ink: #ffffff' ), 'template injects the contrast colour' );
+vg_assert( str_contains( $html, '--vg-accent-dark: #f4f4f5' ), 'template injects the dark-theme accent' );
+vg_assert( str_contains( $html, 'vg-theme-auto' ), 'template applies the theme class' );
 vg_assert( str_contains( $html, 'nonce="abc123"' ), 'template uses the CSP nonce' );
 vg_assert( str_contains( $html, 'href="https://example.test/gate.css"' ), 'template links the local stylesheet' );
 vg_assert( str_contains( $html, 'src="https://example.test/gate.js"' ), 'template links the local script' );
@@ -336,9 +352,37 @@ vg_assert( 1 === substr_count( $html, '<script' ), 'template contains only the e
 vg_assert( str_contains( $html, '&lt;script&gt;' ), 'title is HTML-escaped' );
 vg_assert( str_contains( $html, '&quot;password&quot; &lt;b&gt;' ), 'notice is HTML-escaped' );
 vg_assert( str_contains( $html, 'Test &amp; Site' ), 'site name is HTML-escaped' );
-vg_assert( str_contains( $html, 'https://example.test/logo.png?x=1&amp;y=2' ), 'logo URL is escaped' );
+vg_assert( str_contains( $html, 'class="vg-logo"' ), 'template renders the prepared logo markup' );
+vg_assert( str_contains( $html, 'aria-invalid="true"' ), 'invalid attempts mark the field' );
 vg_assert( str_contains( $html, 'value="https://example.test/protected?x=1&amp;y=2"' ), 'redirect target is escaped' );
 vg_assert( str_contains( $html, 'Keep me signed in for 30 days' ), 'remember-me label is rendered' );
+vg_assert( ! str_contains( $html, '<footer' ), 'template has no footer' );
+vg_assert( ! str_contains( $html, 'Need access' ), 'template has no support link' );
+vg_assert( ! str_contains( $html, 'under construction' ), 'template has no default marketing sentence' );
+
+/* A quiet gate: no message, no logo, no notice. */
+$vg_quiet = array_merge(
+	$vg,
+	array(
+		'message' => '',
+		'logo'    => '',
+		'notice'  => '',
+		'invalid' => false,
+	)
+);
+
+unset( $vg );
+
+$vg = $vg_quiet;
+
+ob_start();
+require VAULTGATE_DIR . 'templates/gate.php';
+$html = (string) ob_get_clean();
+
+vg_assert( ! str_contains( $html, 'vg-message' ), 'an empty message renders no paragraph' );
+vg_assert( ! str_contains( $html, 'vg-alert' ), 'no notice renders no alert' );
+vg_assert( ! str_contains( $html, 'class="vg-logo"' ), 'no logo renders no image' );
+vg_assert( str_contains( $html, 'class="vg-mark"' ), 'no logo falls back to the built-in mark' );
 
 /* -------------------------------------------------------------------------
  * Report.

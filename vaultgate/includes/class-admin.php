@@ -2,6 +2,10 @@
 /**
  * Admin settings screen, save handler and notices.
  *
+ * Visual language: white Swiss, hairline rules, sharp corners, one accent —
+ * the same family as the front gate, with Space Grotesk headings and
+ * JetBrains Mono micro-labels, all embedded locally.
+ *
  * @package VaultGate
  */
 
@@ -66,8 +70,18 @@ final class Admin {
 			return;
 		}
 
+		wp_enqueue_media();
 		wp_enqueue_style( 'vaultgate-admin', VAULTGATE_URL . 'assets/css/admin.css', array(), VAULTGATE_VERSION );
-		wp_enqueue_script( 'vaultgate-admin', VAULTGATE_URL . 'assets/js/admin.js', array(), VAULTGATE_VERSION, true );
+		wp_enqueue_script( 'vaultgate-admin', VAULTGATE_URL . 'assets/js/admin.js', array( 'jquery' ), VAULTGATE_VERSION, true );
+
+		wp_localize_script(
+			'vaultgate-admin',
+			'vaultGateAdmin',
+			array(
+				'chooseLogo' => __( 'Choose a logo', 'vaultgate' ),
+				'useLogo'    => __( 'Use this image', 'vaultgate' ),
+			)
+		);
 	}
 
 	/**
@@ -216,8 +230,10 @@ final class Admin {
 		$saved       = isset( $_GET['vg_saved'] ) && is_string( $_GET['vg_saved'] ) ? sanitize_key( wp_unslash( $_GET['vg_saved'] ) ) : '';
 		$error_codes = isset( $_GET['vg_error'] ) && is_string( $_GET['vg_error'] ) ? sanitize_text_field( wp_unslash( $_GET['vg_error'] ) ) : '';
 
+		$disabled = defined( 'VAULTGATE_DISABLED' ) && VAULTGATE_DISABLED;
+
 		if ( 'vaultgate' !== $page ) {
-			if ( defined( 'VAULTGATE_DISABLED' ) && VAULTGATE_DISABLED ) {
+			if ( $disabled ) {
 				printf(
 					'<div class="notice notice-info"><p>%s</p></div>',
 					esc_html__( 'VaultGate is disabled by the VAULTGATE_DISABLED constant in wp-config.php.', 'vaultgate' )
@@ -265,7 +281,7 @@ final class Admin {
 			);
 		}
 
-		if ( defined( 'VAULTGATE_DISABLED' ) && VAULTGATE_DISABLED ) {
+		if ( $disabled ) {
 			printf(
 				'<div class="notice notice-info"><p>%s</p></div>',
 				esc_html__( 'VaultGate is disabled by the VAULTGATE_DISABLED constant in wp-config.php.', 'vaultgate' )
@@ -281,50 +297,47 @@ final class Admin {
 			return;
 		}
 
-		$settings  = $this->settings->all();
-		$active    = $this->settings->is_enabled();
-		$has_hash  = $this->settings->has_password();
-		$changed   = $this->settings->password_changed_at();
-		$logs      = $this->settings->logs();
-		$date_fmt  = ( get_option( 'date_format' ) ?: 'Y-m-d' ) . ' ' . ( get_option( 'time_format' ) ?: 'H:i' );
-		$caps      = Settings::capabilities();
-		$themes    = array(
-			'auto'  => __( 'Automatic (follows the visitor’s system)', 'vaultgate' ),
+		$settings = $this->settings->all();
+		$active   = $this->settings->is_enabled();
+		$has_hash = $this->settings->has_password();
+		$changed  = $this->settings->password_changed_at();
+		$logs     = $this->settings->logs();
+		$date_fmt = ( get_option( 'date_format' ) ?: 'Y-m-d' ) . ' ' . ( get_option( 'time_format' ) ?: 'H:i' );
+		$caps     = Settings::capabilities();
+		$accent   = Settings::normalize_hex( (string) $settings['accent'] );
+		$logo_id  = isset( $settings['logo_id'] ) ? absint( $settings['logo_id'] ) : 0;
+		$logo_src = $logo_id > 0 ? (string) wp_get_attachment_image_url( $logo_id, 'medium' ) : '';
+
+		$themes = array(
 			'light' => __( 'Light', 'vaultgate' ),
 			'dark'  => __( 'Dark', 'vaultgate' ),
+			'auto'  => __( 'System', 'vaultgate' ),
 		);
 		?>
 		<div class="wrap vg-admin" data-vg-admin>
-			<div class="vg-admin-head">
-				<div class="vg-admin-title">
-					<span class="vg-admin-mark" aria-hidden="true">
-						<svg viewBox="0 0 512 512" width="38" height="38" focusable="false" aria-hidden="true">
-							<defs>
-								<linearGradient id="vg-admin-bg" x1="0" y1="0" x2="1" y2="1">
-									<stop offset="0" stop-color="#6366f1"/>
-									<stop offset="1" stop-color="#7c3aed"/>
-								</linearGradient>
-							</defs>
-							<rect width="512" height="512" rx="116" fill="url(#vg-admin-bg)"/>
-							<path d="M176 232v-40a80 80 0 0 1 160 0v40" fill="none" stroke="#fff" stroke-width="34" stroke-linecap="round"/>
-							<rect x="136" y="228" width="240" height="192" rx="46" fill="#fff"/>
-							<circle cx="256" cy="304" r="27" fill="#4b45d6"/>
-							<path d="M247 312h18v40a9 9 0 0 1-18 0z" fill="#4b45d6"/>
+			<header class="vg-admin-head">
+				<div class="vg-brand">
+					<span class="vg-brand-mark" aria-hidden="true">
+						<svg viewBox="0 0 64 64" width="34" height="34" focusable="false" aria-hidden="true">
+							<rect width="64" height="64" rx="8" fill="#0b0d10"/>
+							<path d="M21 47V30.5a11 11 0 0 1 22 0V47" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="square"/>
+							<path d="M17 47h30" stroke="#fff" stroke-width="3" stroke-linecap="square"/>
+							<circle cx="32" cy="36" r="2.6" fill="#fff"/>
 						</svg>
 					</span>
 					<div>
 						<h1>
 							VaultGate
-							<span class="vg-badge <?php echo $active ? 'vg-badge--on' : 'vg-badge--off'; ?>">
-								<?php echo $active ? esc_html__( 'Protection active', 'vaultgate' ) : esc_html__( 'Protection inactive', 'vaultgate' ); ?>
+							<span class="vg-state <?php echo $active ? 'is-on' : 'is-off'; ?>">
+								<?php echo $active ? esc_html__( 'Locked', 'vaultgate' ) : esc_html__( 'Open', 'vaultgate' ); ?>
 							</span>
 						</h1>
 						<p class="vg-lead">
-							<?php esc_html_e( 'Lock the whole site behind a single password while you build it. No third-party service, no tracking, no external assets.', 'vaultgate' ); ?>
+							<?php esc_html_e( 'One password for the whole site while you build it. No third-party service, no tracking, no external assets.', 'vaultgate' ); ?>
 						</p>
 					</div>
 				</div>
-				<p class="vg-version">
+				<p class="vg-meta">
 					<?php
 					printf(
 						/* translators: 1: plugin version, 2: PHP version, 3: WordPress version. */
@@ -335,7 +348,7 @@ final class Admin {
 					);
 					?>
 				</p>
-			</div>
+			</header>
 
 			<nav class="vg-tabs" role="tablist" aria-label="<?php esc_attr_e( 'VaultGate sections', 'vaultgate' ); ?>">
 				<button type="button" class="vg-tab" role="tab" id="vg-tab-protection" aria-controls="vg-panel-protection" aria-selected="true" data-vg-tab="protection"><?php esc_html_e( 'Protection', 'vaultgate' ); ?></button>
@@ -345,12 +358,12 @@ final class Admin {
 				<button type="button" class="vg-tab" role="tab" id="vg-tab-activity" aria-controls="vg-panel-activity" aria-selected="false" tabindex="-1" data-vg-tab="activity"><?php esc_html_e( 'Activity', 'vaultgate' ); ?></button>
 			</nav>
 
-			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="vg-form">
 				<input type="hidden" name="action" value="vaultgate_save">
 				<?php wp_nonce_field( 'vaultgate_save' ); ?>
 
 				<div class="vg-panel" id="vg-panel-protection" role="tabpanel" aria-labelledby="vg-tab-protection" data-vg-panel="protection">
-					<div class="vg-status-card <?php echo $active ? 'is-on' : 'is-off'; ?>">
+					<div class="vg-status <?php echo $active ? 'is-on' : 'is-off'; ?>">
 						<span class="vg-status-dot" aria-hidden="true"></span>
 						<div>
 							<strong>
@@ -383,11 +396,9 @@ final class Admin {
 						(bool) $settings['enabled'],
 						__( 'Every front-end page, feed, sitemap and anonymous REST request will ask for the password.', 'vaultgate' )
 					);
+
+					$this->section( __( 'Password', 'vaultgate' ) );
 					?>
-
-					<hr class="vg-sep">
-
-					<h2><?php esc_html_e( 'Password', 'vaultgate' ); ?></h2>
 					<p class="vg-help"><?php esc_html_e( 'Leave both fields empty to keep the current password. The password is stored as a one-way hash, never in clear text.', 'vaultgate' ); ?></p>
 
 					<div class="vg-grid vg-grid--2">
@@ -412,29 +423,84 @@ final class Admin {
 					);
 					?>
 
-					<div class="vg-callout">
+					<div class="vg-note">
 						<strong><?php esc_html_e( 'Locked out?', 'vaultgate' ); ?></strong>
 						<p><?php esc_html_e( 'You can still log in through wp-login.php: administrator sessions always bypass the gate. As a last resort, add the emergency constant or use WP-CLI (see the Advanced tab).', 'vaultgate' ); ?></p>
 					</div>
 				</div>
 
 				<div class="vg-panel" id="vg-panel-appearance" role="tabpanel" aria-labelledby="vg-tab-appearance" data-vg-panel="appearance">
-					<h2><?php esc_html_e( 'What visitors see', 'vaultgate' ); ?></h2>
-					<p class="vg-help"><?php esc_html_e( 'The gate is a standalone, accessible page: no theme, no plugin, no external font or script.', 'vaultgate' ); ?></p>
+					<?php $this->section( __( 'Logo', 'vaultgate' ) ); ?>
+
+					<div class="vg-field vg-field--logo">
+						<span class="vg-field-label"><?php esc_html_e( 'Site logo', 'vaultgate' ); ?></span>
+						<div class="vg-logo-field">
+							<div class="vg-logo-preview<?php echo '' === $logo_src ? ' is-empty' : ''; ?>" data-vg-logo-preview>
+								<img src="<?php echo esc_url( $logo_src ); ?>" alt=""<?php echo '' === $logo_src ? ' hidden' : ''; ?> data-vg-logo-image>
+								<span class="vg-logo-placeholder"<?php echo '' !== $logo_src ? ' hidden' : ''; ?> data-vg-logo-placeholder>
+									<?php esc_html_e( 'No logo selected', 'vaultgate' ); ?>
+								</span>
+							</div>
+							<div class="vg-logo-actions">
+								<button type="button" class="button button-secondary" data-vg-logo-pick><?php esc_html_e( 'Choose image', 'vaultgate' ); ?></button>
+								<button type="button" class="button-link vg-remove" data-vg-logo-clear<?php echo 0 === $logo_id ? ' hidden' : ''; ?>><?php esc_html_e( 'Remove', 'vaultgate' ); ?></button>
+								<p class="vg-help"><?php esc_html_e( 'Pick an image from the WordPress Media Library: it is stored in wp-content/uploads and comes back with your media backups. PNG, JPEG, WebP, GIF or SVG. A wide logo works best (max 168 × 56 px on the gate).', 'vaultgate' ); ?></p>
+							</div>
+						</div>
+						<input type="hidden" name="vaultgate[logo_id]" value="<?php echo esc_attr( (string) $logo_id ); ?>" data-vg-logo-input>
+					</div>
+
+					<?php $this->section( __( 'Colour', 'vaultgate' ) ); ?>
+
+					<div class="vg-field vg-field--accent">
+						<span class="vg-field-label" id="vg-accent-label"><?php esc_html_e( 'Accent colour', 'vaultgate' ); ?></span>
+						<div class="vg-swatches" data-vg-swatches role="group" aria-labelledby="vg-accent-label">
+							<?php foreach ( Settings::swatches() as $swatch ) : ?>
+								<?php $swatch_value = Settings::normalize_hex( (string) $swatch['value'] ); ?>
+								<button
+									type="button"
+									class="vg-swatch"
+									data-vg-swatch="<?php echo esc_attr( $swatch_value ); ?>"
+									style="--vg-swatch: <?php echo esc_attr( $swatch_value ); ?>"
+									aria-pressed="<?php echo $accent === $swatch_value ? 'true' : 'false'; ?>"
+									title="<?php echo esc_attr( (string) $swatch['label'] ); ?>"
+								>
+									<span class="vg-swatch-chip" aria-hidden="true"></span>
+									<span class="vg-swatch-name"><?php echo esc_html( (string) $swatch['label'] ); ?></span>
+								</button>
+							<?php endforeach; ?>
+						</div>
+						<div class="vg-accent-custom">
+							<label for="vg-accent"><?php esc_html_e( 'Custom', 'vaultgate' ); ?></label>
+							<input type="color" id="vg-accent" name="vaultgate[accent]" value="<?php echo esc_attr( $accent ); ?>" data-vg-accent>
+							<code data-vg-accent-value><?php echo esc_html( $accent ); ?></code>
+						</div>
+						<p class="vg-help"><?php esc_html_e( 'Used for the button, the focus ring and the rule under the title. The text colour of the button is chosen automatically for contrast.', 'vaultgate' ); ?></p>
+					</div>
+
+					<div class="vg-field">
+						<span class="vg-field-label"><?php esc_html_e( 'Theme', 'vaultgate' ); ?></span>
+						<div class="vg-segmented">
+							<?php foreach ( $themes as $value => $label ) : ?>
+								<label>
+									<input type="radio" name="vaultgate[theme]" value="<?php echo esc_attr( $value ); ?>"<?php checked( (string) $settings['theme'], $value ); ?>>
+									<span><?php echo esc_html( $label ); ?></span>
+								</label>
+							<?php endforeach; ?>
+						</div>
+						<p class="vg-help"><?php esc_html_e( '“System” follows the visitor’s operating system preference.', 'vaultgate' ); ?></p>
+					</div>
+
+					<?php $this->section( __( 'Text', 'vaultgate' ) ); ?>
 
 					<?php
-					$this->field_text( 'gate_title', __( 'Title', 'vaultgate' ), (string) $settings['gate_title'], __( 'Shown as the main heading and in the browser tab.', 'vaultgate' ) );
-					$this->field_textarea( 'gate_message', __( 'Message', 'vaultgate' ), (string) $settings['gate_message'], __( 'Basic HTML is allowed (links, bold, line breaks).', 'vaultgate' ) );
-					$this->field_text( 'logo_url', __( 'Logo URL', 'vaultgate' ), (string) $settings['logo_url'], __( 'Optional. HTTPS recommended. Displayed above the title; leave empty for the built-in lock icon.', 'vaultgate' ), 'url', 'https://example.com/logo.svg' );
-					$this->field_color( 'accent', __( 'Accent colour', 'vaultgate' ), (string) $settings['accent'], __( 'Used for the button, focus rings and highlights.', 'vaultgate' ) );
-					$this->field_select( 'theme', __( 'Colour theme', 'vaultgate' ), (string) $settings['theme'], $themes );
-					$this->field_text( 'support_url', __( 'Support link', 'vaultgate' ), (string) $settings['support_url'], __( 'Optional. A “Need access?” link under the form. Accepts http(s) and mailto.', 'vaultgate' ), 'text', 'mailto:hello@example.com' );
-					$this->field_text( 'footer_note', __( 'Footer note', 'vaultgate' ), (string) $settings['footer_note'], __( 'Optional small text under the card. The site name is used when empty.', 'vaultgate' ) );
+					$this->field_text( 'gate_title', __( 'Title', 'vaultgate' ), (string) $settings['gate_title'], __( 'Main heading and browser tab title.', 'vaultgate' ) );
+					$this->field_textarea( 'gate_message', __( 'Message', 'vaultgate' ), (string) $settings['gate_message'], __( 'Optional. Basic HTML is allowed (links, bold, line breaks). Leave empty for a single, quiet gate page.', 'vaultgate' ), '', 4 );
 					?>
 				</div>
 
 				<div class="vg-panel" id="vg-panel-access" role="tabpanel" aria-labelledby="vg-tab-access" data-vg-panel="access">
-					<h2><?php esc_html_e( 'Sessions', 'vaultgate' ); ?></h2>
+					<?php $this->section( __( 'Sessions', 'vaultgate' ) ); ?>
 
 					<div class="vg-grid vg-grid--2">
 						<?php
@@ -446,19 +512,16 @@ final class Admin {
 					<?php
 					$this->field_checkbox( 'remember_enabled', __( 'Offer “Keep me signed in”', 'vaultgate' ), (bool) $settings['remember_enabled'], __( 'Shows a checkbox on the gate page.', 'vaultgate' ) );
 					$this->field_select( 'bypass_capability', __( 'Logged-in users who bypass the gate', 'vaultgate' ), (string) $settings['bypass_capability'], $caps, __( 'Choose the minimum capability. Administrators always bypass.', 'vaultgate' ) );
-					?>
 
-					<hr class="vg-sep">
+					$this->section( __( 'Network rules', 'vaultgate' ) );
 
-					<h2><?php esc_html_e( 'Network rules', 'vaultgate' ); ?></h2>
-
-					<?php
 					$this->field_textarea(
 						'ip_allowlist',
 						__( 'IP allowlist', 'vaultgate' ),
 						(string) $settings['ip_allowlist'],
 						__( 'One IP or CIDR range per line. These visitors skip the gate entirely. IPv4 and IPv6 are supported.', 'vaultgate' ),
-						"203.0.113.10\n2001:db8::/32"
+						"203.0.113.10\n2001:db8::/32",
+						5
 					);
 
 					$this->field_checkbox(
@@ -473,13 +536,14 @@ final class Admin {
 						__( 'Excluded paths', 'vaultgate' ),
 						(string) $settings['exclude_paths'],
 						__( 'One path per line. A path also covers its sub-paths; * is a wildcard. Useful for health checks, payment webhooks or a public API.', 'vaultgate' ),
-						"/favicon.ico\n/webhooks/*"
+						"/favicon.ico\n/webhooks/*",
+						5
 					);
 					?>
 				</div>
 
 				<div class="vg-panel" id="vg-panel-advanced" role="tabpanel" aria-labelledby="vg-tab-advanced" data-vg-panel="advanced">
-					<h2><?php esc_html_e( 'What is protected', 'vaultgate' ); ?></h2>
+					<?php $this->section( __( 'What is protected', 'vaultgate' ) ); ?>
 
 					<?php
 					$this->field_checkbox( 'protect_rest', __( 'REST API', 'vaultgate' ), (bool) $settings['protect_rest'], __( 'Anonymous /wp-json requests return 401. Logged-in users above the bypass capability keep access.', 'vaultgate' ) );
@@ -487,29 +551,24 @@ final class Admin {
 					$this->field_checkbox( 'protect_sitemaps', __( 'Sitemaps', 'vaultgate' ), (bool) $settings['protect_sitemaps'], __( 'wp-sitemap.xml and its children are gated.', 'vaultgate' ) );
 					$this->field_checkbox( 'protect_ajax', __( 'Anonymous AJAX', 'vaultgate' ), (bool) $settings['protect_ajax'], __( 'admin-ajax.php requests from visitors without a valid gate cookie return 401.', 'vaultgate' ) );
 					$this->field_checkbox( 'protect_xmlrpc', __( 'XML-RPC', 'vaultgate' ), (bool) $settings['protect_xmlrpc'], __( 'Blocks xmlrpc.php until the visitor is authenticated.', 'vaultgate' ) );
+
+					$this->section( __( 'Brute force', 'vaultgate' ) );
 					?>
-
-					<hr class="vg-sep">
-
-					<h2><?php esc_html_e( 'Brute force', 'vaultgate' ); ?></h2>
-
 					<div class="vg-grid vg-grid--2">
 						<?php
-						$this->field_number( 'max_attempts', __( 'Attempts before lock-out', 'vaultgate' ), (int) $settings['max_attempts'], 1, 50, __( 'Per IP address, inside the lock-out window.', 'vaultgate' ) );
+						$this->field_number( 'max_attempts', __( 'Attempts before lock-out', 'vaultgate' ), (int) $settings['max_attempts'], 1, 50, __( 'Per visitor, inside the lock-out window.', 'vaultgate' ) );
 						$this->field_number( 'lockout_minutes', __( 'Lock-out duration (minutes)', 'vaultgate' ), (int) $settings['lockout_minutes'], 1, 1440, __( 'The visitor must wait this long after too many failures.', 'vaultgate' ) );
 						?>
 					</div>
 
-					<hr class="vg-sep">
-
-					<h2><?php esc_html_e( 'Privacy and cleanup', 'vaultgate' ); ?></h2>
+					<?php $this->section( __( 'Privacy and cleanup', 'vaultgate' ) ); ?>
 
 					<?php
 					$this->field_checkbox( 'log_enabled', __( 'Keep a small activity log', 'vaultgate' ), (bool) $settings['log_enabled'], __( 'The last 20 events, with anonymised IP addresses, shown in the Activity tab.', 'vaultgate' ) );
-					$this->field_checkbox( 'delete_data', __( 'Delete all plugin data when the plugin is deleted', 'vaultgate' ), (bool) $settings['delete_data'], __( 'Options, password hash and log are removed. The plugin does nothing until you delete it.', 'vaultgate' ) );
+					$this->field_checkbox( 'delete_data', __( 'Delete all plugin data when the plugin is deleted', 'vaultgate' ), (bool) $settings['delete_data'], __( 'Options, password hash, log and transients are removed. The plugin does nothing until you delete it.', 'vaultgate' ) );
 					?>
 
-					<div class="vg-callout vg-callout--code">
+					<div class="vg-note vg-note--warn">
 						<strong><?php esc_html_e( 'Emergency disable', 'vaultgate' ); ?></strong>
 						<p><?php esc_html_e( 'Add this line to wp-config.php to disable the gate without touching the database:', 'vaultgate' ); ?></p>
 						<pre><code>define( 'VAULTGATE_DISABLED', true );</code></pre>
@@ -522,11 +581,11 @@ wp vaultgate password 'a-new-long-passphrase'</code></pre>
 				<div class="vg-panel" id="vg-panel-activity" role="tabpanel" aria-labelledby="vg-tab-activity" data-vg-panel="activity">
 					<div class="vg-panel-head">
 						<div>
-							<h2><?php esc_html_e( 'Recent activity', 'vaultgate' ); ?></h2>
+							<?php $this->section( __( 'Recent activity', 'vaultgate' ) ); ?>
 							<p class="vg-help"><?php esc_html_e( 'IP addresses are anonymised. This log never contains passwords.', 'vaultgate' ); ?></p>
 						</div>
 						<?php if ( array() !== $logs ) : ?>
-							<button type="submit" class="button" form="vg-clear-log"><?php esc_html_e( 'Clear log', 'vaultgate' ); ?></button>
+							<button type="submit" class="button button-secondary" form="vg-clear-log"><?php esc_html_e( 'Clear log', 'vaultgate' ); ?></button>
 						<?php endif; ?>
 					</div>
 
@@ -534,7 +593,7 @@ wp vaultgate password 'a-new-long-passphrase'</code></pre>
 						<p class="vg-empty"><?php esc_html_e( 'No activity recorded yet.', 'vaultgate' ); ?></p>
 					<?php else : ?>
 						<div class="vg-table-wrap">
-							<table class="widefat striped vg-table">
+							<table class="widefat vg-table">
 								<thead>
 									<tr>
 										<th scope="col"><?php esc_html_e( 'Date', 'vaultgate' ); ?></th>
@@ -559,7 +618,7 @@ wp vaultgate password 'a-new-long-passphrase'</code></pre>
 				</div>
 
 				<div class="vg-savebar">
-					<span class="vg-savebar__hint"><?php esc_html_e( 'Changes apply immediately to the whole site.', 'vaultgate' ); ?></span>
+					<span class="vg-savebar-hint"><?php esc_html_e( 'Changes apply immediately to the whole site.', 'vaultgate' ); ?></span>
 					<?php submit_button( __( 'Save changes', 'vaultgate' ), 'primary', 'submit', false ); ?>
 				</div>
 			</form>
@@ -573,27 +632,39 @@ wp vaultgate password 'a-new-long-passphrase'</code></pre>
 	}
 
 	/**
+	 * Section heading with a hairline rule.
+	 *
+	 * @param string $label Heading text.
+	 */
+	private function section( string $label ): void {
+		printf(
+			'<h2 class="vg-section"><span>%s</span></h2>',
+			esc_html( $label )
+		);
+	}
+
+	/**
 	 * Human label for a log event.
 	 *
 	 * @param string $event Event key.
 	 */
 	private function event_label( string $event ): string {
 		$labels = array(
-			'login_success'   => __( 'Login succeeded', 'vaultgate' ),
-			'login_failed'    => __( 'Login failed', 'vaultgate' ),
-			'login_locked'    => __( 'Login blocked (rate limit)', 'vaultgate' ),
-			'logout'          => __( 'Logged out', 'vaultgate' ),
-			'logout_all'      => __( 'All sessions revoked', 'vaultgate' ),
+			'login_success'    => __( 'Login succeeded', 'vaultgate' ),
+			'login_failed'     => __( 'Login failed', 'vaultgate' ),
+			'login_locked'     => __( 'Login blocked (rate limit)', 'vaultgate' ),
+			'logout'           => __( 'Logged out', 'vaultgate' ),
+			'logout_all'       => __( 'All sessions revoked', 'vaultgate' ),
 			'password_changed' => __( 'Password changed', 'vaultgate' ),
-			'settings_saved'  => __( 'Settings saved', 'vaultgate' ),
-			'form_expired'    => __( 'Expired form token', 'vaultgate' ),
-			'honeypot'        => __( 'Honeypot triggered', 'vaultgate' ),
-			'cookie_failed'   => __( 'Cookie refused by the browser', 'vaultgate' ),
-			'ajax_blocked'    => __( 'Anonymous AJAX blocked', 'vaultgate' ),
-			'rest_blocked'    => __( 'Anonymous REST request blocked', 'vaultgate' ),
-			'xmlrpc_blocked'  => __( 'XML-RPC request blocked', 'vaultgate' ),
+			'settings_saved'   => __( 'Settings saved', 'vaultgate' ),
+			'form_expired'     => __( 'Expired form token', 'vaultgate' ),
+			'honeypot'         => __( 'Honeypot triggered', 'vaultgate' ),
+			'cookie_failed'    => __( 'Cookie refused by the browser', 'vaultgate' ),
+			'ajax_blocked'     => __( 'Anonymous AJAX blocked', 'vaultgate' ),
+			'rest_blocked'     => __( 'Anonymous REST request blocked', 'vaultgate' ),
+			'xmlrpc_blocked'   => __( 'XML-RPC request blocked', 'vaultgate' ),
 			'endpoint_blocked' => __( 'Direct endpoint blocked', 'vaultgate' ),
-			'log_cleared'     => __( 'Activity log cleared', 'vaultgate' ),
+			'log_cleared'      => __( 'Activity log cleared', 'vaultgate' ),
 		);
 
 		return $labels[ $event ] ?? $event;
@@ -653,13 +724,14 @@ wp vaultgate password 'a-new-long-passphrase'</code></pre>
 	 * @param string $value       Current value.
 	 * @param string $description Help text.
 	 * @param string $placeholder Placeholder.
+	 * @param int    $rows        Visible rows.
 	 */
-	private function field_textarea( string $key, string $label, string $value, string $description = '', string $placeholder = '' ): void {
+	private function field_textarea( string $key, string $label, string $value, string $description = '', string $placeholder = '', int $rows = 5 ): void {
 		$id = 'vg-' . $key;
 		?>
 		<div class="vg-field">
 			<label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $label ); ?></label>
-			<textarea id="<?php echo esc_attr( $id ); ?>" name="vaultgate[<?php echo esc_attr( $key ); ?>]" rows="5" placeholder="<?php echo esc_attr( $placeholder ); ?>"<?php echo '' !== $description ? ' aria-describedby="' . esc_attr( $id . '-desc' ) . '"' : ''; ?>><?php echo esc_textarea( $value ); ?></textarea>
+			<textarea id="<?php echo esc_attr( $id ); ?>" name="vaultgate[<?php echo esc_attr( $key ); ?>]" rows="<?php echo esc_attr( (string) $rows ); ?>" placeholder="<?php echo esc_attr( $placeholder ); ?>"<?php echo '' !== $description ? ' aria-describedby="' . esc_attr( $id . '-desc' ) . '"' : ''; ?>><?php echo esc_textarea( $value ); ?></textarea>
 			<?php if ( '' !== $description ) : ?>
 				<p class="vg-help" id="<?php echo esc_attr( $id . '-desc' ); ?>"><?php echo esc_html( $description ); ?></p>
 			<?php endif; ?>
@@ -712,30 +784,6 @@ wp vaultgate password 'a-new-long-passphrase'</code></pre>
 					<option value="<?php echo esc_attr( (string) $option_value ); ?>" <?php selected( $value, (string) $option_value ); ?>><?php echo esc_html( $option_label ); ?></option>
 				<?php endforeach; ?>
 			</select>
-			<?php if ( '' !== $description ) : ?>
-				<p class="vg-help" id="<?php echo esc_attr( $id . '-desc' ); ?>"><?php echo esc_html( $description ); ?></p>
-			<?php endif; ?>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Colour picker.
-	 *
-	 * @param string $key         Setting key.
-	 * @param string $label       Label.
-	 * @param string $value       Current hex colour.
-	 * @param string $description Help text.
-	 */
-	private function field_color( string $key, string $label, string $value, string $description = '' ): void {
-		$id = 'vg-' . $key;
-		?>
-		<div class="vg-field vg-field--color">
-			<label for="<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $label ); ?></label>
-			<span class="vg-color">
-				<input type="color" id="<?php echo esc_attr( $id ); ?>" name="vaultgate[<?php echo esc_attr( $key ); ?>]" value="<?php echo esc_attr( Settings::normalize_hex( $value ) ); ?>"<?php echo '' !== $description ? ' aria-describedby="' . esc_attr( $id . '-desc' ) . '"' : ''; ?>>
-				<code><?php echo esc_html( Settings::normalize_hex( $value ) ); ?></code>
-			</span>
 			<?php if ( '' !== $description ) : ?>
 				<p class="vg-help" id="<?php echo esc_attr( $id . '-desc' ); ?>"><?php echo esc_html( $description ); ?></p>
 			<?php endif; ?>

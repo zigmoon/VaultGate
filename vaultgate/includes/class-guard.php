@@ -478,7 +478,7 @@ final class Guard {
 		$notice   = $this->notice();
 		$nonce    = $this->csp_nonce();
 
-		$theme = in_array( $settings['theme'], array( 'auto', 'light', 'dark' ), true ) ? $settings['theme'] : 'auto';
+		$theme = in_array( $settings['theme'], array( 'auto', 'light', 'dark' ), true ) ? $settings['theme'] : 'light';
 		$title = trim( (string) $settings['gate_title'] );
 
 		if ( '' === $title ) {
@@ -486,10 +486,7 @@ final class Guard {
 		}
 
 		$message = wp_kses_post( (string) $settings['gate_message'] );
-		$logo    = esc_url_raw( (string) $settings['logo_url'] );
-		$support = esc_url_raw( (string) $settings['support_url'] );
-		$accent  = sanitize_hex_color( (string) $settings['accent'] );
-		$accent  = $accent ? $accent : '#4f46e5';
+		$accent  = Settings::normalize_hex( (string) $settings['accent'] );
 
 		$site_name = wp_specialchars_decode( (string) get_bloginfo( 'name' ), ENT_QUOTES );
 		$action    = add_query_arg( 'vaultgate', 'login', home_url( '/' ) );
@@ -497,7 +494,10 @@ final class Guard {
 		$token     = $this->token->form_token();
 		$remember  = ! empty( $settings['remember_enabled'] );
 		$days      = (int) $settings['remember_days'];
-		$ink       = $this->contrast_ink( $accent );
+		$ink       = Settings::ink_on( $accent );
+
+		$accent_dark     = Settings::accent_for_dark( $accent );
+		$accent_dark_ink = Settings::ink_on( $accent_dark );
 
 		$lock_seconds = 0;
 
@@ -529,30 +529,77 @@ final class Guard {
 		}
 
 		$vg = array(
-			'title'         => $title,
-			'message'       => $message,
-			'logo'          => $logo,
-			'support'       => $support,
-			'footer'        => (string) $settings['footer_note'],
-			'accent'        => $accent,
-			'accent_ink'    => $ink,
-			'theme'         => $theme,
-			'nonce'         => $nonce,
-			'action'        => $action,
-			'redirect'      => $redirect,
-			'form_token'    => $token,
-			'remember'      => $remember,
-			'remember_days' => $days,
-			'notice'        => $notice['text'],
-			'invalid'       => $notice['invalid'],
-			'lock_seconds'  => $lock_seconds,
-			'site_name'     => $site_name,
-			'style_url'     => VAULTGATE_URL . 'assets/css/gate.css',
-			'script_url'    => VAULTGATE_URL . 'assets/js/gate.js',
+			'title'           => $title,
+			'message'         => $message,
+			'logo'            => $this->logo_markup( $settings ),
+			'accent'          => $accent,
+			'accent_ink'      => $ink,
+			'accent_dark'     => $accent_dark,
+			'accent_dark_ink' => $accent_dark_ink,
+			'theme'           => $theme,
+			'nonce'           => $nonce,
+			'action'          => $action,
+			'redirect'        => $redirect,
+			'form_token'      => $token,
+			'remember'        => $remember,
+			'remember_days'   => $days,
+			'notice'          => $notice['text'],
+			'invalid'         => $notice['invalid'],
+			'lock_seconds'    => $lock_seconds,
+			'site_name'       => $site_name,
+			'style_url'       => VAULTGATE_URL . 'assets/css/gate.css',
+			'script_url'      => VAULTGATE_URL . 'assets/js/gate.js',
 		);
 
 		require VAULTGATE_DIR . 'templates/gate.php';
 		exit;
+	}
+
+	/**
+	 * Markup of the logo shown above the title.
+	 *
+	 * The logo chosen in the media library wins; the legacy URL field remains
+	 * as a fallback for sites that pasted an external URL. The image is
+	 * decorative: the site name is printed just below it.
+	 *
+	 * @param array<string, mixed> $settings Settings.
+	 */
+	private function logo_markup( array $settings ): string {
+		$logo_id = isset( $settings['logo_id'] ) ? absint( $settings['logo_id'] ) : 0;
+
+		if ( $logo_id > 0 && function_exists( 'wp_get_attachment_image' ) ) {
+			$markup = wp_get_attachment_image(
+				$logo_id,
+				'medium',
+				false,
+				array(
+					'class'    => 'vg-logo',
+					'alt'      => '',
+					'decoding' => 'async',
+				)
+			);
+
+			if ( is_string( $markup ) && '' !== $markup ) {
+				return $markup;
+			}
+		}
+
+		$url = esc_url_raw( (string) ( $settings['logo_url'] ?? '' ) );
+
+		if ( '' === $url ) {
+			return '';
+		}
+
+		$scheme = strtolower( (string) wp_parse_url( $url, PHP_URL_SCHEME ) );
+
+		if ( ! in_array( $scheme, array( 'http', 'https' ), true ) ) {
+			return '';
+		}
+
+		return sprintf(
+			'<img class="vg-logo" src="%1$s" alt="" decoding="async">',
+			esc_url( $url )
+		);
 	}
 
 	/**
@@ -670,36 +717,6 @@ final class Guard {
 		$port = isset( $parts['port'] ) ? ':' . (int) $parts['port'] : '';
 
 		return $scheme . '://' . strtolower( (string) $parts['host'] ) . $port;
-	}
-
-	/**
-	 * Picks a readable text colour for the accent button.
-	 *
-	 * @param string $hex Accent colour, 6-digit hex.
-	 */
-	private function contrast_ink( string $hex ): string {
-		$hex = ltrim( $hex, '#' );
-
-		if ( 6 !== strlen( $hex ) ) {
-			return '#ffffff';
-		}
-
-		$channels = array(
-			hexdec( substr( $hex, 0, 2 ) ) / 255,
-			hexdec( substr( $hex, 2, 2 ) ) / 255,
-			hexdec( substr( $hex, 4, 2 ) ) / 255,
-		);
-
-		$linear = array_map(
-			static function ( float $channel ): float {
-				return $channel <= 0.04045 ? $channel / 12.92 : ( ( $channel + 0.055 ) / 1.055 ) ** 2.4;
-			},
-			$channels
-		);
-
-		$luminance = 0.2126 * $linear[0] + 0.7152 * $linear[1] + 0.0722 * $linear[2];
-
-		return $luminance > 0.48 ? '#11131a' : '#ffffff';
 	}
 
 	/**

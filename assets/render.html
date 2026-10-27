@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VaultGate — image renderer</title>
+<style>
+	@font-face {
+		font-family: 'Inter';
+		font-style: normal;
+		font-weight: 100 900;
+		font-display: block;
+		src: url('../vaultgate/assets/fonts/inter-latin.woff2') format('woff2');
+	}
+
+	@font-face {
+		font-family: 'Space Grotesk';
+		font-style: normal;
+		font-weight: 300 700;
+		font-display: block;
+		src: url('../vaultgate/assets/fonts/spacegrotesk-latin.woff2') format('woff2');
+	}
+
+	@font-face {
+		font-family: 'JetBrains Mono';
+		font-style: normal;
+		font-weight: 100 800;
+		font-display: block;
+		src: url('../vaultgate/assets/fonts/jetbrainsmono-latin.woff2') format('woff2');
+	}
+
+	* { box-sizing: border-box; }
+
+	html, body {
+		margin: 0;
+		padding: 0;
+		background: #0b0d10;
+		color: #f3f5f8;
+		font-family: 'Inter', system-ui, sans-serif;
+		overflow: hidden;
+	}
+
+	.canvas {
+		position: relative;
+		width: 100vw;
+		height: 100vh;
+		display: flex;
+		align-items: center;
+		background: #0b0d10;
+	}
+
+	.canvas::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background:
+			radial-gradient(120% 90% at 100% 0%, rgba(255, 255, 255, 0.07), transparent 60%);
+		pointer-events: none;
+	}
+
+	.mark {
+		flex: none;
+		display: block;
+		overflow: hidden;
+		border-radius: 1.2vmin;
+	}
+
+	.mark svg { display: block; width: 100%; height: 100%; }
+
+	.wordmark {
+		font-family: 'Space Grotesk', 'Inter', sans-serif;
+		font-weight: 600;
+		letter-spacing: -0.035em;
+		line-height: 1;
+	}
+
+	.tagline {
+		font-family: 'JetBrains Mono', monospace;
+		font-weight: 400;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		color: #9aa2ae;
+	}
+
+	.accent-rule {
+		background: #0a66ff;
+	}
+
+	/* ── Banner 1544×500 and 772×250 (same ratio) ─────────────────────────── */
+
+	.banner {
+		padding: 0 6.2vw;
+		gap: 4.2vw;
+	}
+
+	.banner .mark {
+		width: 10.4vw;
+		height: 10.4vw;
+	}
+
+	.banner .copy { flex: 1; }
+
+	.banner .wordmark {
+		font-size: 7.4vw;
+	}
+
+	.banner .tagline {
+		margin-top: 1.7vw;
+		font-size: 1.24vw;
+	}
+
+	.banner .rule {
+		width: 5.2vw;
+		height: 0.4vw;
+		margin-bottom: 2.1vw;
+	}
+
+	.banner .meta {
+		position: absolute;
+		left: 6.2vw;
+		bottom: 5.2vw;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 1.05vw;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: #6e7683;
+	}
+
+	/* ── Social preview 1280×640 ──────────────────────────────────────────── */
+
+	.social {
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+		padding: 0 8vw;
+		gap: 3.4vw;
+	}
+
+	.social .mark {
+		width: 13vw;
+		height: 13vw;
+	}
+
+	.social .wordmark {
+		font-size: 9.6vw;
+	}
+
+	.social .tagline {
+		margin-top: 2.4vw;
+		font-size: 1.55vw;
+	}
+
+	.social .rule {
+		width: 7vw;
+		height: 0.55vw;
+		margin-bottom: 2.8vw;
+	}
+
+	.social .meta {
+		position: absolute;
+		left: 8vw;
+		bottom: 6vw;
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 1.34vw;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: #6e7683;
+	}
+</style>
+</head>
+<body>
+	<main class="canvas" id="canvas"></main>
+	<script>
+		const params = new URLSearchParams(location.search);
+		const variant = params.get('variant') === 'social' ? 'social' : 'banner';
+		const canvas = document.getElementById('canvas');
+		canvas.classList.add(variant);
+
+		const mark = '<span class="mark"><svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="72" fill="#f7f8fa"/><g fill="none" stroke="#0b0d10" stroke-width="26" stroke-linecap="square"><path d="M166 372V238a90 90 0 0 1 180 0v134"/><path d="M128 372h256"/></g><circle cx="256" cy="272" r="17" fill="#0b0d10"/><path d="M256 284v52" stroke="#0b0d10" stroke-width="26" stroke-linecap="square"/></svg></span>';
+
+		canvas.innerHTML = mark
+			+ '<div class="copy">'
+			+ '<span class="rule accent-rule" style="display:block"></span>'
+			+ '<div class="wordmark">VaultGate</div>'
+			+ '<div class="tagline">Password protection for WordPress</div>'
+			+ '</div>'
+			+ '<div class="meta">WordPress 6.5 – 7.1 · PHP 8.2 – 8.5 · GPL-2.0</div>';
+	</script>
+</body>
+</html>

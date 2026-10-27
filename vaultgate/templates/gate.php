@@ -2,12 +2,17 @@
 /**
  * Standalone gate page.
  *
+ * Visual language: white Swiss, hairline rules, sharp corners, one accent.
+ * Typography: Inter — the SuperPhoto / SuperPrint family — embedded locally.
+ *
  * @package VaultGate
  *
  * @var array<string, mixed> $vg View data prepared by Guard::render_gate().
  */
 
 defined( 'ABSPATH' ) || exit;
+
+$vg_theme_class = 'light' === (string) $vg['theme'] ? 'vg-theme-light' : ( 'dark' === (string) $vg['theme'] ? 'vg-theme-dark' : 'vg-theme-auto' );
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -19,63 +24,64 @@ defined( 'ABSPATH' ) || exit;
 	<title><?php echo esc_html( (string) $vg['title'] ); ?> — <?php echo esc_html( (string) $vg['site_name'] ); ?></title>
 	<link rel="stylesheet" href="<?php echo esc_url( (string) $vg['style_url'] ); ?>">
 	<style nonce="<?php echo esc_attr( (string) $vg['nonce'] ); ?>">
-		:root { --vg-accent: <?php echo esc_attr( (string) $vg['accent'] ); ?>; --vg-accent-ink: <?php echo esc_attr( (string) $vg['accent_ink'] ); ?>; }
+		:root {
+			--vg-accent: <?php echo esc_attr( (string) $vg['accent'] ); ?>;
+			--vg-accent-ink: <?php echo esc_attr( (string) $vg['accent_ink'] ); ?>;
+			--vg-accent-dark: <?php echo esc_attr( (string) $vg['accent_dark'] ); ?>;
+			--vg-accent-dark-ink: <?php echo esc_attr( (string) $vg['accent_dark_ink'] ); ?>;
+		}
 	</style>
 </head>
-<body class="vg-gate vg-theme-<?php echo esc_attr( (string) $vg['theme'] ); ?>">
+<body class="vg-gate <?php echo esc_attr( $vg_theme_class ); ?>">
 	<a class="vg-skip" href="#vg-password"><?php esc_html_e( 'Skip to the password field', 'vaultgate' ); ?></a>
 
-	<main class="vg-card" aria-labelledby="vg-title">
+	<main class="vg-shell">
 		<header class="vg-head">
 			<?php if ( '' !== (string) $vg['logo'] ) : ?>
-				<img class="vg-logo" src="<?php echo esc_url( (string) $vg['logo'] ); ?>" alt="<?php echo esc_attr( (string) $vg['site_name'] ); ?>" decoding="async">
+				<div class="vg-logo-slot">
+					<?php
+					// Core-generated attachment markup, already escaped by logo_markup().
+					echo $vg['logo']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					?>
+				</div>
 			<?php else : ?>
 				<span class="vg-mark" aria-hidden="true">
-					<svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
-						<path d="M7 10V7a5 5 0 0 1 10 0v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-						<rect x="4.75" y="10" width="14.5" height="10.75" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
-						<circle cx="12" cy="15.25" r="1.35" fill="currentColor"/>
-						<path d="M12 16.4v1.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+					<svg viewBox="0 0 40 40" width="34" height="34" focusable="false" aria-hidden="true">
+						<path d="M10.5 34V17.5a9.5 9.5 0 0 1 19 0V34" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
+						<path d="M6 34h28" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
+						<circle cx="20" cy="23" r="2.4" fill="currentColor"/>
+						<path d="M20 24.6v5.4" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/>
 					</svg>
 				</span>
 			<?php endif; ?>
 
-			<p class="vg-eyebrow"><?php echo esc_html( (string) $vg['site_name'] ); ?></p>
-			<h1 id="vg-title"><?php echo esc_html( (string) $vg['title'] ); ?></h1>
+			<p class="vg-site"><?php echo esc_html( (string) $vg['site_name'] ); ?></p>
+			<h1 class="vg-title" id="vg-title"><?php echo esc_html( (string) $vg['title'] ); ?></h1>
+
+			<?php if ( '' !== trim( (string) $vg['message'] ) ) : ?>
+				<div class="vg-message"><?php echo wp_kses_post( wpautop( (string) $vg['message'] ) ); ?></div>
+			<?php endif; ?>
 		</header>
 
-		<?php if ( '' !== trim( (string) $vg['message'] ) ) : ?>
-			<div class="vg-message"><?php echo wp_kses_post( wpautop( (string) $vg['message'] ) ); ?></div>
-		<?php endif; ?>
-
-		<?php if ( '' !== (string) $vg['notice'] ) : ?>
-			<p class="vg-alert" id="vg-notice" role="alert" aria-live="polite" aria-atomic="true">
-				<span class="vg-alert-icon" aria-hidden="true">
-					<svg viewBox="0 0 20 20" width="17" height="17" focusable="false" aria-hidden="true">
-						<path d="M10 2.5 18 16H2L10 2.5Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-						<path d="M10 7.6v4.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-						<circle cx="10" cy="13.9" r="0.95" fill="currentColor"/>
-					</svg>
-				</span>
-				<?php echo esc_html( (string) $vg['notice'] ); ?>
-			</p>
-		<?php endif; ?>
-
-		<form class="vg-form" method="post" action="<?php echo esc_url( (string) $vg['action'] ); ?>">
+		<form class="vg-form" method="post" action="<?php echo esc_url( (string) $vg['action'] ); ?>" aria-labelledby="vg-title">
 			<input type="hidden" name="vaultgate_action" value="login">
 			<input type="hidden" name="vaultgate_form_token" value="<?php echo esc_attr( (string) $vg['form_token'] ); ?>">
 			<input type="hidden" name="vaultgate_redirect" value="<?php echo esc_attr( (string) $vg['redirect'] ); ?>">
 
 			<div class="vg-field">
-				<label for="vg-password"><?php esc_html_e( 'Password', 'vaultgate' ); ?></label>
-				<div class="vg-control">
-					<input id="vg-password" name="vaultgate_password" type="password" autocomplete="current-password" autocapitalize="none" spellcheck="false" enterkeyhint="go" required autofocus aria-describedby="vg-password-hint<?php echo '' !== (string) $vg['notice'] ? ' vg-notice' : ''; ?>"<?php echo ! empty( $vg['invalid'] ) ? ' aria-invalid="true"' : ''; ?>>
+				<div class="vg-label-row">
+					<label for="vg-password"><?php esc_html_e( 'Password', 'vaultgate' ); ?></label>
 					<button class="vg-reveal" type="button" data-vg-reveal aria-controls="vg-password" aria-pressed="false" data-label-show="<?php echo esc_attr__( 'Show', 'vaultgate' ); ?>" data-label-hide="<?php echo esc_attr__( 'Hide', 'vaultgate' ); ?>">
 						<span data-vg-reveal-label><?php esc_html_e( 'Show', 'vaultgate' ); ?></span>
 					</button>
 				</div>
+				<input id="vg-password" name="vaultgate_password" type="password" autocomplete="current-password" autocapitalize="none" spellcheck="false" enterkeyhint="go" required autofocus aria-describedby="vg-password-hint<?php echo ! empty( $vg['invalid'] ) ? ' vg-notice' : ''; ?>"<?php echo ! empty( $vg['invalid'] ) ? ' aria-invalid="true"' : ''; ?>>
 				<p id="vg-password-hint" class="vg-hint"><?php esc_html_e( 'Enter the password provided by the site owner.', 'vaultgate' ); ?></p>
 			</div>
+
+			<?php if ( '' !== (string) $vg['notice'] ) : ?>
+				<p class="vg-alert" id="vg-notice" role="alert" aria-live="polite" aria-atomic="true"><?php echo esc_html( (string) $vg['notice'] ); ?></p>
+			<?php endif; ?>
 
 			<?php if ( ! empty( $vg['remember'] ) ) : ?>
 				<label class="vg-check">
@@ -100,31 +106,14 @@ defined( 'ABSPATH' ) || exit;
 
 			<button class="vg-submit" type="submit" data-vg-lock="<?php echo esc_attr( (string) (int) $vg['lock_seconds'] ); ?>" data-label-wait="<?php echo esc_attr__( 'Try again in %s', 'vaultgate' ); ?>">
 				<span data-vg-submit-label><?php esc_html_e( 'Enter site', 'vaultgate' ); ?></span>
-				<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-					<path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
-				</svg>
 			</button>
 
 			<div class="vg-hp" aria-hidden="true" inert>
-				<label for="vg-website"><?php esc_html_e( 'Website', 'vaultgate' ); ?></label>
+				<span><?php esc_html_e( 'Website', 'vaultgate' ); ?></span>
 				<input id="vg-website" type="text" name="vaultgate_website" value="" tabindex="-1" autocomplete="off">
 			</div>
 		</form>
-
-		<?php if ( '' !== (string) $vg['support'] ) : ?>
-			<a class="vg-support" href="<?php echo esc_url( (string) $vg['support'] ); ?>">
-				<?php esc_html_e( 'Need access? Contact the site owner.', 'vaultgate' ); ?>
-			</a>
-		<?php endif; ?>
 	</main>
-
-	<footer class="vg-footer">
-		<?php if ( '' !== (string) $vg['footer'] ) : ?>
-			<p><?php echo esc_html( (string) $vg['footer'] ); ?></p>
-		<?php else : ?>
-			<p><?php echo esc_html( (string) $vg['site_name'] ); ?></p>
-		<?php endif; ?>
-	</footer>
 
 	<script src="<?php echo esc_url( (string) $vg['script_url'] ); ?>" defer></script>
 </body>

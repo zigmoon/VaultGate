@@ -6,7 +6,7 @@
  */
 
 define( 'ABSPATH', __DIR__ . '/' );
-define( 'VAULTGATE_VERSION', '1.0.0' );
+define( 'VAULTGATE_VERSION', '1.1.0' );
 define( 'VAULTGATE_URL', 'https://example.test/wp-content/plugins/vaultgate/' );
 define( 'VAULTGATE_DIR', dirname( __DIR__ ) . '/vaultgate/' );
 define( 'MINUTE_IN_SECONDS', 60 );
@@ -141,6 +141,25 @@ function wp_json_encode( $value ) {
 
 function wp_date( $format, $timestamp = null ) {
 	return date( $format, $timestamp ?? time() );
+}
+
+function wp_get_attachment_image_url( $attachment_id, $size = 'thumbnail', $icon = false ) {
+	$images = $GLOBALS['vg_attachments'] ?? array();
+
+	return $images[ (int) $attachment_id ] ?? false;
+}
+
+function wp_get_attachment_image( $attachment_id, $size = 'thumbnail', $icon = false, $attr = array() ) {
+	$url = wp_get_attachment_image_url( $attachment_id, $size, $icon );
+
+	if ( false === $url ) {
+		return false;
+	}
+
+	$class = isset( $attr['class'] ) ? ' class="' . esc_attr( $attr['class'] ) . '"' : '';
+	$alt   = isset( $attr['alt'] ) ? ' alt="' . esc_attr( $attr['alt'] ) . '"' : ' alt=""';
+
+	return '<img src="' . esc_url( $url ) . '"' . $class . $alt . '>';
 }
 
 function current_time( $type ) {

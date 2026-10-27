@@ -1,35 +1,50 @@
 <?php
 /**
- * Local visual preview of the gate page (development only).
+ * Gate page preview with query switches (development only).
  *
- * Usage:
- *   php -S 127.0.0.1:8450 tests/preview-router.php
+ *   /                     light theme, no logo
+ *   /?theme=dark          dark theme
+ *   /?theme=auto          follow the system
+ *   /?accent=%230a66ff    custom accent colour
+ *   /?logo=1              sample logo in place of the built-in mark
+ *   /?notice=1            error state
  *
  * @package VaultGate
  */
 
 require_once __DIR__ . '/bootstrap.php';
+require_once VAULTGATE_DIR . 'includes/class-settings.php';
+
+$vg_theme  = isset( $_GET['theme'] ) ? (string) $_GET['theme'] : 'light';
+$vg_accent = isset( $_GET['accent'] ) ? (string) $_GET['accent'] : '#0b0d10';
+$vg_logo   = ! empty( $_GET['logo'] );
+
+$vg_theme  = in_array( $vg_theme, array( 'light', 'dark', 'auto' ), true ) ? $vg_theme : 'light';
+$vg_accent = preg_match( '/^#[0-9a-f]{6}$/i', $vg_accent ) ? strtolower( $vg_accent ) : '#0b0d10';
+
+$vg_accent_dark = VaultGate\Settings::accent_for_dark( $vg_accent );
 
 $vg = array(
-	'title'         => 'Site privé',
-	'message'       => 'Ce site est en cours de construction. Saisissez le mot de passe pour continuer.',
-	'logo'          => '',
-	'support'       => 'mailto:hello@example.test',
-	'footer'        => 'VaultGate · aperçu local',
-	'accent'        => '#4f46e5',
-	'accent_ink'    => '#ffffff',
-	'theme'         => 'auto',
-	'nonce'         => 'preview-nonce',
-	'action'        => 'http://127.0.0.1:8450/?vaultgate=login',
-	'redirect'      => 'http://127.0.0.1:8450/',
-	'form_token'    => '1234567890.' . str_repeat( 'a', 64 ),
-	'remember'      => true,
-	'remember_days' => 30,
-	'notice'        => 'Mot de passe incorrect. Veuillez réessayer.',
-	'lock_seconds'  => 0,
-	'site_name'     => 'Studio Zigmoon',
-	'style_url'     => 'http://127.0.0.1:8450/vaultgate/assets/css/gate.css',
-	'script_url'    => 'http://127.0.0.1:8450/vaultgate/assets/js/gate.js',
+	'title'           => isset( $_GET['title'] ) ? (string) $_GET['title'] : 'Site privé',
+	'message'         => '',
+	'logo'            => $vg_logo ? '<img class="vg-logo" src="/assets/logo-sample.svg" alt="Studio Zigmoon" decoding="async">' : '',
+	'accent'          => $vg_accent,
+	'accent_ink'      => VaultGate\Settings::ink_on( $vg_accent ),
+	'accent_dark'     => $vg_accent_dark,
+	'accent_dark_ink' => VaultGate\Settings::ink_on( $vg_accent_dark ),
+	'theme'           => $vg_theme,
+	'nonce'           => 'preview-nonce',
+	'action'          => 'http://127.0.0.1:8450/?vaultgate=login',
+	'redirect'        => 'http://127.0.0.1:8450/',
+	'form_token'      => '1234567890.' . str_repeat( 'a', 64 ),
+	'remember'        => true,
+	'remember_days'   => 30,
+	'notice'          => ! empty( $_GET['notice'] ) ? 'Mot de passe incorrect. Veuillez réessayer.' : '',
+	'invalid'         => ! empty( $_GET['notice'] ),
+	'lock_seconds'    => 0,
+	'site_name'       => 'Studio Zigmoon',
+	'style_url'       => 'http://127.0.0.1:8450/vaultgate/assets/css/gate.css',
+	'script_url'      => 'http://127.0.0.1:8450/vaultgate/assets/js/gate.js',
 );
 
 require VAULTGATE_DIR . 'templates/gate.php';

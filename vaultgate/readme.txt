@@ -1,23 +1,26 @@
 === VaultGate ===
 Contributors: zigmoon
-Donate link: https://github.com/zigmoon
 Tags: password protection, maintenance mode, coming soon, access control, privacy
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Lock an entire WordPress site behind one password, with a polished gate page, signed cookies, CIDR allowlisting and no third-party service.
+One password for the whole site, with a quiet Swiss gate page, signed cookies and no third-party service.
 
 == Description ==
 
-VaultGate protects a whole WordPress installation while it is being built or kept private. Visitors see a fast, accessible password page instead of the site. Everything else — pages, posts, archives, feeds, sitemaps, the REST API, AJAX and XML-RPC — stays closed until the correct password is entered.
+VaultGate protects an entire WordPress installation while it is being built or kept private. Visitors see a fast, accessible password page instead of the site. Pages, feeds, sitemaps, the REST API, AJAX and XML-RPC stay closed until the correct password is entered.
 
-**Built for the current stack.** VaultGate targets WordPress 6.5 through 7.1 and PHP 8.2 through 8.5. It uses only maintained WordPress APIs, has no deprecated calls, no Composer or npm build step and no external requests. The included test suite is executed on PHP 8.3 and PHP 8.5.
+**Design** — a white Swiss gate page: hairline rules, sharp corners, one accent colour, no shadow, no decoration. It ships with the Inter typeface embedded in the plugin (the SuperPhoto / SuperPrint family), so the page renders identically everywhere and never calls Google Fonts or a CDN. Black is the default accent, with eight presets and a free colour picker.
 
-**Security first**
+**Your logo, from the media library** — pick any image in Settings → VaultGate → Gate page. It is stored in the WordPress Media Library (`wp-content/uploads/YYYY/MM/`), so it is included in your media backups and reused by any other theme or plugin. Wide logos work best; the gate caps them at 168 × 56 px.
+
+**Built for the current stack** — WordPress 6.5 through 7.1, PHP 8.2 through 8.5. Only maintained WordPress APIs, no deprecated calls, no Composer or npm build step, no external request. The test suite runs on PHP 8.3 and PHP 8.5.
+
+**Security**
 
 * The password is stored with `wp_hash_password()` — never in clear text, never logged.
 * Access is a stateless HMAC-SHA256 token in an HttpOnly, SameSite=Lax cookie (Secure on HTTPS).
@@ -27,18 +30,18 @@ VaultGate protects a whole WordPress installation while it is being built or kep
 * The gate sends `no-store` caching headers, `X-Robots-Tag`, `X-Frame-Options`, `Referrer-Policy`, `X-Content-Type-Options`, `Permissions-Policy` and a strict Content-Security-Policy with a per-request nonce.
 * No jQuery, no external fonts, no analytics, no CDN dependency.
 
-**Quality of implementation**
+**Quality**
 
 * Strictly escaped output, sanitised input, capability checks and nonces on every admin action.
 * Small, single-responsibility classes: settings, access rules, tokens, rate limiter, guard, admin, CLI.
-* 142 automated assertions ship in the `tests/` directory (unit tests plus a boot/render smoke test).
-* French translation included (`fr_FR`), English source strings, `.pot` catalogue.
+* 163 automated assertions ship in the `tests/` directory (unit tests plus a boot/render smoke test).
+* English source strings, complete French and Spanish translations, `.pot` catalogue.
 * Uninstall cleanup is opt-in, multisite-aware and also removes transients.
 
 **Features**
 
 * Master switch plus password change from Settings → VaultGate.
-* Custom gate page: title, message, logo, accent colour (automatic contrast), light/dark/auto theme, support link and footer.
+* Gate page: your logo, title, optional message, accent colour with automatic contrast, light / dark / system theme.
 * Session duration and an optional "Keep me signed in".
 * Let logged-in users with a chosen capability (administrators, editors, authors or any logged-in user) bypass the gate. Administrators always bypass.
 * IP allowlist with IPv4, IPv6 and CIDR ranges.
@@ -63,9 +66,18 @@ You can always log in through `wp-login.php`. Administrator sessions always bypa
 2. Activate the plugin.
 3. Open Settings → VaultGate.
 4. Enter a password (minimum 8 characters), confirm it, then tick "Enable password protection" and save.
-5. Open the site in a private window to check the gate.
+5. Optional: choose your logo and accent colour under "Gate page".
+6. Open the site in a private window to check the gate.
 
 == Frequently Asked Questions ==
+
+= Where is my logo stored? =
+
+In the WordPress Media Library, under `wp-content/uploads/YYYY/MM/`. VaultGate only stores the attachment ID, so the image survives plugin updates and is included in any media backup. Removing the plugin does not delete the image from your library.
+
+= Which image formats can I use? =
+
+PNG, JPEG, WebP and GIF. SVG uploads are blocked by WordPress by default; enable them with a plugin or an `upload_mimes` filter if you need vector logos. A wide logo works best: the gate caps it at 168 × 56 px and keeps the aspect ratio.
 
 = Is the password stored in clear text? =
 
@@ -97,13 +109,29 @@ Yes. Settings are per site. Network activation is supported; uninstall cleanup r
 
 = Which PHP versions are supported? =
 
-PHP 8.2 and newer, including PHP 8.3, 8.4 and 8.5. The code uses typed properties, straightforward control flow and no deprecated APIs.
+PHP 8.2 and newer, including PHP 8.3, 8.4 and 8.5.
 
 = Is the gate page accessible? =
 
 It uses semantic HTML, a skip link, visible focus rings, a properly labelled password field, an `aria-live` error message, reduced-motion support and AA-level colour contrast. The password reveal button and the lock-out countdown are progressive enhancement only: the form works without JavaScript.
 
+= Can I remove the message under the title? =
+
+Yes, it is empty by default. The gate is then a single quiet column: logo, site name, title, password field and button.
+
 == Changelog ==
+
+= 1.1.0 =
+* New visual language: white Swiss gate page and admin screen, hairline rules, sharp corners, black by default.
+* Inter, Space Grotesk and JetBrains Mono are now embedded in the plugin — no Google Fonts, no CDN.
+* Logo picker built on the WordPress Media Library (attachment ID, honours image sizes).
+* Eight accent presets plus a free colour picker, with automatic contrast and a dark-theme fallback.
+* Light / dark / system theme, light by default.
+* The default "under construction" sentence, the support link and the footer are gone: nothing is printed that you did not write.
+* Spanish translation added; English is the source language, French and Spanish ship as translations.
+* Mobile layout rebuilt: the gate is centred at every width, with no horizontal overflow.
+* New icon, banners and social preview in the same art direction.
+* New validation helpers: `Settings::luminance()`, `ink_on()`, `accent_for_dark()`, `swatches()`.
 
 = 1.0.0 =
 * Initial release.
@@ -111,10 +139,9 @@ It uses semantic HTML, a skip link, visible focus rings, a properly labelled pas
 * HMAC-signed HttpOnly cookies with instant global revocation.
 * Per-visitor rate limiting with a live countdown, and an anonymised activity log.
 * CIDR/IP allowlist, path exclusions resolved against the installation folder, and capability-based bypass.
-* Customisable, accessible gate page with light, dark and automatic themes.
-* French translation, WP-CLI commands and opt-in uninstall cleanup.
+* WP-CLI commands and opt-in uninstall cleanup.
 
 == Upgrade Notice ==
 
-= 1.0.0 =
-First public release.
+= 1.1.0 =
+New Swiss design, media-library logo picker, accent presets, embedded fonts and a Spanish translation. Existing settings are kept.

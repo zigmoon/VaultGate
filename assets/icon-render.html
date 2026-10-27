@@ -5,17 +5,11 @@
 <title>VaultGate icon renderer</title>
 <style>
 	html, body { margin: 0; padding: 0; background: transparent; }
-	body { display: flex; align-items: flex-start; justify-content: flex-start; }
+	body { display: block; }
 	#icon { display: block; }
 </style>
 </head>
 <body>
-<img id="icon" src="icon.svg" alt="">
-<script>
-	const size = Number(new URLSearchParams(location.search).get('size') || 512);
-	const img = document.getElementById('icon');
-	img.width = size;
-	img.height = size;
-</script>
+<img id="icon" src="icon.svg" alt="" width="1024" height="1024">
 </body>
 </html>

@@ -29,7 +29,8 @@ final class Settings {
 	private ?array $cache = null;
 
 	/**
-	 * Plugin defaults. English source strings; French ships as a translation.
+	 * Plugin defaults. English source strings; French and Spanish ship as
+	 * translations.
 	 *
 	 * @return array<string, mixed>
 	 */
@@ -37,12 +38,11 @@ final class Settings {
 		return array(
 			'enabled'            => false,
 			'gate_title'         => __( 'Private site', 'vaultgate' ),
-			'gate_message'       => __( 'This site is under construction. Enter the password to continue.', 'vaultgate' ),
+			'gate_message'       => '',
+			'logo_id'            => 0,
 			'logo_url'           => '',
-			'accent'             => '#4f46e5',
-			'theme'              => 'auto',
-			'support_url'        => '',
-			'footer_note'        => '',
+			'accent'             => '#0b0d10',
+			'theme'              => 'light',
 			'session_days'       => 7,
 			'remember_enabled'   => true,
 			'remember_days'      => 30,
@@ -60,6 +60,56 @@ final class Settings {
 			'log_enabled'        => true,
 			'delete_data'        => false,
 		);
+	}
+
+	/**
+	 * Colour presets offered in the settings screen. Monochrome first, like
+	 * the rest of the interface: black is the default.
+	 *
+	 * @return array<int, array{value: string, label: string}>
+	 */
+	public static function swatches(): array {
+		$swatches = array(
+			array(
+				'value' => '#0b0d10',
+				'label' => __( 'Ink', 'vaultgate' ),
+			),
+			array(
+				'value' => '#44505f',
+				'label' => __( 'Slate', 'vaultgate' ),
+			),
+			array(
+				'value' => '#0a66ff',
+				'label' => __( 'Blue', 'vaultgate' ),
+			),
+			array(
+				'value' => '#0f7a53',
+				'label' => __( 'Green', 'vaultgate' ),
+			),
+			array(
+				'value' => '#9a5b00',
+				'label' => __( 'Amber', 'vaultgate' ),
+			),
+			array(
+				'value' => '#b42318',
+				'label' => __( 'Red', 'vaultgate' ),
+			),
+			array(
+				'value' => '#6d28d9',
+				'label' => __( 'Violet', 'vaultgate' ),
+			),
+			array(
+				'value' => '#be123c',
+				'label' => __( 'Rose', 'vaultgate' ),
+			),
+		);
+
+		/**
+		 * Filters the accent colour presets.
+		 *
+		 * @param array<int, array{value: string, label: string}> $swatches Presets.
+		 */
+		return (array) apply_filters( 'vaultgate_swatches', $swatches );
 	}
 
 	/**
@@ -368,26 +418,19 @@ final class Settings {
 		}
 
 		$clean['gate_message'] = wp_kses_post( self::scalar( $input['gate_message'] ?? '' ) );
-		$clean['footer_note']  = trim( sanitize_text_field( self::scalar( $input['footer_note'] ?? '' ) ) );
 
-		$logo = esc_url_raw( trim( self::scalar( $input['logo_url'] ?? '' ) ) );
-		$logo_scheme = '' !== $logo ? strtolower( (string) wp_parse_url( $logo, PHP_URL_SCHEME ) ) : '';
+		$clean['logo_id']  = max( 0, (int) self::scalar( $input['logo_id'] ?? '' ) );
+		$logo              = esc_url_raw( trim( self::scalar( $input['logo_url'] ?? '' ) ) );
+		$logo_scheme       = '' !== $logo ? strtolower( (string) wp_parse_url( $logo, PHP_URL_SCHEME ) ) : '';
 		if ( '' !== $logo && ! in_array( $logo_scheme, array( 'http', 'https' ), true ) ) {
 			$logo = '';
 		}
 		$clean['logo_url'] = $logo;
 
-		$support = esc_url_raw( trim( self::scalar( $input['support_url'] ?? '' ) ) );
-		$support_scheme = '' !== $support ? strtolower( (string) wp_parse_url( $support, PHP_URL_SCHEME ) ) : '';
-		if ( '' !== $support && ! in_array( $support_scheme, array( 'http', 'https', 'mailto' ), true ) ) {
-			$support = '';
-		}
-		$clean['support_url'] = $support;
-
 		$accent               = sanitize_hex_color( self::scalar( $input['accent'] ?? '' ) );
 		$clean['accent']      = self::normalize_hex( $accent ? $accent : $defaults['accent'] );
 		$theme                = sanitize_key( self::scalar( $input['theme'] ?? '' ) );
-		$clean['theme']       = in_array( $theme, array( 'auto', 'light', 'dark' ), true ) ? $theme : 'auto';
+		$clean['theme']       = in_array( $theme, array( 'auto', 'light', 'dark' ), true ) ? $theme : 'light';
 		$clean['session_days']  = min( 365, max( 1, absint( self::scalar( $input['session_days'] ?? '' ) ) ?: (int) $defaults['session_days'] ) );
 		$clean['remember_days'] = min( 365, max( 1, absint( self::scalar( $input['remember_days'] ?? '' ) ) ?: (int) $defaults['remember_days'] ) );
 
@@ -417,7 +460,52 @@ final class Settings {
 			return '#' . $matches[1] . $matches[1] . $matches[2] . $matches[2] . $matches[3] . $matches[3];
 		}
 
-		return preg_match( '/^#[0-9a-f]{6}$/', $color ) ? $color : '#4f46e5';
+		return preg_match( '/^#[0-9a-f]{6}$/', $color ) ? $color : '#0b0d10';
+	}
+
+	/**
+	 * Relative luminance of a hex colour (WCAG 2.1 definition).
+	 *
+	 * @param string $hex 6-digit hex colour.
+	 */
+	public static function luminance( string $hex ): float {
+		$hex = ltrim( self::normalize_hex( $hex ), '#' );
+
+		$channels = array(
+			hexdec( substr( $hex, 0, 2 ) ) / 255,
+			hexdec( substr( $hex, 2, 2 ) ) / 255,
+			hexdec( substr( $hex, 4, 2 ) ) / 255,
+		);
+
+		$linear = array_map(
+			static function ( float $channel ): float {
+				return $channel <= 0.04045 ? $channel / 12.92 : ( ( $channel + 0.055 ) / 1.055 ) ** 2.4;
+			},
+			$channels
+		);
+
+		return 0.2126 * $linear[0] + 0.7152 * $linear[1] + 0.0722 * $linear[2];
+	}
+
+	/**
+	 * Readable text colour on top of an accent colour.
+	 *
+	 * @param string $hex 6-digit hex colour.
+	 */
+	public static function ink_on( string $hex ): string {
+		return self::luminance( $hex ) > 0.48 ? '#0b0d10' : '#ffffff';
+	}
+
+	/**
+	 * Accent colour to use on the dark theme.
+	 *
+	 * A near-black accent would disappear on a near-black page, so dark themes
+	 * fall back to white for the button and keep the chosen hue for highlights.
+	 *
+	 * @param string $hex 6-digit hex colour.
+	 */
+	public static function accent_for_dark( string $hex ): string {
+		return self::luminance( $hex ) < 0.06 ? '#f4f4f5' : self::normalize_hex( $hex );
 	}
 
 	/**

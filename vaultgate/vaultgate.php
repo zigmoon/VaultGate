@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       VaultGate
  * Plugin URI:        https://github.com/zigmoon/passwordprotect
- * Description:       Password-protects an entire WordPress site with a polished gate page, granular access rules and no third-party dependencies.
- * Version:           1.0.0
+ * Description:       Password-protects an entire WordPress site with a quiet, Swiss-designed gate page, granular access rules and no third-party dependencies.
+ * Version:           1.1.0
  * Requires at least: 6.5
  * Tested up to:      7.1
  * Requires PHP:      8.2
@@ -22,7 +22,7 @@ namespace VaultGate;
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'VAULTGATE_VERSION' ) ) {
-	define( 'VAULTGATE_VERSION', '1.0.0' );
+	define( 'VAULTGATE_VERSION', '1.1.0' );
 }
 if ( ! defined( 'VAULTGATE_FILE' ) ) {
 	define( 'VAULTGATE_FILE', __FILE__ );
