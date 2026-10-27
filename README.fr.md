@@ -36,6 +36,8 @@
 
 **Réglages → VaultGate** — cinq onglets, sans bruit : **Protection**, **Page de garde**, **Accès**, **Avancé**, **Activité**.
 
+![Protection : interrupteur principal, mot de passe, déconnexion de tous les visiteurs](docs/admin-protection.png)
+
 - **Un mot de passe, tout est fermé.** Pages, archives, flux, sitemaps, API REST, AJAX anonyme et XML-RPC — chaque surface a son interrupteur.
 - **Votre logo, votre couleur.** Logo choisi dans la médiathèque (`wp-content/uploads`), huit nuances ou n’importe quel code hexadécimal, page de garde claire / sombre / système. Le contraste est calculé, jamais deviné.
 - **Rien que vous n’ayez écrit.** Aucune phrase marketing, aucun lien de support, aucun pied de page sur la garde. Un logo, un titre, un champ, un bouton.
@@ -50,8 +52,6 @@
 | ![Claire](docs/gate-light.png) | ![Sombre](docs/gate-dark.png) |
 
 Une colonne, centrée dès 320 px, et elle fonctionne sans JavaScript.
-
-![Protection : interrupteur principal, mot de passe, déconnexion de tous les visiteurs](docs/admin-protection.png)
 
 ## Installation
 

@@ -36,6 +36,8 @@
 
 **Settings → VaultGate** — five tabs, no noise: **Protection**, **Gate page**, **Access**, **Advanced**, **Activity**.
 
+![Protection: master switch, password, sign out every visitor](docs/admin-protection.png)
+
 - **One password, everything closed.** Pages, archives, feeds, sitemaps, the REST API, anonymous AJAX and XML-RPC — each with its own switch.
 - **Your logo, your colour.** Logo picked from the Media Library (`wp-content/uploads`), eight accent swatches or any hex, light / dark / system gate. Contrast is computed, never guessed.
 - **Nothing you did not write.** No marketing sentence, no support link, no footer on the gate. A logo, a title, a field, a button.
@@ -50,8 +52,6 @@
 | ![Light](docs/gate-light.png) | ![Dark](docs/gate-dark.png) |
 
 One column, centred from 320 px up, and it works without JavaScript.
-
-![Protection: master switch, password, sign out every visitor](docs/admin-protection.png)
 
 ## Install
 

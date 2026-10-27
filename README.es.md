@@ -36,6 +36,8 @@
 
 **Ajustes → VaultGate** — cinco pestañas, sin ruido: **Protección**, **Página de acceso**, **Acceso**, **Avanzado**, **Actividad**.
 
+![Protección: interruptor principal, contraseña, cerrar sesión a todos los visitantes](docs/admin-protection.png)
+
 - **Una contraseña y todo queda cerrado.** Páginas, archivos, feeds, sitemaps, la API REST, AJAX anónimo y XML-RPC — cada superficie con su interruptor.
 - **Tu logotipo, tu color.** Logotipo elegido en la biblioteca de medios (`wp-content/uploads`), ocho matices o cualquier hexadecimal, página clara / oscura / sistema. El contraste se calcula, nunca se adivina.
 - **Nada que tú no hayas escrito.** Sin frase de marketing, sin enlace de soporte, sin pie de página. Un logotipo, un título, un campo, un botón.
@@ -50,8 +52,6 @@
 | ![Clara](docs/gate-light.png) | ![Oscura](docs/gate-dark.png) |
 
 Una columna, centrada desde 320 px, y funciona sin JavaScript.
-
-![Protección: interruptor principal, contraseña, cerrar sesión a todos los visitantes](docs/admin-protection.png)
 
 ## Instalación
 
