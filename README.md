@@ -48,7 +48,9 @@ One column, centred from 320 px up. It works without JavaScript; the eye that re
 
 | Protection | Gate page | Access |
 |---|---|---|
-| ![Protection: master switch, password with reveal, sign out every visitor](docs/admin-protection.png) | ![Gate page: logo from the Media Library, accent swatches, theme, texts](docs/admin-gate.png) | ![Access: sessions, bypass capability, IP allowlist, trusted proxies, excluded paths](docs/admin-access.png) |
+| [![Protection: master switch, password with reveal, sign out every visitor](docs/admin-protection.png)](docs/admin-protection.png) | [![Gate page: logo from the Media Library, accent swatches, theme, texts](docs/admin-gate.png)](docs/admin-gate.png) | [![Access: sessions, bypass capability, IP allowlist, trusted proxies, excluded paths](docs/admin-access.png)](docs/admin-access.png) |
+
+Click a panel for the full-size view.
 
 **Advanced** holds the surface switches (REST, feeds, sitemaps, AJAX, XML-RPC), the brute-force limits and the cleanup options; **Activity** lists the last 20 events.
 
