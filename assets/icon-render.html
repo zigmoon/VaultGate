@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>VaultGate icon renderer</title>
+<style>
+	html, body { margin: 0; padding: 0; background: transparent; }
+	body { display: flex; align-items: flex-start; justify-content: flex-start; }
+	#icon { display: block; }
+</style>
+</head>
+<body>
+<img id="icon" src="icon.svg" alt="">
+<script>
+	const size = Number(new URLSearchParams(location.search).get('size') || 512);
+	const img = document.getElementById('icon');
+	img.width = size;
+	img.height = size;
+</script>
+</body>
+</html>
