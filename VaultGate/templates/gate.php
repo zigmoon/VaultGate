@@ -3,7 +3,7 @@
  * Standalone gate page.
  *
  * Visual language: white Swiss, hairline rules, sharp corners, one accent.
- * Typography: Inter — the SuperPhoto / SuperPrint family — embedded locally.
+ * Typography: Inter, embedded locally as WOFF2.
  *
  * @package VaultGate
  *

@@ -92,7 +92,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - Opt-in, multisite-aware uninstall cleanup.
 - Reproducible tooling: translations, images and archive with SHA-256 verification.
 
-[1.1.2]: https://github.com/zigmoon/passwordprotect/releases/tag/v1.1.2
-[1.1.1]: https://github.com/zigmoon/passwordprotect/releases/tag/v1.1.1
-[1.1.0]: https://github.com/zigmoon/passwordprotect/releases/tag/v1.1.0
-[1.0.0]: https://github.com/zigmoon/passwordprotect/releases/tag/v1.0.0
+[1.1.2]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.2
+[1.1.1]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.1
+[1.1.0]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.0
+[1.0.0]: https://github.com/zigmoon/VaultGate/releases/tag/v1.0.0

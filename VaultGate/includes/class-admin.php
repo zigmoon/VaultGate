@@ -24,7 +24,7 @@ final class Admin {
 	 */
 	private const AUTHOR_SITE = 'https://2points13.fr';
 	private const DEV_SITE    = 'https://zigmoon.com';
-	private const DOCS_SITE   = 'https://github.com/zigmoon/passwordprotect#readme';
+	private const DOCS_SITE   = 'https://github.com/zigmoon/VaultGate#readme';
 
 	/**
 	 * Settings.

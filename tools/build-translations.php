@@ -119,7 +119,7 @@ function vg_po_header( string $locale ): string {
 	$header = "msgid \"\"\n"
 		. "msgstr \"\"\n"
 		. "\"Project-Id-Version: VaultGate 1.1.2\\n\"\n"
-		. "\"Report-Msgid-Bugs-To: https://github.com/zigmoon/passwordprotect/issues\\n\"\n"
+		. "\"Report-Msgid-Bugs-To: https://github.com/zigmoon/VaultGate/issues\\n\"\n"
 		. "\"POT-Creation-Date: 2026-10-27T00:00:00+00:00\\n\"\n";
 
 	if ( '' !== $locale ) {
@@ -202,7 +202,7 @@ foreach ( $locales as $locale => $catalogue ) {
 	file_put_contents( $root . '/VaultGate/languages/vaultgate-' . $locale . '.po', $po );
 
 	$mo_header = "Project-Id-Version: VaultGate 1.1.2\n"
-		. "Report-Msgid-Bugs-To: https://github.com/zigmoon/passwordprotect/issues\n"
+		. "Report-Msgid-Bugs-To: https://github.com/zigmoon/VaultGate/issues\n"
 		. "PO-Revision-Date: 2026-10-27T00:00:00+00:00\n"
 		. "Last-Translator: zigmoon\n"
 		. "Language-Team: {$team}\n"

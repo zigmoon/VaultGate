@@ -12,7 +12,7 @@ Merci de ne **pas** ouvrir d’issue publique pour une faille de sécurité.
 
 Utilisez les avis de sécurité privés de GitHub :
 
-<https://github.com/zigmoon/passwordprotect/security/advisories/new>
+<https://github.com/zigmoon/VaultGate/security/advisories/new>
 
 Merci d’indiquer :
 

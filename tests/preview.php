@@ -27,7 +27,7 @@ $vg_accent_dark = VaultGate\Settings::accent_for_dark( $vg_accent );
 $vg = array(
 	'title'           => isset( $_GET['title'] ) ? (string) $_GET['title'] : 'Site privé',
 	'message'         => '',
-	'logo'            => $vg_logo ? '<img class="vg-logo" src="/assets/logo-sample.svg" alt="Studio Zigmoon" decoding="async">' : '',
+	'logo'            => $vg_logo ? '<img class="vg-logo" src="/assets/logo-sample.svg" alt="" decoding="async">' : '',
 	'accent'          => $vg_accent,
 	'accent_ink'      => VaultGate\Settings::ink_on( $vg_accent ),
 	'accent_dark'     => $vg_accent_dark,
@@ -42,9 +42,8 @@ $vg = array(
 	'notice'          => ! empty( $_GET['notice'] ) ? 'Mot de passe incorrect. Veuillez réessayer.' : '',
 	'invalid'         => ! empty( $_GET['notice'] ),
 	'lock_seconds'    => 0,
-	'site_name'       => 'Studio Zigmoon',
-	'style_url'       => 'http://127.0.0.1:8450/vaultgate/assets/css/gate.css',
-	'script_url'      => 'http://127.0.0.1:8450/vaultgate/assets/js/gate.js',
+	'style_url'       => 'http://127.0.0.1:8450/VaultGate/assets/css/gate.css',
+	'script_url'      => 'http://127.0.0.1:8450/VaultGate/assets/js/gate.js',
 );
 
 require VAULTGATE_DIR . 'templates/gate.php';

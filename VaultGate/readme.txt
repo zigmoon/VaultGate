@@ -14,7 +14,7 @@ One password for the whole site, with a quiet Swiss gate page, signed cookies an
 
 VaultGate protects an entire WordPress installation while it is being built or kept private. Visitors see a fast, accessible password page instead of the site. Pages, feeds, sitemaps, the REST API, AJAX and XML-RPC stay closed until the correct password is entered.
 
-**Design** — a white Swiss gate page: hairline rules, sharp corners, one accent colour, no shadow, no decoration. It ships with the Inter typeface embedded in the plugin (the SuperPhoto / SuperPrint family), so the page renders identically everywhere and never calls Google Fonts or a CDN. Black is the default accent, with eight presets and a free colour picker.
+**Design** — a white Swiss gate page: hairline rules, sharp corners, one accent colour, no shadow, no decoration. It ships with the Inter typeface embedded in the plugin as WOFF2, so the page renders identically everywhere and never calls Google Fonts or a CDN. Black is the default accent, with eight presets and a free colour picker.
 
 **Your logo, from the media library** — pick any image in Settings → VaultGate → Gate page. It is stored in the WordPress Media Library (`wp-content/uploads/YYYY/MM/`), so it is included in your media backups and reused by any other theme or plugin. Wide logos work best; the gate caps them at 168 × 56 px.
 
