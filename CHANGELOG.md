@@ -3,6 +3,16 @@
 All notable changes to VaultGate are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.4] — 28 October 2026
+
+### Fixed
+
+- **No more flash of five stacked panels.** Inactive tabs are now hidden by the server (`hidden` attribute) instead of waiting for the script, so the settings screen paints its real shape immediately. Without JavaScript every panel is still shown, as before.
+
+### Changed
+
+- README: the gate comes first, the settings screen follows in a three-column table, and every screenshot was retaken on WordPress 7.1.3 — same crop, same height, both password eyes and the new Trusted proxies field included.
+
 ## [1.1.3] — 28 October 2026
 
 ### Security
@@ -106,6 +116,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - Opt-in, multisite-aware uninstall cleanup.
 - Reproducible tooling: translations, images and archive with SHA-256 verification.
 
+[1.1.4]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.4
 [1.1.3]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.3
 [1.1.1]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.1
 [1.1.0]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.0

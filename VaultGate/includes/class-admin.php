@@ -545,7 +545,7 @@ final class Admin {
 					</div>
 				</div>
 
-				<div class="vg-panel" id="vg-panel-appearance" role="tabpanel" aria-labelledby="vg-tab-appearance" data-vg-panel="appearance">
+				<div class="vg-panel" id="vg-panel-appearance" hidden role="tabpanel" aria-labelledby="vg-tab-appearance" data-vg-panel="appearance">
 					<?php $this->section( __( 'Logo', 'vaultgate' ) ); ?>
 
 					<div class="vg-field vg-field--logo">
@@ -615,7 +615,7 @@ final class Admin {
 					?>
 				</div>
 
-				<div class="vg-panel" id="vg-panel-access" role="tabpanel" aria-labelledby="vg-tab-access" data-vg-panel="access">
+				<div class="vg-panel" id="vg-panel-access" hidden role="tabpanel" aria-labelledby="vg-tab-access" data-vg-panel="access">
 					<?php $this->section( __( 'Sessions', 'vaultgate' ) ); ?>
 
 					<div class="vg-grid vg-grid--2">
@@ -667,7 +667,7 @@ final class Admin {
 					?>
 				</div>
 
-				<div class="vg-panel" id="vg-panel-advanced" role="tabpanel" aria-labelledby="vg-tab-advanced" data-vg-panel="advanced">
+				<div class="vg-panel" id="vg-panel-advanced" hidden role="tabpanel" aria-labelledby="vg-tab-advanced" data-vg-panel="advanced">
 					<?php $this->section( __( 'What is protected', 'vaultgate' ) ); ?>
 
 					<?php
@@ -703,7 +703,7 @@ wp vaultgate password 'a-new-long-passphrase'</code></pre>
 					</div>
 				</div>
 
-				<div class="vg-panel" id="vg-panel-activity" role="tabpanel" aria-labelledby="vg-tab-activity" data-vg-panel="activity">
+				<div class="vg-panel" id="vg-panel-activity" hidden role="tabpanel" aria-labelledby="vg-tab-activity" data-vg-panel="activity">
 					<div class="vg-panel-head">
 						<div>
 							<?php $this->section( __( 'Recent activity', 'vaultgate' ) ); ?>

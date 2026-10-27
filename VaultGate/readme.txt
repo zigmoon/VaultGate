@@ -4,7 +4,7 @@ Tags: password protection, maintenance mode, coming soon, access control, privac
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,6 +127,9 @@ Yes, it is empty by default. The gate is then a single quiet column: logo, title
 
 == Changelog ==
 
+= 1.1.4 =
+* The settings screen no longer flashes the five panels stacked before the script runs: inactive tabs are hidden by the server.
+
 = 1.1.3 =
 * Security: a spoofed X-Forwarded-For can no longer imitate an allowlisted address or dodge the rate limiter. Forwarded headers are ignored unless the direct peer is a trusted proxy, and the chain is read from the right.
 * Security: CF-Connecting-IP, True-Client-IP and X-Real-IP are no longer read, because a plain proxy passes them through untouched.
@@ -170,6 +173,9 @@ Yes, it is empty by default. The gate is then a single quiet column: logo, title
 * WP-CLI commands and opt-in uninstall cleanup.
 
 == Upgrade Notice ==
+
+= 1.1.4 =
+Small polish release: the settings screen paints cleanly instead of stacking its five panels for a frame. Existing settings are kept.
 
 = 1.1.3 =
 Security release: forwarded headers are only trusted from a configured proxy, and path normalisation no longer has a traversal gap. Update now if "Trust reverse-proxy headers" is enabled.

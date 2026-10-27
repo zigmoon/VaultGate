@@ -11,8 +11,8 @@
 
 <p align="center">
   <a href="https://github.com/zigmoon/VaultGate/releases/latest"><b>⬇ Download</b></a> ·
+  <a href="#the-gate">The gate</a> ·
   <a href="#install">Install</a> ·
-  <a href="#what-you-get">What you get</a> ·
   <a href="#security">Security</a> ·
   <a href="#credits">Credits</a>
 </p>
@@ -20,25 +20,10 @@
 <p align="center">
   <img alt="WordPress 6.5 to 7.1" src="https://img.shields.io/badge/WordPress-6.5%20%E2%86%92%207.1-0b0d10?style=flat-square">
   <img alt="PHP 8.2 to 8.5" src="https://img.shields.io/badge/PHP-8.2%20%E2%86%92%208.5-0b0d10?style=flat-square">
-  <img alt="Version 1.1.3" src="https://img.shields.io/badge/version-1.1.3-0a66ff?style=flat-square">
+  <img alt="Version 1.1.4" src="https://img.shields.io/badge/version-1.1.4-0a66ff?style=flat-square">
   <img alt="213 assertions" src="https://img.shields.io/badge/tests-213%20assertions-0b0d10?style=flat-square">
   <img alt="Licence GPL-2.0-or-later" src="https://img.shields.io/badge/licence-GPL--2.0--or--later-0b0d10?style=flat-square">
 </p>
-
-![Settings, Gate page tab: logo from the Media Library, accent swatches, theme, texts](docs/admin-appearance.png)
-
-## What you get
-
-**Settings → VaultGate** — five tabs, no noise: **Protection**, **Gate page**, **Access**, **Advanced**, **Activity**.
-
-![Protection tab: master switch, password with reveal, sign out every visitor](docs/admin-protection.png)
-
-- **One password, everything closed.** Pages, archives, feeds, sitemaps, the REST API, anonymous AJAX and XML-RPC — each with its own switch.
-- **Your logo, your colour.** Logo picked from the Media Library (`wp-content/uploads`), eight accent swatches or any hex, light / dark / system gate. Button contrast is computed, never guessed.
-- **Nothing you did not write.** No marketing sentence, no support link, no footer on the gate. A logo, a title, a field, a button.
-- **No third party.** Fonts, icons and styles live inside the plugin. No Google Fonts, no CDN, no analytics, no outbound request.
-- **Built to be removed.** No table, no `.htaccess`, no rewrite rule. Deactivate and the site is public again.
-- **English, French, Spanish.** Source strings in English; the interface follows the site language.
 
 ## The gate
 
@@ -47,6 +32,25 @@
 | ![Light](docs/gate-light.png) | ![Dark](docs/gate-dark.png) |
 
 One column, centred from 320 px up. It works without JavaScript; the eye that reveals the password, the lock-out countdown and the caps-lock hint are progressive enhancement only.
+
+## What you get
+
+**Settings → VaultGate** — five tabs, no noise: **Protection**, **Gate page**, **Access**, **Advanced**, **Activity**.
+
+- **One password, everything closed.** Pages, archives, feeds, sitemaps, the REST API, anonymous AJAX and XML-RPC — each with its own switch.
+- **Your logo, your colour.** Logo picked from the Media Library (`wp-content/uploads`), eight accent swatches or any hex, light / dark / system gate. Button contrast is computed, never guessed.
+- **Nothing you did not write.** No marketing sentence, no support link, no footer on the gate. A logo, a title, a field, a button.
+- **No third party.** Fonts, icons and styles live inside the plugin. No Google Fonts, no CDN, no analytics, no outbound request.
+- **Built to be removed.** No table, no `.htaccess`, no rewrite rule. Deactivate and the site is public again.
+- **English, French, Spanish.** Source strings in English; the interface follows the site language.
+
+## The settings screen
+
+| Protection | Gate page | Access |
+|---|---|---|
+| ![Protection: master switch, password with reveal, sign out every visitor](docs/admin-protection.png) | ![Gate page: logo from the Media Library, accent swatches, theme, texts](docs/admin-gate.png) | ![Access: sessions, bypass capability, IP allowlist, trusted proxies, excluded paths](docs/admin-access.png) |
+
+**Advanced** holds the surface switches (REST, feeds, sitemaps, AJAX, XML-RPC), the brute-force limits and the cleanup options; **Activity** lists the last 20 events.
 
 ## Security
 
@@ -64,7 +68,7 @@ One column, centred from 320 px up. It works without JavaScript; the eye that re
 
 ## Install
 
-1. Download `VaultGate-1.1.3.zip` from [Releases](https://github.com/zigmoon/VaultGate/releases/latest).
+1. Download `VaultGate-1.1.4.zip` from [Releases](https://github.com/zigmoon/VaultGate/releases/latest).
 2. **Plugins → Add New → Upload Plugin**, choose the ZIP, install, activate.
 3. **Settings → VaultGate**: set the password, then turn protection on.
 
@@ -109,6 +113,9 @@ Deactivating makes the site public again and revokes every issued cookie. Deleti
 - **Latest WordPress, latest PHP.** WordPress 6.5 → 7.1, PHP 8.2 → 8.5, no deprecated call, no bundled library. Translations load on `init`, as WordPress 6.7+ requires.
 - **213 assertions.** Two suites on PHP 8.3 and 8.5, with no WordPress installation: `174 passed, 0 failed` and `39 passed, 0 failed`.
 - **Checked on a real install.** Every surface probed on WordPress 7.1.3 / PHP 8.3: front, posts, feeds, sitemaps, REST, AJAX, XML-RPC, `robots.txt`, `wp-login.php`, admin, activation and deletion.
+- **Responsive back office.** The settings screen holds up down to 360 px; the gate is centred at every width.
+
+<img src="docs/admin-mobile.png" alt="The settings screen on a phone, 390 px wide" width="270">
 
 ## Development
 

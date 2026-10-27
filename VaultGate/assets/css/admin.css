@@ -232,6 +232,13 @@
 	border-top: 1px solid var(--vg-line);
 }
 
+/* Panels other than the active one are marked `hidden` by PHP so that the
+   screen never flashes five stacked panels before the script runs. Without
+   JavaScript the tabs are not rendered either, so every panel is shown. */
+.vg-admin:not(.vg-admin--js) .vg-panel[hidden] {
+	display: block;
+}
+
 .vg-admin--js .vg-panel[hidden] {
 	display: none;
 }
