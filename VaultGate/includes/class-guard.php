@@ -525,6 +525,7 @@ final class Guard {
 			'title'           => $title,
 			'message'         => $message,
 			'logo'            => $this->logo_markup( $settings ),
+			'favicon'         => $this->favicon_markup(),
 			'accent'          => $accent,
 			'accent_ink'      => $ink,
 			'accent_dark'     => $accent_dark,
@@ -545,6 +546,40 @@ final class Guard {
 
 		require VAULTGATE_DIR . 'templates/gate.php';
 		exit;
+	}
+
+	/**
+	 * `<link>` tags for the browser tab.
+	 *
+	 * The gate is a standalone page, so `wp_head()` never runs and none of the
+	 * icon tags WordPress prints on the rest of the site are emitted: without
+	 * this the tab is blank while the plugin is active. The WordPress Site Icon
+	 * (Customize → Site Identity) is used first; a site that never set one
+	 * falls back to the VaultGate mark shipped with the plugin.
+	 */
+	private function favicon_markup(): string {
+		$links = array();
+
+		if ( function_exists( 'get_site_icon_url' ) ) {
+			$icon = (string) get_site_icon_url( 512 );
+
+			if ( '' !== $icon ) {
+				$links[ $icon ] = sprintf( '<link rel="icon" href="%s" sizes="any">', esc_url( $icon ) );
+			}
+
+			$touch = (string) get_site_icon_url( 180 );
+
+			if ( '' !== $touch && ! isset( $links[ $touch ] ) ) {
+				$links[ $touch ] = sprintf( '<link rel="apple-touch-icon" href="%s">', esc_url( $touch ) );
+			}
+		}
+
+		if ( array() === $links ) {
+			$links['svg'] = sprintf( '<link rel="icon" href="%s" type="image/svg+xml">', esc_url( VAULTGATE_URL . 'assets/icon.svg' ) );
+			$links['png'] = sprintf( '<link rel="icon" href="%s" sizes="64x64" type="image/png">', esc_url( VAULTGATE_URL . 'assets/icon-64.png' ) );
+		}
+
+		return implode( "\n\t", $links );
 	}
 
 	/**

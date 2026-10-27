@@ -179,11 +179,11 @@ msgstr "Désactivation d’urgence"
 msgid "Enable password protection"
 msgstr "Activer la protection par mot de passe"
 
-#: VaultGate/templates/gate.php:127
+#: VaultGate/templates/gate.php:128
 msgid "Enter site"
 msgstr "Entrer sur le site"
 
-#: VaultGate/templates/gate.php:98
+#: VaultGate/templates/gate.php:99
 msgid "Enter the password provided by the site owner."
 msgstr "Saisissez le mot de passe fourni par le propriétaire du site."
 
@@ -223,7 +223,7 @@ msgstr "Page de garde"
 msgid "Green"
 msgstr "Vert"
 
-#: VaultGate/includes/class-admin.php:799 VaultGate/templates/gate.php:85
+#: VaultGate/includes/class-admin.php:799 VaultGate/templates/gate.php:86
 msgid "Hide password"
 msgstr "Masquer le mot de passe"
 
@@ -251,7 +251,7 @@ msgstr "Les adresses IP sont anonymisées. Ce journal ne contient jamais de mots
 msgid "IP allowlist"
 msgstr "Liste d’IP autorisées"
 
-#: VaultGate/includes/class-guard.php:613
+#: VaultGate/includes/class-guard.php:648
 msgid "Incorrect password. Please try again."
 msgstr "Mot de passe incorrect. Veuillez réessayer."
 
@@ -267,11 +267,11 @@ msgstr "Invalide immédiatement tous les cookies d’accès. Votre propre accès
 msgid "Keep a small activity log"
 msgstr "Conserver un petit journal d’activité"
 
-#: VaultGate/templates/gate.php:117
+#: VaultGate/templates/gate.php:118
 msgid "Keep me signed in for %d days"
 msgstr "Rester connecté pendant %d jours"
 
-#: VaultGate/templates/gate.php:113
+#: VaultGate/templates/gate.php:114
 msgid "Keep me signed in for 1 day"
 msgstr "Rester connecté pendant 1 jour"
 
@@ -395,7 +395,7 @@ msgstr "Les options, le hachage du mot de passe, le journal et les transients so
 msgid "Or use WP-CLI:"
 msgstr "Ou utilisez WP-CLI :"
 
-#: VaultGate/includes/class-admin.php:510 VaultGate/templates/gate.php:72
+#: VaultGate/includes/class-admin.php:510 VaultGate/templates/gate.php:73
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -423,7 +423,7 @@ msgstr "Par visiteur, dans la fenêtre de blocage."
 msgid "Pick an image from the WordPress Media Library: it is stored in wp-content/uploads and comes back with your media backups. PNG, JPEG, WebP, GIF or SVG. A wide logo works best (max 168 × 56 px on the gate)."
 msgstr "Choisissez une image dans la médiathèque WordPress : elle est stockée dans wp-content/uploads et revient avec vos sauvegardes de médias. PNG, JPEG, WebP, GIF ou SVG. Un logo large est préférable (168 × 56 px maximum sur la page de garde)."
 
-#: VaultGate/includes/class-guard.php:619
+#: VaultGate/includes/class-guard.php:654
 msgid "Please enter the password."
 msgstr "Veuillez saisir le mot de passe."
 
@@ -531,7 +531,7 @@ msgstr "Réglages enregistrés"
 msgid "Settings saved."
 msgstr "Réglages enregistrés."
 
-#: VaultGate/includes/class-admin.php:796 VaultGate/includes/class-admin.php:797 VaultGate/includes/class-admin.php:798 VaultGate/templates/gate.php:82 VaultGate/templates/gate.php:83 VaultGate/templates/gate.php:84
+#: VaultGate/includes/class-admin.php:796 VaultGate/includes/class-admin.php:797 VaultGate/includes/class-admin.php:798 VaultGate/templates/gate.php:83 VaultGate/templates/gate.php:84 VaultGate/templates/gate.php:85
 msgid "Show password"
 msgstr "Afficher le mot de passe"
 
@@ -551,7 +551,7 @@ msgstr "Logo du site"
 msgid "Sitemaps"
 msgstr "Sitemaps"
 
-#: VaultGate/templates/gate.php:36
+#: VaultGate/templates/gate.php:37
 msgid "Skip to the password field"
 msgstr "Aller au champ du mot de passe"
 
@@ -611,15 +611,15 @@ msgstr "Ce site est protégé par mot de passe. Authentifiez-vous sur le site av
 msgid "Title"
 msgstr "Titre"
 
-#: VaultGate/includes/class-guard.php:633
+#: VaultGate/includes/class-guard.php:668
 msgid "Too many attempts. Please try again later."
 msgstr "Trop de tentatives. Veuillez réessayer plus tard."
 
-#: VaultGate/includes/class-guard.php:629
+#: VaultGate/includes/class-guard.php:664
 msgid "Too many attempts. Try again in %d minutes."
 msgstr "Trop de tentatives. Réessayez dans %d minutes."
 
-#: VaultGate/includes/class-guard.php:625
+#: VaultGate/includes/class-guard.php:660
 msgid "Too many attempts. Try again in 1 minute."
 msgstr "Trop de tentatives. Réessayez dans 1 minute."
 
@@ -631,7 +631,7 @@ msgstr "Faire confiance aux en-têtes du proxy inverse"
 msgid "Trusted proxies"
 msgstr "Proxys de confiance"
 
-#: VaultGate/templates/gate.php:126
+#: VaultGate/templates/gate.php:127
 msgid "Try again in %s"
 msgstr "Réessayer dans %s"
 
@@ -679,7 +679,7 @@ msgstr "VaultGate · inactif"
 msgid "Violet"
 msgstr "Violet"
 
-#: VaultGate/templates/gate.php:131
+#: VaultGate/templates/gate.php:132
 msgid "Website"
 msgstr "Site web"
 
@@ -703,11 +703,11 @@ msgstr "Vous n’êtes pas autorisé à modifier ces réglages."
 msgid "You can still log in through wp-login.php: administrator sessions always bypass the gate. As a last resort, add the emergency constant or use WP-CLI (see the Advanced tab)."
 msgstr "Vous pouvez toujours vous connecter via wp-login.php : les sessions administrateur contournent toujours la protection. En dernier recours, ajoutez la constante d’urgence ou utilisez WP-CLI (voir l’onglet Avancé)."
 
-#: VaultGate/includes/class-guard.php:649
+#: VaultGate/includes/class-guard.php:684
 msgid "Your browser refused the session cookie. Enable cookies and try again."
 msgstr "Votre navigateur a refusé le cookie de session. Activez les cookies et réessayez."
 
-#: VaultGate/includes/class-guard.php:643
+#: VaultGate/includes/class-guard.php:678
 msgid "Your session expired. Please try again."
 msgstr "Votre session a expiré. Veuillez réessayer."
 

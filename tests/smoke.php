@@ -107,6 +107,42 @@ vg_smoke_assert( str_contains( $admin_html, 'name="vaultgate_force_logout"' ), '
 vg_smoke_assert( str_contains( $admin_html, 'name="vaultgate[ip_allowlist]"' ), 'IP allowlist renders' );
 vg_smoke_assert( str_contains( $admin_html, 'id="vg-clear-log"' ), 'clear-log form renders' );
 vg_smoke_assert( str_contains( $admin_html, 'id="vg-panel-activity"' ), 'activity panel renders' );
+vg_smoke_assert( str_contains( $admin_html, 'role="switch"' ), 'booleans render as switches' );
+vg_smoke_assert( 8 <= substr_count( $admin_html, 'type="checkbox" role="switch"' ), 'every boolean is a switch, not a box' );
+vg_smoke_assert( str_contains( $admin_html, 'name="vaultgate[enabled]"' ) && str_contains( $admin_html, 'value="0"' ), 'the switch still posts a hidden 0 with the settings array' );
+
+/* ── Favicon on the gate ────────────────────────────────────────────────── */
+
+$favicon = new ReflectionMethod( VaultGate\Guard::class, 'favicon_markup' );
+$favicon->setAccessible( true );
+$guard_object = new VaultGate\Guard( $settings );
+
+$GLOBALS['vg_site_icon'] = array();
+$fallback                = (string) $favicon->invoke( $guard_object );
+
+vg_smoke_assert( str_contains( $fallback, 'assets/icon.svg' ), 'a site without a Site Icon gets the plugin mark' );
+vg_smoke_assert( str_contains( $fallback, 'type="image/svg+xml"' ), 'the fallback favicon is the vector one' );
+vg_smoke_assert( str_contains( $fallback, 'icon-64.png' ), 'a raster fallback is offered too' );
+vg_smoke_assert( ! str_contains( $fallback, 'apple-touch-icon' ), 'no touch icon without a site icon' );
+
+$GLOBALS['vg_site_icon'] = array(
+	512 => 'https://example.test/wp-content/uploads/icon-512.png',
+	180 => 'https://example.test/wp-content/uploads/icon-180.png',
+);
+$branded = (string) $favicon->invoke( $guard_object );
+
+vg_smoke_assert( str_contains( $branded, 'icon-512.png' ), 'the WordPress Site Icon is used on the gate' );
+vg_smoke_assert( str_contains( $branded, 'rel="apple-touch-icon"' ), 'the touch icon is printed for iOS' );
+vg_smoke_assert( ! str_contains( $branded, 'assets/icon.svg' ), 'the plugin mark steps aside when the site has an icon' );
+vg_smoke_assert( 1 === substr_count( $branded, 'rel="icon"' ), 'no duplicate icon link' );
+
+$GLOBALS['vg_site_icon'] = array( 512 => 'https://example.test/wp-content/uploads/icon-512.png' );
+$single                  = (string) $favicon->invoke( $guard_object );
+
+vg_smoke_assert( 1 === substr_count( $single, '<link' ), 'a single site icon prints a single link' );
+vg_smoke_assert( ! str_contains( $single, 'apple-touch-icon' ), 'no touch link when the 180 size is missing' );
+
+$GLOBALS['vg_site_icon'] = array();
 
 $_GET['vg_error'] = 'password_short,password_mismatch';
 ob_start();

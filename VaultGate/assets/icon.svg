@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="VaultGate">
+	<title>VaultGate</title>
+	<rect width="512" height="512" rx="72" fill="#0b0d10"/>
+	<g fill="none" stroke="#f7f8fa" stroke-width="26" stroke-linecap="square">
+		<path d="M166 372V238a90 90 0 0 1 180 0v134"/>
+		<path d="M128 372h256"/>
+	</g>
+	<circle cx="256" cy="272" r="17" fill="#f7f8fa"/>
+	<path d="M256 284v52" stroke="#f7f8fa" stroke-width="26" stroke-linecap="square"/>
+</svg>

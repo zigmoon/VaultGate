@@ -908,7 +908,13 @@ wp vaultgate password 'a-new-long-passphrase'</code></pre>
 	}
 
 	/**
-	 * Checkbox field with a hidden 0 so that the option is always submitted.
+	 * Boolean field rendered as a switch.
+	 *
+	 * The control stays a native `<input type="checkbox">` — so it submits,
+	 * works without JavaScript and keeps its keyboard behaviour — but it is
+	 * styled as a switch and exposed as `role="switch"` for assistive
+	 * technology. A hidden 0 is printed first so the option is always
+	 * submitted, even when the switch is off.
 	 *
 	 * @param string $key         Setting key.
 	 * @param string $label       Label.
@@ -922,8 +928,9 @@ wp vaultgate password 'a-new-long-passphrase'</code></pre>
 		?>
 		<div class="vg-checkbox-field">
 			<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="0">
-			<label for="<?php echo esc_attr( $id ); ?>">
-				<input type="checkbox" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" value="1" <?php checked( $checked ); ?><?php echo '' !== $description ? ' aria-describedby="' . esc_attr( $id . '-desc' ) . '"' : ''; ?>>
+			<?php // The input is nested, so the label needs no `for`: with both, a click toggles twice in Chrome. ?>
+			<label>
+				<input type="checkbox" role="switch" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" value="1" <?php checked( $checked ); ?><?php echo '' !== $description ? ' aria-describedby="' . esc_attr( $id . '-desc' ) . '"' : ''; ?>>
 				<span><?php echo esc_html( $label ); ?></span>
 			</label>
 			<?php if ( '' !== $description ) : ?>

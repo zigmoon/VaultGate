@@ -444,6 +444,12 @@ function get_current_screen() {
 	return (object) array( 'id' => $GLOBALS['vg_screen_id'] ?? 'dashboard' );
 }
 
+function get_site_icon_url( $size = 512 ) {
+	$icons = $GLOBALS['vg_site_icon'] ?? array();
+
+	return $icons[ (int) $size ] ?? '';
+}
+
 function wp_nonce_field( $action = -1, $name = '_wpnonce', $referer = true, $echo = true ) {
 	$html = '<input type="hidden" name="' . esc_attr( $name ) . '" value="test-nonce">';
 	if ( $echo ) {

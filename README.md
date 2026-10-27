@@ -20,8 +20,8 @@
 <p align="center">
   <img alt="WordPress 6.5 to 7.1" src="https://img.shields.io/badge/WordPress-6.5%20%E2%86%92%207.1-0b0d10?style=flat-square">
   <img alt="PHP 8.2 to 8.5" src="https://img.shields.io/badge/PHP-8.2%20%E2%86%92%208.5-0b0d10?style=flat-square">
-  <img alt="Version 1.1.4" src="https://img.shields.io/badge/version-1.1.4-0a66ff?style=flat-square">
-  <img alt="213 assertions" src="https://img.shields.io/badge/tests-213%20assertions-0b0d10?style=flat-square">
+  <img alt="Version 1.1.5" src="https://img.shields.io/badge/version-1.1.5-0a66ff?style=flat-square">
+  <img alt="228 assertions" src="https://img.shields.io/badge/tests-228%20assertions-0b0d10?style=flat-square">
   <img alt="Licence GPL-2.0-or-later" src="https://img.shields.io/badge/licence-GPL--2.0--or--later-0b0d10?style=flat-square">
 </p>
 
@@ -39,6 +39,8 @@ One column, centred from 320 px up. It works without JavaScript; the eye that re
 
 - **One password, everything closed.** Pages, archives, feeds, sitemaps, the REST API, anonymous AJAX and XML-RPC — each with its own switch.
 - **Your logo, your colour.** Logo picked from the Media Library (`wp-content/uploads`), eight accent swatches or any hex, light / dark / system gate. Button contrast is computed, never guessed.
+- **Your favicon, even on the gate.** The browser tab keeps the WordPress Site Icon; a site that never set one falls back to the VaultGate mark instead of a blank tab.
+- **Switches, not checkboxes.** Every on/off setting is a real switch — native input, keyboard-navigable, exposed as `role="switch"`.
 - **Nothing you did not write.** No marketing sentence, no support link, no footer on the gate. A logo, a title, a field, a button.
 - **No third party.** Fonts, icons and styles live inside the plugin. No Google Fonts, no CDN, no analytics, no outbound request.
 - **Built to be removed.** No table, no `.htaccess`, no rewrite rule. Deactivate and the site is public again.
@@ -70,7 +72,7 @@ Click a panel for the full-size view.
 
 ## Install
 
-1. Download `VaultGate-1.1.4.zip` from [Releases](https://github.com/zigmoon/VaultGate/releases/latest).
+1. Download `VaultGate-1.1.5.zip` from [Releases](https://github.com/zigmoon/VaultGate/releases/latest).
 2. **Plugins → Add New → Upload Plugin**, choose the ZIP, install, activate.
 3. **Settings → VaultGate**: set the password, then turn protection on.
 
@@ -113,7 +115,7 @@ Deactivating makes the site public again and revokes every issued cookie. Deleti
 ## Quality
 
 - **Latest WordPress, latest PHP.** WordPress 6.5 → 7.1, PHP 8.2 → 8.5, no deprecated call, no bundled library. Translations load on `init`, as WordPress 6.7+ requires.
-- **213 assertions.** Two suites on PHP 8.3 and 8.5, with no WordPress installation: `174 passed, 0 failed` and `39 passed, 0 failed`.
+- **228 assertions.** Two suites on PHP 8.3 and 8.5, with no WordPress installation: `176 passed, 0 failed` and `52 passed, 0 failed`.
 - **Checked on a real install.** Every surface probed on WordPress 7.1.3 / PHP 8.3: front, posts, feeds, sitemaps, REST, AJAX, XML-RPC, `robots.txt`, `wp-login.php`, admin, activation and deletion.
 - **Responsive back office.** The settings screen holds up down to 360 px; the gate is centred at every width.
 
@@ -128,7 +130,7 @@ php tools/build-translations.php  # .pot + fr_FR + es_ES, compiled and verified
 pwsh -File tools/build-zip.ps1    # dist/VaultGate-<version>.zip, hash-verified
 ```
 
-Expected output: `174 passed, 0 failed` and `39 passed, 0 failed`. The suites use a small set of WordPress stubs (`tests/bootstrap.php`): no database, no web server, no WordPress installation needed.
+Expected output: `176 passed, 0 failed` and `52 passed, 0 failed`. The suites use a small set of WordPress stubs (`tests/bootstrap.php`): no database, no web server, no WordPress installation needed.
 
 ## Credits
 

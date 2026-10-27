@@ -395,6 +395,7 @@ $vg = array(
 	'invalid'         => true,
 	'lock_seconds'    => 0,
 	'site_name'       => 'Test & Site',
+	'favicon'         => '<link rel="icon" href="https://example.test/wp-content/uploads/icon-512.png?s=1&amp;t=2" sizes="any">',
 	'style_url'       => 'https://example.test/gate.css',
 	'script_url'      => 'https://example.test/gate.js',
 );
@@ -414,6 +415,8 @@ vg_assert( str_contains( $html, 'vg-theme-auto' ), 'template applies the theme c
 vg_assert( str_contains( $html, 'nonce="abc123"' ), 'template uses the CSP nonce' );
 vg_assert( str_contains( $html, 'href="https://example.test/gate.css"' ), 'template links the local stylesheet' );
 vg_assert( str_contains( $html, 'src="https://example.test/gate.js"' ), 'template links the local script' );
+vg_assert( str_contains( $html, 'rel="icon"' ), 'template prints the favicon links' );
+vg_assert( str_contains( $html, 'icon-512.png?s=1&amp;t=2' ), 'the favicon markup is printed as prepared, still escaped' );
 vg_assert( str_contains( $html, 'data-label-show="Show password"' ), 'template passes translated reveal labels' );
 vg_assert( str_contains( $html, 'class="vg-eye vg-eye--open"' ) && str_contains( $html, 'vg-eye--off' ), 'the reveal control is an eye, both states in the markup' );
 vg_assert( str_contains( $html, 'aria-label="Show password"' ), 'the eye is labelled for assistive technology' );

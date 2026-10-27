@@ -3,6 +3,17 @@
 All notable changes to VaultGate are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.5] — 28 October 2026
+
+### Added
+
+- **The favicon survives the gate.** The gate is a standalone page, so `wp_head()` never ran and none of the icon tags WordPress prints on the rest of the site were emitted: the tab was blank while the plugin was active. It now prints the WordPress Site Icon (Customize → Site Identity, `512` and `apple-touch-icon` `180`), and falls back to the VaultGate mark shipped in the plugin when no Site Icon is set.
+- **Switches instead of checkboxes.** Every boolean setting is rendered as a switch: the pill is a native `<input type="checkbox">` restyled, so it still submits, works without JavaScript, keeps its keyboard behaviour, and is exposed as `role="switch"`.
+
+### Fixed
+
+- A boolean wrapped in `<label for="…">` **and** nested in that label toggled twice on some clicks in Chrome; the redundant `for` is gone, the label associates implicitly.
+
 ## [1.1.4] — 28 October 2026
 
 ### Fixed
@@ -116,6 +127,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - Opt-in, multisite-aware uninstall cleanup.
 - Reproducible tooling: translations, images and archive with SHA-256 verification.
 
+[1.1.5]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.5
 [1.1.4]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.4
 [1.1.3]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.3
 [1.1.1]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.1

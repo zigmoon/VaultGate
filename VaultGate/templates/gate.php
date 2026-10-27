@@ -22,6 +22,7 @@ $vg_theme_class = 'light' === (string) $vg['theme'] ? 'vg-theme-light' : ( 'dark
 	<meta name="robots" content="noindex, nofollow, noarchive">
 	<meta name="color-scheme" content="light dark">
 	<title><?php echo esc_html( (string) $vg['title'] ); ?></title>
+	<?php echo $vg['favicon']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in Guard::favicon_markup(). ?>
 	<link rel="stylesheet" href="<?php echo esc_url( (string) $vg['style_url'] ); ?>">
 	<style nonce="<?php echo esc_attr( (string) $vg['nonce'] ); ?>">
 		:root {
