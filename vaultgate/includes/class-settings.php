@@ -20,6 +20,7 @@ final class Settings {
 	public const CHANGED_OPTION      = 'vaultgate_password_changed';
 	public const LOG_OPTION          = 'vaultgate_log';
 	public const VERSION_OPTION      = 'vaultgate_version';
+	public const WELCOME_OPTION      = 'vaultgate_welcome';
 
 	/**
 	 * Runtime cache for the merged settings array.
@@ -29,15 +30,18 @@ final class Settings {
 	private ?array $cache = null;
 
 	/**
-	 * Plugin defaults. English source strings; French and Spanish ship as
-	 * translations.
+	 * Plugin defaults.
+	 *
+	 * These values are written to the database, so they must never be
+	 * translated: a site that switches language would keep the old strings.
+	 * User-facing fallbacks are translated where they are rendered.
 	 *
 	 * @return array<string, mixed>
 	 */
 	public static function defaults(): array {
 		return array(
 			'enabled'            => false,
-			'gate_title'         => __( 'Private site', 'vaultgate' ),
+			'gate_title'         => '',
 			'gate_message'       => '',
 			'logo_id'            => 0,
 			'logo_url'           => '',
@@ -58,7 +62,7 @@ final class Settings {
 			'max_attempts'       => 5,
 			'lockout_minutes'    => 15,
 			'log_enabled'        => true,
-			'delete_data'        => false,
+			'delete_data'        => true,
 		);
 	}
 
@@ -113,7 +117,18 @@ final class Settings {
 	}
 
 	/**
-	 * Capabilities offered as "can bypass" choices.
+	 * Capability keys accepted as a bypass rule. Plain values, no translation:
+	 * this list is used for validation, which can happen before `init`.
+	 *
+	 * @return array<int, string>
+	 */
+	public static function capability_keys(): array {
+		return array( 'manage_options', 'edit_others_posts', 'edit_posts', 'read' );
+	}
+
+	/**
+	 * Capabilities offered as "can bypass" choices, with translated labels.
+	 * Rendered in the settings screen only.
 	 *
 	 * @return array<string, string>
 	 */
@@ -288,6 +303,23 @@ final class Settings {
 	}
 
 	/**
+	 * Removes the short-lived transients the plugin creates (rate-limit
+	 * counters and log throttles). Called on deactivation so that turning the
+	 * plugin off leaves nothing behind.
+	 */
+	public function purge_transients(): void {
+		global $wpdb;
+
+		if ( ! isset( $wpdb->options ) || ! is_object( $wpdb ) || ! method_exists( $wpdb, 'query' ) ) {
+			return;
+		}
+
+		$wpdb->query(
+			"DELETE FROM {$wpdb->options} WHERE option_name LIKE '\_transient\_vaultgate\_%' OR option_name LIKE '\_transient\_timeout\_vaultgate\_%'"
+		);
+	}
+
+	/**
 	 * Appends an entry to the capped activity log.
 	 *
 	 * @param string $event Short event key.
@@ -413,9 +445,6 @@ final class Settings {
 		}
 
 		$clean['gate_title'] = trim( sanitize_text_field( self::scalar( $input['gate_title'] ?? '' ) ) );
-		if ( '' === $clean['gate_title'] ) {
-			$clean['gate_title'] = $defaults['gate_title'];
-		}
 
 		$clean['gate_message'] = wp_kses_post( self::scalar( $input['gate_message'] ?? '' ) );
 
@@ -435,7 +464,7 @@ final class Settings {
 		$clean['remember_days'] = min( 365, max( 1, absint( self::scalar( $input['remember_days'] ?? '' ) ) ?: (int) $defaults['remember_days'] ) );
 
 		$capability = sanitize_key( self::scalar( $input['bypass_capability'] ?? '' ) );
-		$clean['bypass_capability'] = array_key_exists( $capability, self::capabilities() )
+		$clean['bypass_capability'] = in_array( $capability, self::capability_keys(), true )
 			? $capability
 			: $defaults['bypass_capability'];
 

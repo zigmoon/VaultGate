@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="assets/icon-256.png" alt="VaultGate" width="112" height="112">
+  <img src="assets/icon-256.png" alt="VaultGate" width="92" height="92">
 </p>
 
 <h1 align="center">VaultGate</h1>
 
 <p align="center">
-  <b>Un seul mot de passe pour tout le site.</b><br>
-  Une extension WordPress discrète et sans dépendance, qui garde un site privé pendant sa construction.
+  <b>Un mot de passe pour tout le site — rien d’autre sur la page.</b><br>
+  Une extension WordPress discrète, pour les sites en cours de construction.
 </p>
 
 <p align="center">
@@ -16,66 +16,50 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/zigmoon/passwordprotect/releases/latest"><b>⬇️ Télécharger</b></a> ·
+  <a href="https://github.com/zigmoon/passwordprotect/releases/latest"><b>⬇ Télécharger</b></a> ·
   <a href="#installation">Installation</a> ·
-  <a href="#la-page-de-garde">La page de garde</a> ·
-  <a href="#sécurité">Sécurité</a> ·
-  <a href="#développement">Développement</a>
+  <a href="#ce-que-vous-obtenez">Ce que vous obtenez</a> ·
+  <a href="#credits">Crédits</a>
 </p>
 
 <p align="center">
-  <img alt="WordPress 6.5 – 7.1" src="https://img.shields.io/badge/WordPress-6.5%20%E2%86%92%207.1-0b0d10?style=flat-square">
-  <img alt="PHP 8.2 – 8.5" src="https://img.shields.io/badge/PHP-8.2%20%E2%86%92%208.5-0b0d10?style=flat-square">
-  <img alt="Version 1.1.0" src="https://img.shields.io/badge/version-1.1.0-0a66ff?style=flat-square">
+  <img alt="WordPress 6.5 → 7.1" src="https://img.shields.io/badge/WordPress-6.5%20%E2%86%92%207.1-0b0d10?style=flat-square">
+  <img alt="PHP 8.2 → 8.5" src="https://img.shields.io/badge/PHP-8.2%20%E2%86%92%208.5-0b0d10?style=flat-square">
+  <img alt="Version 1.1.1" src="https://img.shields.io/badge/version-1.1.1-0a66ff?style=flat-square">
+  <img alt="181 assertions" src="https://img.shields.io/badge/tests-181%20assertions-0b0d10?style=flat-square">
   <img alt="Licence GPL-2.0-or-later" src="https://img.shields.io/badge/licence-GPL--2.0--or--later-0b0d10?style=flat-square">
-  <img alt="163 assertions" src="https://img.shields.io/badge/tests-163%20assertions-0b0d10?style=flat-square">
-  <img alt="Aucune dépendance" src="https://img.shields.io/badge/d%C3%A9pendances-aucune-0b0d10?style=flat-square">
 </p>
 
-<p align="center">
-  <img src="docs/gate-light.png" alt="La page de garde VaultGate" width="880">
-</p>
+![Réglages → VaultGate → Page de garde : logo de la médiathèque, nuances d’accent, thème, textes](docs/admin-appearance.png)
 
----
+## Ce que vous obtenez
 
-## Points clés
+**Réglages → VaultGate** — cinq onglets, sans bruit : **Protection**, **Page de garde**, **Accès**, **Avancé**, **Activité**.
 
-- **Un mot de passe, tout est fermé.** Pages, archives, flux, sitemaps, API REST, AJAX anonyme et XML-RPC — chaque surface se règle.
-- **Votre logo, votre couleur.** Choisissez une image dans la médiathèque WordPress ; huit teintes prêtes à l’emploi ou une couleur libre. Noir par défaut, contraste calculé automatiquement.
-- **Les polices dans l’extension.** Inter (la famille de SuperPhoto), Space Grotesk et JetBrains Mono sont livrées en WOFF2 dans l’extension. Aucun Google Fonts, aucun CDN, aucune requête sortante.
-- **Rien que vous n’ayez écrit.** Aucune phrase marketing par défaut, aucun lien d’assistance, aucun pied de page. Un logo, un titre, un champ, un bouton.
-- **Cookies signés, sans session.** Jeton HMAC-SHA256 sans état ; un clic révoque tous les visiteurs.
-- **Durci par défaut.** `wp_hash_password()`, limitation par visiteur, CSP à nonce, `no-store`, `noindex`, `Permissions-Policy`.
-- **Auto-hébergé et sobre.** Ni Composer, ni npm, ni build, ni statistiques, ni appel externe.
-- **Anglais, français, espagnol.** Chaînes sources en anglais ; les deux traductions sont livrées compilées et vérifiées.
-- **163 assertions.** Deux suites, exécutées sous PHP 8.3 et PHP 8.5, sans installation WordPress.
+- **Un mot de passe, tout est fermé.** Pages, archives, flux, sitemaps, API REST, AJAX anonyme et XML-RPC — chaque surface a son interrupteur.
+- **Votre logo, votre couleur.** Logo choisi dans la médiathèque (`wp-content/uploads`), huit nuances ou n’importe quel code hexadécimal, page de garde claire / sombre / système. Le contraste est calculé, jamais deviné.
+- **Rien que vous n’ayez écrit.** Aucune phrase marketing, aucun lien de support, aucun pied de page sur la garde. Un logo, un titre, un champ, un bouton.
+- **Aucun tiers.** Polices, icônes et styles sont dans l’extension. Pas de Google Fonts, pas de CDN, pas de mesure d’audience, aucune requête sortante.
+- **Cookie signé, pas de session.** HMAC-SHA256, `HttpOnly`, `SameSite` ; un clic révoque tous les visiteurs.
+- **Conçue pour être retirée.** Aucune table, aucun `.htaccess`, aucune règle de réécriture. Désactivez : le site est de nouveau public.
 
 ## La page de garde
 
-| Clair | Sombre |
+| Claire | Sombre |
 |---|---|
-| ![Clair](docs/gate-light.png) | ![Sombre](docs/gate-dark.png) |
+| ![Claire](docs/gate-light.png) | ![Sombre](docs/gate-dark.png) |
 
-| Mobile (390 × 844) |
-|---|
-| <img src="docs/gate-mobile.png" alt="Mobile" width="330"> |
+Une colonne, centrée dès 320 px, et elle fonctionne sans JavaScript.
 
-Une seule colonne, centrée à toutes les largeurs, à partir de 320 px. Un filet sépare l’en-tête du formulaire, un trait d’accent souligne le titre, le bouton est la seule surface colorée. Le même langage sert à l’écran de réglages :
-
-| Réglages — logo, couleur, thème | Réglages — protection |
-|---|---|
-| ![Réglages de la page](docs/admin-appearance.png) | ![Réglages de protection](docs/admin-protection.png) |
+![Protection : interrupteur principal, mot de passe, déconnexion de tous les visiteurs](docs/admin-protection.png)
 
 ## Installation
 
-**Depuis l’archive**
+1. Téléchargez `vaultgate-1.1.1.zip` depuis les [versions](https://github.com/zigmoon/passwordprotect/releases/latest).
+2. **Extensions → Ajouter → Téléverser une extension**, choisissez le ZIP, installez, activez.
+3. **Réglages → VaultGate** : définissez le mot de passe, puis activez la protection.
 
-1. Téléchargez `vaultgate-1.1.0.zip` depuis les [versions](https://github.com/zigmoon/passwordprotect/releases/latest).
-2. WordPress → **Extensions → Ajouter → Téléverser une extension**.
-3. Activez **VaultGate**.
-4. Ouvrez **Réglages → VaultGate**.
-
-**Depuis un dépôt cloné**
+Ou depuis un dépôt :
 
 ```bash
 cp -r vaultgate /chemin/vers/wp-content/plugins/
@@ -84,191 +68,32 @@ wp vaultgate password 'une longue phrase secrète'
 wp vaultgate enable
 ```
 
-Nécessite WordPress 6.5+ et PHP 8.2+. Aucune extension PHP au-delà d’une installation WordPress standard.
+WordPress 6.5+ et PHP 8.2+ — rien d’autre à installer. La première activation affiche une seule notification qui mène au champ mot de passe : elle se ferme.
 
-## Configuration
+![Première activation](docs/admin-welcome.png)
 
-**Réglages → VaultGate** comporte cinq onglets.
+## Qualité
 
-| Onglet | Contenu |
-|---|---|
-| Protection | Interrupteur, nouveau mot de passe, « déconnecter tous les visiteurs », aide au déblocage |
-| Page de garde | **Logo**, titre, message facultatif, **couleur d’accent**, **thème** |
-| Accès | Durée de session, « rester connecté », capacité de contournement, IP autorisées, confiance au proxy, chemins exclus |
-| Avancé | Basculements REST / flux / sitemaps / AJAX / XML-RPC, anti-force brute, journal, nettoyage à la désinstallation |
-| Activité | Les 20 derniers événements, adresses IP anonymisées |
+- **Dernières versions.** WordPress 6.5 → 7.1, PHP 8.2 → 8.5, aucun appel déprécié, aucune bibliothèque embarquée. Les traductions se chargent sur `init`, comme l’exige WordPress 6.7+.
+- **181 assertions.** Deux suites (`php tests/run.php`, `php tests/smoke.php`) sur PHP 8.3 et 8.5, sans installation de WordPress.
+- **Vérifiée sur une vraie installation.** Toutes les surfaces testées sur WordPress 7.1.3 / PHP 8.3 : accueil, articles, flux, sitemaps, REST, AJAX, XML-RPC, `robots.txt`, `wp-login.php`, administration, activation et suppression.
+- **Back office responsive.** L’écran de réglages reste utilisable jusqu’à 360 px ; la garde est centrée à toutes les largeurs.
 
-### Le logo
+## Limites
 
-Choisissez une image avec **Choisir une image** : la médiathèque WordPress s’ouvre. VaultGate enregistre l’identifiant de la pièce jointe, pas une copie :
+- **Fichiers statiques.** `wp-content/uploads/...` est servi par le serveur web et n’atteint jamais WordPress. Utilisez l’authentification serveur pour les fichiers sensibles.
+- **Cache de page.** La garde envoie `no-store` et vérifie le cookie à chaque requête ; excluez le site d’un cache de page tant qu’il est verrouillé.
+- **`wp-login.php` reste ouvert.** C’est la porte de sortie : les sessions administrateur ne sont jamais bloquées.
+- **Un mot de passe partagé.** Ce n’est pas un gestionnaire d’utilisateurs ou de rôles.
 
-- le fichier vit dans `wp-content/uploads/AAAA/MM/`, comme n’importe quel média ;
-- il revient avec vos sauvegardes de médias et reste réutilisable par un thème ;
-- WordPress génère les tailles, la page de garde sert donc une image adaptée ;
-- **Retirer** vide le champ et fait revenir la marque géométrique intégrée.
+## La retirer
 
-La page de garde limite le logo à 168 × 56 px CSS en conservant les proportions : un logo large fonctionne mieux. PNG, JPEG, WebP et GIF sont acceptés ; le SVG demande un filtre `upload_mimes`, comme partout dans WordPress.
+La désactivation rend le site public et révoque tous les cookies émis. La suppression retire les réglages, l’empreinte du mot de passe et le journal — **activé par défaut** — donc rien ne reste en base. En cas de blocage : `define( 'VAULTGATE_DISABLED', true );` dans `wp-config.php`, ou `wp vaultgate disable`.
 
-### La couleur
+## Crédits
 
-Huit préréglages — **Noir d’encre** (par défaut), Ardoise, Bleu, Vert, Ambre, Rouge, Violet, Rose — ou le sélecteur natif. L’accent colore le bouton, l’anneau de focus et le trait sous le titre. La couleur du texte du bouton bascule entre blanc et noir selon la luminance relative WCAG, et un accent presque noir devient blanc sur le thème sombre pour que le bouton reste visible.
+Un plugin de **[2.13](https://2points13.fr)** · dev by **[zigmoon](https://zigmoon.com)**.
 
-### Le thème
+![La ligne du plugin dans la liste des extensions](docs/admin-plugins.png)
 
-**Clair** (par défaut), **Sombre**, ou **Système** pour suivre le système d’exploitation du visiteur.
-
-## Sécurité
-
-- **Mot de passe** — `wp_hash_password()` / `wp_check_password()`. Jamais en clair, jamais journalisé, jamais transmis.
-- **Cookie** — `expiration.signature`, HMAC-SHA256 sur le contexte, la version de session et l’expiration, avec `wp_salt('auth')` et le `COOKIEHASH` du site. Vérifié par `hash_equals()`.
-- **Révocation** — changer le mot de passe, basculer la protection ou cliquer sur « déconnecter tous les visiteurs » incrémente `vaultgate_auth_version` : tous les cookies émis deviennent invalides immédiatement.
-- **Attributs du cookie** — `HttpOnly`, `SameSite=Lax`, `Secure` en HTTPS (ou derrière un proxy de confiance), chemin et domaine WordPress.
-- **Limitation** — fenêtre glissante par visiteur dans un transient dont la clé est un HMAC de l’adresse. Blocage avec compte à rebours sur le bouton.
-- **Formulaire** — jeton signé à expiration, champ piège invisible, messages génériques, redirection `303` après traitement.
-- **En-têtes** — `no-store`, `noindex, nofollow, noarchive`, `X-Frame-Options: DENY`, `nosniff`, `Referrer-Policy: no-referrer`, `Permissions-Policy` restrictive, CSP à nonce par requête.
-- **Administration** — `manage_options`, nonce sur chaque action, validation serveur, sortie échappée.
-
-### Limites
-
-- **Fichiers statiques.** Les fichiers servis directement par le serveur (`wp-content/uploads/…`) ne passent jamais par WordPress. Utilisez une authentification serveur ou un stockage privé s’ils sont sensibles.
-- **Cache de page.** La page de garde envoie `no-store` et vérifie le cookie à chaque requête, mais excluez le site d’un cache externe tant qu’il est verrouillé.
-- **`wp-login.php` reste ouvert.** C’est nécessaire : c’est la porte de secours. VaultGate est une porte publique, pas un remplacement de l’authentification WordPress.
-- **Un mot de passe partagé.** Ce n’est pas un gestionnaire d’utilisateurs ni de rôles.
-- **Multisite.** Les réglages sont propres à chaque site.
-
-## Accès d’urgence
-
-1. `wp-login.php` n’est jamais filtré, et les sessions administrateur contournent toujours la page de garde.
-2. Ou, sans tableau de bord, dans `wp-config.php` :
-   ```php
-   define( 'VAULTGATE_DISABLED', true );
-   ```
-3. Ou en WP-CLI :
-   ```bash
-   wp vaultgate status
-   wp vaultgate disable
-   wp vaultgate password 'une nouvelle phrase secrète'
-   ```
-
-Un visiteur peut se reverrouiller avec `https://exemple.com/?vaultgate=logout`.
-
-## WP-CLI
-
-```text
-wp vaultgate status              État complet : protection, mot de passe, surfaces, capacité
-wp vaultgate enable              Active la protection (un mot de passe doit exister)
-wp vaultgate disable             Désactive, conserve le mot de passe
-wp vaultgate password <mdp>      Définit le mot de passe (8 caractères minimum)
-wp vaultgate password --stdin    Le lit sur l’entrée standard
-wp vaultgate logout-all          Révoque tous les cookies émis
-wp vaultgate log                 Affiche le journal d’activité
-wp vaultgate log --clear         Le vide
-```
-
-## Filtres
-
-| Filtre | Rôle |
-|---|---|
-| `vaultgate_should_gate` | Autoriser ou refuser la page de garde pour une requête |
-| `vaultgate_client_ip` | Remplacer l’adresse détectée |
-| `vaultgate_bypass_capabilities` | Ajouter ou retirer des capacités de contournement |
-| `vaultgate_blocked_endpoints` | Modifier la liste des points d’entrée directs bloqués |
-| `vaultgate_secure_cookie` | Forcer ou désactiver l’attribut `Secure` |
-| `vaultgate_cookie_name` | Renommer le cookie |
-| `vaultgate_swatches` | Modifier les préréglages de couleur |
-| `vaultgate_throttled_log_events` | Choisir les événements limités à une entrée par minute |
-| `vaultgate_log_size` | Nombre d’entrées conservées (20 par défaut) |
-
-```php
-// Laisser passer un webhook de paiement sans ouvrir tout le site.
-add_filter(
-	'vaultgate_should_gate',
-	static function ( bool $gate ): bool {
-		return str_starts_with( $_SERVER['REQUEST_URI'] ?? '', '/webhooks/stripe' ) ? false : $gate;
-	}
-);
-```
-
-## Développement
-
-PHP 8.2+ et rien d’autre.
-
-```bash
-php tests/run.php                 # tests unitaires
-php tests/smoke.php               # démarrage, guard, REST, rendu de l’admin
-php tools/build-translations.php  # .pot + fr_FR + es_ES, compilés et vérifiés
-pwsh -File tools/build-images.ps1 # tailles d’icônes depuis assets/icon-master.png
-pwsh -File tools/build-zip.ps1    # dist/vaultgate-<version>.zip, vérifié par empreinte
-
-# Aperçus de design (sans WordPress)
-php -S 127.0.0.1:8450 tests/preview-router.php
-#   /                        page de garde, thème clair
-#   /?theme=dark             page de garde, thème sombre
-#   /?accent=%230a66ff       page de garde, accent personnalisé
-#   /?logo=1                 page de garde avec un logo d’exemple
-#   /admin-preview.php       écran de réglages
-```
-
-Sortie attendue :
-
-```text
-140 passed, 0 failed
-23 passed, 0 failed
-```
-
-Les suites utilisent un petit jeu de fonctions WordPress simulées (`tests/bootstrap.php`) : pas de base de données, pas de serveur web, pas d’installation WordPress. Elles tournent sous **PHP 8.3.36** et **PHP 8.5.12**.
-
-## Arborescence
-
-```text
-passwordprotect/
-├── vaultgate/                     l’extension, telle qu’elle s’installe
-│   ├── vaultgate.php              en-tête WordPress + amorçage
-│   ├── includes/                  réglages, règles d’accès, jetons, limitation, guard, admin, CLI
-│   ├── templates/gate.php         la page de garde
-│   ├── assets/css|js/             styles et scripts, sans CDN
-│   ├── assets/fonts/              Inter, Space Grotesk, JetBrains Mono (WOFF2, OFL)
-│   └── languages/                 .pot, fr_FR, es_ES (sources, compilés et vérifiés)
-├── assets/                        sources d’icône, bannières, aperçu social
-├── docs/                          captures utilisées ci-dessus
-├── dist/                          archive installable versionnée
-├── tests/                         suites de tests + aperçus de design
-└── tools/                         traductions, images, archive
-```
-
-## Compatibilité
-
-| | |
-|---|---|
-| WordPress | 6.5 → 7.1 (dernière stable au moment de la rédaction : 7.1.3) |
-| PHP | 8.2 → 8.5, tests sous 8.3.36 et 8.5.12 |
-| Base de données | Aucune table créée ; uniquement `wp_options` |
-| Multisite | Oui, réglages par site |
-| Extensions PHP | Aucune au-delà d’une installation WordPress standard |
-| Navigateurs | Tout navigateur actuel ; la page de garde fonctionne sans JavaScript |
-
-## FAQ
-
-**Où va le logo ?**
-Dans la médiathèque WordPress. VaultGate enregistre l’identifiant de la pièce jointe : le fichier est sauvegardé avec vos médias et réutilisable ailleurs.
-
-**Comment supprimer la phrase sous le titre ?**
-Il n’y en a pas par défaut. Le champ message de l’onglet **Page de garde** est facultatif ; sans lui, la page est une seule colonne sobre.
-
-**Puis-je utiliser ma propre police ?**
-Les trois familles sont embarquées dans l’extension. Pour en changer, remplacez les fichiers WOFF2 dans `vaultgate/assets/fonts/` et mettez à jour les règles `@font-face` dans `vaultgate/assets/css/`. Rien n’est chargé depuis un tiers.
-
-**Est-ce compatible avec un cache de page ?**
-Les en-têtes et la vérification du cookie sont corrects, mais excluez le site d’un cache externe tant qu’il est verrouillé.
-
-**Les fichiers téléversés sont-ils protégés ?**
-Non — ils contournent WordPress. Voir [Limites](#limites).
-
-**Que se passe-t-il si je désactive l’extension ?**
-Le site redevient public et tous les cookies émis sont révoqués : réactiver redemandera le mot de passe.
-
-## Licence
-
-GPL-2.0-or-later — voir [LICENSE](LICENSE). Copyright © 2026 zigmoon.
-
-Signalements de sécurité : [SECURITY.md](SECURITY.md).
+GPL-2.0-or-later — voir [LICENSE](LICENSE). Polices : Inter, Space Grotesk, JetBrains Mono (SIL Open Font License, embarquées).

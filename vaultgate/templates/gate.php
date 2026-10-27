@@ -21,7 +21,7 @@ $vg_theme_class = 'light' === (string) $vg['theme'] ? 'vg-theme-light' : ( 'dark
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="robots" content="noindex, nofollow, noarchive">
 	<meta name="color-scheme" content="light dark">
-	<title><?php echo esc_html( (string) $vg['title'] ); ?> — <?php echo esc_html( (string) $vg['site_name'] ); ?></title>
+	<title><?php echo esc_html( (string) $vg['title'] ); ?></title>
 	<link rel="stylesheet" href="<?php echo esc_url( (string) $vg['style_url'] ); ?>">
 	<style nonce="<?php echo esc_attr( (string) $vg['nonce'] ); ?>">
 		:root {
@@ -55,7 +55,6 @@ $vg_theme_class = 'light' === (string) $vg['theme'] ? 'vg-theme-light' : ( 'dark
 				</span>
 			<?php endif; ?>
 
-			<p class="vg-site"><?php echo esc_html( (string) $vg['site_name'] ); ?></p>
 			<h1 class="vg-title" id="vg-title"><?php echo esc_html( (string) $vg['title'] ); ?></h1>
 
 			<?php if ( '' !== trim( (string) $vg['message'] ) ) : ?>

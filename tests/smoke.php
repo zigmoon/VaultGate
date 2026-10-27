@@ -116,6 +116,59 @@ $notices_html = (string) ob_get_clean();
 vg_smoke_assert( str_contains( $notices_html, 'at least 8 characters' ), 'password length error is shown' );
 vg_smoke_assert( str_contains( $notices_html, 'do not match' ), 'password mismatch error is shown' );
 
+/* ── Credits: the plugin says where it comes from ───────────────────────── */
+
+$admin = new VaultGate\Admin( $settings );
+
+$row_meta = $admin->row_meta( array(), 'vaultgate/vaultgate.php' );
+$row_html = implode( ' ', $row_meta );
+
+vg_smoke_assert( 3 === count( $row_meta ), 'the plugin row gains author, developer and documentation links' );
+vg_smoke_assert( str_contains( $row_html, 'https://2points13.fr' ), 'the plugin row links to 2points13.fr' );
+vg_smoke_assert( str_contains( $row_html, 'https://zigmoon.com' ), 'the plugin row links to zigmoon.com' );
+vg_smoke_assert( str_contains( $row_html, 'rel="noopener noreferrer"' ), 'outbound links are opened safely' );
+vg_smoke_assert( array() === $admin->row_meta( array(), 'other/other.php' ), 'other plugins keep their own row' );
+
+$GLOBALS['vg_screen_id'] = 'dashboard';
+vg_smoke_assert( 'WordPress' === $admin->footer_text( 'WordPress' ), 'the dashboard footer is left untouched' );
+
+$GLOBALS['vg_screen_id'] = 'settings_page_vaultgate';
+$footer                  = (string) $admin->footer_text( 'WordPress' );
+vg_smoke_assert( str_contains( $footer, '2points13.fr' ) && str_contains( $footer, 'zigmoon.com' ), 'the plugin footer carries both credits' );
+
+vg_smoke_assert( str_contains( $admin_html, 'vg-credits' ), 'the settings page ends with the credits block' );
+vg_smoke_assert( str_contains( $admin_html, '2points13.fr' ) && str_contains( $admin_html, 'zigmoon.com' ), 'the credits block shows both sites' );
+
+/* ── Welcome notice ─────────────────────────────────────────────────────── */
+
+update_option( 'vaultgate_welcome', time(), false );
+
+$_GET['page'] = 'dashboard';
+ob_start();
+$admin->notices();
+$welcome_html = (string) ob_get_clean();
+
+vg_smoke_assert( str_contains( $welcome_html, 'Set the password' ), 'activation points to the password field' );
+vg_smoke_assert( str_contains( $welcome_html, 'Dismiss' ), 'the welcome notice can be dismissed' );
+vg_smoke_assert( str_contains( $welcome_html, '2points13.fr' ), 'the welcome notice says where the plugin comes from' );
+
+$_GET['page'] = 'vaultgate';
+ob_start();
+$admin->notices();
+ob_end_clean();
+
+vg_smoke_assert( false === get_option( 'vaultgate_welcome', false ), 'opening the settings screen clears the welcome notice' );
+
+/* ── Deactivation leaves nothing behind ─────────────────────────────────── */
+
+$version_before = (int) get_option( 'vaultgate_auth_version' );
+
+VaultGate\Plugin::deactivate();
+
+vg_smoke_assert( (int) get_option( 'vaultgate_auth_version' ) === $version_before + 1, 'deactivation revokes every issued cookie' );
+vg_smoke_assert( false === get_option( 'vaultgate_welcome', false ), 'deactivation removes the welcome flag' );
+vg_smoke_assert( true, 'deactivation runs without a fatal error and without a database table' );
+
 define( 'VAULTGATE_DISABLED', true );
 vg_smoke_assert( ! $settings->is_enabled(), 'VAULTGATE_DISABLED disables the gate' );
 

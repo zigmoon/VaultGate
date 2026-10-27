@@ -488,13 +488,12 @@ final class Guard {
 		$message = wp_kses_post( (string) $settings['gate_message'] );
 		$accent  = Settings::normalize_hex( (string) $settings['accent'] );
 
-		$site_name = wp_specialchars_decode( (string) get_bloginfo( 'name' ), ENT_QUOTES );
-		$action    = add_query_arg( 'vaultgate', 'login', home_url( '/' ) );
-		$redirect  = $this->requested_url();
-		$token     = $this->token->form_token();
-		$remember  = ! empty( $settings['remember_enabled'] );
-		$days      = (int) $settings['remember_days'];
-		$ink       = Settings::ink_on( $accent );
+		$action   = add_query_arg( 'vaultgate', 'login', home_url( '/' ) );
+		$redirect = $this->requested_url();
+		$token    = $this->token->form_token();
+		$remember = ! empty( $settings['remember_enabled'] );
+		$days     = (int) $settings['remember_days'];
+		$ink      = Settings::ink_on( $accent );
 
 		$accent_dark     = Settings::accent_for_dark( $accent );
 		$accent_dark_ink = Settings::ink_on( $accent_dark );
@@ -546,7 +545,6 @@ final class Guard {
 			'notice'          => $notice['text'],
 			'invalid'         => $notice['invalid'],
 			'lock_seconds'    => $lock_seconds,
-			'site_name'       => $site_name,
 			'style_url'       => VAULTGATE_URL . 'assets/css/gate.css',
 			'script_url'      => VAULTGATE_URL . 'assets/js/gate.js',
 		);
@@ -564,8 +562,7 @@ final class Guard {
 	 *
 	 * @param array<string, mixed> $settings Settings.
 	 */
-	private function logo_markup( array $settings ): string {
-		$logo_id = isset( $settings['logo_id'] ) ? absint( $settings['logo_id'] ) : 0;
+	private function logo_markup( array $settings ): string {		$logo_id = isset( $settings['logo_id'] ) ? absint( $settings['logo_id'] ) : 0;
 
 		if ( $logo_id > 0 && function_exists( 'wp_get_attachment_image' ) ) {
 			$markup = wp_get_attachment_image(
@@ -573,9 +570,11 @@ final class Guard {
 				'medium',
 				false,
 				array(
-					'class'    => 'vg-logo',
-					'alt'      => '',
-					'decoding' => 'async',
+					'class'         => 'vg-logo',
+					'alt'           => '',
+					'decoding'      => 'async',
+					'loading'       => 'eager',
+					'fetchpriority' => 'high',
 				)
 			);
 

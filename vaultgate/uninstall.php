@@ -17,6 +17,7 @@ $vaultgate_options = array(
 	'vaultgate_password_changed',
 	'vaultgate_log',
 	'vaultgate_version',
+	'vaultgate_welcome',
 );
 
 $vaultgate_cleanup = static function () use ( $vaultgate_options ): void {

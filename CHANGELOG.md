@@ -3,6 +3,25 @@
 All notable changes to VaultGate are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.1] — 27 October 2026
+
+### Added
+
+- **Credits where they belong.** The settings footer, the dashboard footer of the plugin screen, the Plugins row and the welcome notice all link to [2.13](https://2points13.fr) and [zigmoon](https://zigmoon.com).
+- **Welcome notice after activation**, dismissable, pointing at the password field and stating where the plugin comes from.
+
+### Changed
+
+- **Removal is clean by default.** "Delete all plugin data" now defaults to on; deactivation also revokes every cookie and deletes the rate-limit transients, so a site can be handed over without residue.
+- **Responsive admin**: a second breakpoint (600 px) tightens tabs, swatches and tables; the credits block stacks.
+- **Shorter README**, lead by the interface: real screenshots of the settings screen, the gate (light, dark) and the protection tab, all captured on a live WordPress 7.1.3 install.
+
+### Fixed
+
+- `_load_textdomain_just_in_time` notice on WordPress 6.7+: translations now load on `init`, and the option defaults no longer call `__()`.
+- The site name is no longer printed on the gate or in its `<title>`; the gate prints the plugin title only.
+- The logo image is fetched eagerly with a high priority, since it is the only image above the fold.
+
 ## [1.1.0] — 27 October 2026
 
 ### Added
@@ -58,5 +77,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - Opt-in, multisite-aware uninstall cleanup.
 - Reproducible tooling: translations, images and archive with SHA-256 verification.
 
+[1.1.1]: https://github.com/zigmoon/passwordprotect/releases/tag/v1.1.1
 [1.1.0]: https://github.com/zigmoon/passwordprotect/releases/tag/v1.1.0
 [1.0.0]: https://github.com/zigmoon/passwordprotect/releases/tag/v1.0.0

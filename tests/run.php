@@ -119,8 +119,10 @@ $clean = Settings::sanitize(
 
 vg_same( true, $clean['enabled'], 'enabled flag is boolean true' );
 vg_same( false, $clean['protect_feeds'], 'unchecked flag is boolean false' );
+vg_same( true, Settings::defaults()['delete_data'], 'uninstalling removes the plugin data by default' );
+vg_same( '', Settings::defaults()['gate_title'], 'defaults written to the database are never translated' );
 vg_same( false, Settings::sanitize( array( 'enabled' => array( 1 ) ) )['enabled'], 'array values never enable a flag' );
-vg_same( 'Private site', Settings::sanitize( array( 'gate_title' => array( 'x' ) ) )['gate_title'], 'array values fall back to the default title' );
+vg_same( '', Settings::sanitize( array( 'gate_title' => array( 'x' ) ) )['gate_title'], 'array titles are neutralised, not stored' );
 vg_same( 'Hello', $clean['gate_title'], 'title is stripped and trimmed' );
 vg_same( false, str_contains( $clean['gate_message'], '<script' ), 'message script is removed' );
 vg_same( false, str_contains( $clean['gate_message'], 'alert(1)' ), 'message payload is removed' );

@@ -4,7 +4,7 @@ Tags: password protection, maintenance mode, coming soon, access control, privac
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,9 +34,9 @@ VaultGate protects an entire WordPress installation while it is being built or k
 
 * Strictly escaped output, sanitised input, capability checks and nonces on every admin action.
 * Small, single-responsibility classes: settings, access rules, tokens, rate limiter, guard, admin, CLI.
-* 163 automated assertions ship in the `tests/` directory (unit tests plus a boot/render smoke test).
+* 181 automated assertions ship in the `tests/` directory (unit tests plus a boot/render smoke test).
 * English source strings, complete French and Spanish translations, `.pot` catalogue.
-* Uninstall cleanup is opt-in, multisite-aware and also removes transients.
+* Data cleanup on uninstall is on by default, multisite-aware, and also removes transients; deactivation revokes every issued cookie.
 
 **Features**
 
@@ -59,6 +59,8 @@ You can always log in through `wp-login.php`. Administrator sessions always bypa
 `define( 'VAULTGATE_DISABLED', true );` in `wp-config.php`, or:
 
 `wp vaultgate disable`
+
+**Origin** — a plugin by [2.13](https://2points13.fr), dev by [zigmoon](https://zigmoon.com). Both links are also in the settings footer and on the Plugins screen.
 
 == Installation ==
 
@@ -117,9 +119,18 @@ It uses semantic HTML, a skip link, visible focus rings, a properly labelled pas
 
 = Can I remove the message under the title? =
 
-Yes, it is empty by default. The gate is then a single quiet column: logo, site name, title, password field and button.
+Yes, it is empty by default. The gate is then a single quiet column: logo, title, password field and button.
 
 == Changelog ==
+
+= 1.1.1 =
+* Credits: 2.13 (2points13.fr) and dev by zigmoon (zigmoon.com) in the settings footer, the plugin-screen footer, the Plugins row and the welcome notice.
+* Welcome notice after activation, dismissable, pointing at the password field.
+* Deleting plugin data is now on by default; deactivation revokes every cookie and removes the rate-limit transients.
+* Responsive admin down to 360 px.
+* Translations now load on `init` (WordPress 6.7+ notice fixed); option defaults are no longer translated.
+* The site name is no longer printed on the gate or in its browser title.
+* README led by the interface, with screenshots captured on a live WordPress install.
 
 = 1.1.0 =
 * New visual language: white Swiss gate page and admin screen, hairline rules, sharp corners, black by default.
@@ -142,6 +153,9 @@ Yes, it is empty by default. The gate is then a single quiet column: logo, site 
 * WP-CLI commands and opt-in uninstall cleanup.
 
 == Upgrade Notice ==
+
+= 1.1.1 =
+Credits and origin links, a welcome notice after activation, clean removal by default, a responsive settings screen and a fix for the WordPress 6.7+ translation notice. Existing settings are kept.
 
 = 1.1.0 =
 New Swiss design, media-library logo picker, accent presets, embedded fonts and a Spanish translation. Existing settings are kept.

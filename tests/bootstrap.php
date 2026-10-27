@@ -18,6 +18,7 @@ $GLOBALS['vg_options']    = array();
 $GLOBALS['vg_transients'] = array();
 $GLOBALS['vg_filters']    = array();
 $GLOBALS['vg_actions']    = array();
+$GLOBALS['vg_textdomain_loaded'] = false;
 
 function get_option( $name, $default = false ) {
 	return array_key_exists( $name, $GLOBALS['vg_options'] ) ? $GLOBALS['vg_options'][ $name ] : $default;
@@ -356,6 +357,8 @@ function apply_filters( $tag, $value, ...$args ) {
 }
 
 function load_plugin_textdomain( $domain, $deprecated = false, $plugin_rel_path = false ) {
+	$GLOBALS['vg_textdomain_loaded'] = true;
+
 	return true;
 }
 
@@ -407,9 +410,24 @@ function nocache_headers() {
 	return true;
 }
 
+function wp_nonce_url( $actionurl, $action = -1, $name = '_wpnonce' ) {
+	return $actionurl . ( str_contains( (string) $actionurl, '?' ) ? '&' : '?' ) . $name . '=test-nonce';
+}
+
+function check_admin_referer( $action = -1, $query_arg = '_wpnonce' ) {
+	return true;
+}
+
+function wp_get_referer() {
+	return $GLOBALS['vg_referer'] ?? '';
+}
+
+function get_current_screen() {
+	return (object) array( 'id' => $GLOBALS['vg_screen_id'] ?? 'dashboard' );
+}
+
 function wp_nonce_field( $action = -1, $name = '_wpnonce', $referer = true, $echo = true ) {
 	$html = '<input type="hidden" name="' . esc_attr( $name ) . '" value="test-nonce">';
-
 	if ( $echo ) {
 		echo $html;
 	}

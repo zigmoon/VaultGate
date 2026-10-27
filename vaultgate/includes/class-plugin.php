@@ -63,6 +63,7 @@ final class Plugin {
 	/**
 	 * Activation: store the session version and plugin version. Protection is
 	 * deliberately left off so that activating cannot lock the site by accident.
+	 * A flag is set so the dashboard can point to the password field once.
 	 */
 	public static function activate(): void {
 		if ( false === get_option( Settings::AUTH_VERSION_OPTION, false ) ) {
@@ -70,13 +71,22 @@ final class Plugin {
 		}
 
 		update_option( Settings::VERSION_OPTION, VAULTGATE_VERSION, false );
+		update_option( Settings::WELCOME_OPTION, time(), false );
 	}
 
 	/**
-	 * Deactivation invalidates existing cookies, so re-enabling the plugin
-	 * always requires a fresh login.
+	 * Deactivation leaves the site exactly as it was before the plugin existed:
+	 * the gate stops, issued cookies are revoked, and the short-lived
+	 * transients are removed. Deleting the plugin afterwards removes the rest
+	 * (see uninstall.php) — no table, no rewrite rule, no .htaccess, no
+	 * modification of the database schema.
 	 */
 	public static function deactivate(): void {
-		( new Settings() )->bump_auth_version();
+		$settings = new Settings();
+
+		$settings->bump_auth_version();
+		$settings->purge_transients();
+
+		delete_option( Settings::WELCOME_OPTION );
 	}
 }

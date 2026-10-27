@@ -19,6 +19,14 @@ defined( 'ABSPATH' ) || exit;
 final class Admin {
 
 	/**
+	 * Where the plugin comes from. Plain data, not settings: changing these is
+	 * a code change, which is the point.
+	 */
+	private const AUTHOR_SITE = 'https://2points13.fr';
+	private const DEV_SITE    = 'https://zigmoon.com';
+	private const DOCS_SITE   = 'https://github.com/zigmoon/passwordprotect#readme';
+
+	/**
 	 * Settings.
 	 *
 	 * @var Settings
@@ -41,10 +49,13 @@ final class Admin {
 		add_action( 'admin_menu', array( $this, 'menu' ) );
 		add_action( 'admin_post_vaultgate_save', array( $this, 'handle_save' ) );
 		add_action( 'admin_post_vaultgate_clear_log', array( $this, 'handle_clear_log' ) );
+		add_action( 'admin_post_vaultgate_dismiss_welcome', array( $this, 'handle_dismiss_welcome' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_action( 'admin_bar_menu', array( $this, 'admin_bar' ), 100 );
 		add_action( 'admin_notices', array( $this, 'notices' ) );
 		add_filter( 'plugin_action_links_' . VAULTGATE_BASENAME, array( $this, 'action_links' ) );
+		add_filter( 'plugin_row_meta', array( $this, 'row_meta' ), 10, 2 );
+		add_filter( 'admin_footer_text', array( $this, 'footer_text' ) );
 	}
 
 	/**
@@ -94,6 +105,127 @@ final class Admin {
 		$links[] = '<a href="' . esc_url( admin_url( 'options-general.php?page=vaultgate' ) ) . '">' . esc_html__( 'Settings', 'vaultgate' ) . '</a>';
 
 		return $links;
+	}
+
+	/**
+	 * Adds the author links to the plugin row on the Plugins screen, so the
+	 * origin of the plugin is visible where it is installed.
+	 *
+	 * @param array<int, string> $meta Existing row meta.
+	 * @param string             $file Plugin basename.
+	 * @return array<int, string>
+	 */
+	public function row_meta( array $meta, string $file = '' ): array {
+		if ( '' !== $file && VAULTGATE_BASENAME !== $file ) {
+			return $meta;
+		}
+
+		$meta[] = $this->external_link( self::AUTHOR_SITE, '2.13' );
+		$meta[] = $this->external_link( self::DEV_SITE, __( 'dev by zigmoon', 'vaultgate' ) );
+		$meta[] = $this->external_link( self::DOCS_SITE, __( 'Documentation', 'vaultgate' ) );
+
+		return $meta;
+	}
+
+	/**
+	 * Replaces the "Thank you for creating with WordPress" line on the plugin
+	 * screen only, with the same credits as the settings footer.
+	 *
+	 * @param string $text Existing footer text.
+	 * @return string
+	 */
+	public function footer_text( $text ) {
+		if ( ! $this->is_plugin_screen() ) {
+			return $text;
+		}
+
+		return $this->credit_line();
+	}
+
+	/**
+	 * Dismisses the welcome notice.
+	 */
+	public function handle_dismiss_welcome(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You are not allowed to change these settings.', 'vaultgate' ), '', array( 'response' => 403 ) );
+		}
+
+		check_admin_referer( 'vaultgate_dismiss_welcome' );
+
+		delete_option( Settings::WELCOME_OPTION );
+
+		$referer = function_exists( 'wp_get_referer' ) ? (string) wp_get_referer() : '';
+
+		wp_safe_redirect( '' !== $referer ? $referer : admin_url() );
+		exit;
+	}
+
+	/**
+	 * Is the current screen the VaultGate settings page?
+	 */
+	private function is_plugin_screen(): bool {
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return false;
+		}
+
+		$screen = get_current_screen();
+
+		return is_object( $screen ) && 'settings_page_vaultgate' === ( $screen->id ?? '' );
+	}
+
+	/**
+	 * The credits line: version, author, developer.
+	 */
+	private function credit_line(): string {
+		return sprintf(
+			/* translators: 1: plugin version, 2: author link ("2.13"), 3: developer link ("zigmoon"). */
+			esc_html__( 'VaultGate %1$s — a plugin by %2$s, dev by %3$s.', 'vaultgate' ),
+			esc_html( VAULTGATE_VERSION ),
+			$this->external_link( self::AUTHOR_SITE, '2.13' ),
+			$this->external_link( self::DEV_SITE, 'zigmoon' )
+		);
+	}
+
+	/**
+	 * A link that leaves the dashboard.
+	 *
+	 * @param string $url   Target.
+	 * @param string $label Visible label.
+	 */
+	private function external_link( string $url, string $label ): string {
+		return sprintf(
+			'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
+			esc_url( $url ),
+			esc_html( $label )
+		);
+	}
+
+	/**
+	 * The one-time notice shown after activation: where the password goes, and
+	 * where the plugin comes from.
+	 */
+	private function welcome_notice(): void {
+		if ( ! current_user_can( 'manage_options' ) || false === get_option( Settings::WELCOME_OPTION, false ) ) {
+			return;
+		}
+
+		$settings_url = admin_url( 'options-general.php?page=vaultgate' );
+		$dismiss_url  = wp_nonce_url(
+			admin_url( 'admin-post.php?action=vaultgate_dismiss_welcome' ),
+			'vaultgate_dismiss_welcome'
+		);
+
+		printf(
+			'<div class="notice notice-info vg-welcome"><p><strong>%s</strong> %s</p><p class="vg-welcome-actions"><a class="button button-primary" href="%s">%s</a> <a class="button button-secondary" href="%s">%s</a></p><p class="vg-welcome-credit">%s <span aria-hidden="true">·</span> %s</p></div>',
+			esc_html__( 'VaultGate is active.', 'vaultgate' ),
+			esc_html__( 'Choose the password that protects the site while you build it.', 'vaultgate' ),
+			esc_url( $settings_url ),
+			esc_html__( 'Set the password', 'vaultgate' ),
+			esc_url( $dismiss_url ),
+			esc_html__( 'Dismiss', 'vaultgate' ),
+			$this->external_link( self::AUTHOR_SITE, '2points13.fr' ),
+			$this->external_link( self::DEV_SITE, 'zigmoon.com' )
+		);
 	}
 
 	/**
@@ -240,7 +372,14 @@ final class Admin {
 				);
 			}
 
+			$this->welcome_notice();
+
 			return;
+		}
+
+		// The settings screen is open: the welcome notice has done its job.
+		if ( false !== get_option( Settings::WELCOME_OPTION, false ) ) {
+			delete_option( Settings::WELCOME_OPTION );
 		}
 
 		if ( '1' === $saved ) {
@@ -494,7 +633,7 @@ final class Admin {
 					<?php $this->section( __( 'Text', 'vaultgate' ) ); ?>
 
 					<?php
-					$this->field_text( 'gate_title', __( 'Title', 'vaultgate' ), (string) $settings['gate_title'], __( 'Main heading and browser tab title.', 'vaultgate' ) );
+					$this->field_text( 'gate_title', __( 'Title', 'vaultgate' ), (string) $settings['gate_title'], __( 'Main heading and browser tab title. Leave empty for “Private site”.', 'vaultgate' ), 'text', __( 'Private site', 'vaultgate' ) );
 					$this->field_textarea( 'gate_message', __( 'Message', 'vaultgate' ), (string) $settings['gate_message'], __( 'Optional. Basic HTML is allowed (links, bold, line breaks). Leave empty for a single, quiet gate page.', 'vaultgate' ), '', 4 );
 					?>
 				</div>
@@ -627,6 +766,16 @@ wp vaultgate password 'a-new-long-passphrase'</code></pre>
 				<input type="hidden" name="action" value="vaultgate_clear_log">
 				<?php wp_nonce_field( 'vaultgate_clear_log' ); ?>
 			</form>
+
+			<footer class="vg-credits">
+				<?php // Both helpers escape URL and label; the markup is fixed, only the text varies. ?>
+				<p class="vg-credits-line"><?php echo $this->credit_line(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
+				<p class="vg-credits-links">
+					<?php echo $this->external_link( self::AUTHOR_SITE, '2points13.fr' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<span aria-hidden="true">·</span>
+					<?php echo $this->external_link( self::DEV_SITE, 'zigmoon.com' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</p>
+			</footer>
 		</div>
 		<?php
 	}

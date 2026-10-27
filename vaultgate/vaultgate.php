@@ -3,7 +3,7 @@
  * Plugin Name:       VaultGate
  * Plugin URI:        https://github.com/zigmoon/passwordprotect
  * Description:       Password-protects an entire WordPress site with a quiet, Swiss-designed gate page, granular access rules and no third-party dependencies.
- * Version:           1.1.0
+ * Version:           1.1.1
  * Requires at least: 6.5
  * Tested up to:      7.1
  * Requires PHP:      8.2
@@ -22,7 +22,7 @@ namespace VaultGate;
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'VAULTGATE_VERSION' ) ) {
-	define( 'VAULTGATE_VERSION', '1.1.0' );
+	define( 'VAULTGATE_VERSION', '1.1.1' );
 }
 if ( ! defined( 'VAULTGATE_FILE' ) ) {
 	define( 'VAULTGATE_FILE', __FILE__ );
@@ -49,10 +49,22 @@ require_once VAULTGATE_DIR . 'includes/class-plugin.php';
 add_action(
 	'plugins_loaded',
 	static function (): void {
-		load_plugin_textdomain( 'vaultgate', false, dirname( VAULTGATE_BASENAME ) . '/languages' );
 		Plugin::instance()->boot();
 	},
 	5
+);
+
+/*
+ * WordPress 6.7 and later load translations just in time and report a warning
+ * when a text domain is requested before `init`. Registering the catalogue on
+ * `init` keeps the plugin quiet on every current version.
+ */
+add_action(
+	'init',
+	static function (): void {
+		load_plugin_textdomain( 'vaultgate', false, dirname( VAULTGATE_BASENAME ) . '/languages' );
+	},
+	1
 );
 
 register_activation_hook( __FILE__, array( Plugin::class, 'activate' ) );
