@@ -92,8 +92,7 @@ vg_reset();
 $clean = Settings::sanitize(
 	array(
 		'enabled'           => '1',
-		'gate_title'        => '  <b>Hello</b>  ',
-		'gate_message'      => '<script>alert(1)</script><p>Hi</p>',
+		'gate_title'        => '  <b>Hello</b>  ',		'gate_message'      => '<script>alert(1)</script><p>Hi</p>',
 		'logo_url'          => 'javascript:alert(1)',
 		'accent'            => '#abc',
 		'theme'             => 'neon',
@@ -120,6 +119,8 @@ $clean = Settings::sanitize(
 
 vg_same( true, $clean['enabled'], 'enabled flag is boolean true' );
 vg_same( false, $clean['protect_feeds'], 'unchecked flag is boolean false' );
+vg_same( false, Settings::sanitize( array( 'enabled' => array( 1 ) ) )['enabled'], 'array values never enable a flag' );
+vg_same( 'Private site', Settings::sanitize( array( 'gate_title' => array( 'x' ) ) )['gate_title'], 'array values fall back to the default title' );
 vg_same( 'Hello', $clean['gate_title'], 'title is stripped and trimmed' );
 vg_same( false, str_contains( $clean['gate_message'], '<script' ), 'message script is removed' );
 vg_same( false, str_contains( $clean['gate_message'], 'alert(1)' ), 'message payload is removed' );
@@ -128,8 +129,9 @@ vg_same( 'mailto:hi@example.test', $clean['support_url'], 'mailto support URL is
 vg_same( '#aabbcc', $clean['accent'], '3-digit hex is expanded' );
 vg_same( 'auto', $clean['theme'], 'unknown theme falls back to auto' );
 vg_same( 365, $clean['session_days'], 'session days are capped' );
-vg_same( 1, $clean['remember_days'], 'remember days have a floor' );
-vg_same( 1, $clean['max_attempts'], 'attempts have a floor' );
+vg_same( 30, $clean['remember_days'], 'an empty duration falls back to the default' );
+vg_same( 5, $clean['max_attempts'], 'an empty attempt count falls back to the default' );
+vg_same( 1, Settings::sanitize( array( 'max_attempts' => '1' ) )['max_attempts'], 'explicit attempt counts are kept' );
 vg_same( 1440, $clean['lockout_minutes'], 'lockout is capped' );
 vg_same( 'read', $clean['bypass_capability'], 'known capability is kept' );
 vg_same( 'bye', $clean['footer_note'], 'footer tags are stripped' );

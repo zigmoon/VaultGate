@@ -23,7 +23,7 @@ Première version publique.
 - **Constante d’urgence** `VAULTGATE_DISABLED` et huit filtres d’intégration.
 - **Traduction française complète**, catalogue `.pot`, fichier `.mo` compilé et vérifié.
 - **Nettoyage optionnel** à la désinstallation, compatible multisite, incluant les transients.
-- **139 assertions automatisées** (116 unitaires + 23 d’intégration), exécutées sous PHP 8.3 et PHP 8.5.
+- **142 assertions automatisées** (119 unitaires + 23 d’intégration), exécutées sous PHP 8.3 et PHP 8.5.
 - **Identité visuelle** : icône vectorielle, déclinaisons 512/256/128/64 px, bannières 1544×500 et 772×250, aperçu social 1280×640.
 - **Outillage reproductible** : génération des traductions, des images et de l’archive installable, avec vérification par empreinte SHA-256.
 

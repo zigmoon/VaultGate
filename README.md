@@ -22,7 +22,7 @@
   <img alt="PHP 8.2 – 8.5" src="https://img.shields.io/badge/PHP-8.2%20%E2%86%92%208.5-777bb4?style=flat-square">
   <img alt="Version 1.0.0" src="https://img.shields.io/badge/version-1.0.0-4f46e5?style=flat-square">
   <img alt="Licence GPL-2.0-or-later" src="https://img.shields.io/badge/licence-GPL--2.0--or--later-2f855a?style=flat-square">
-  <img alt="139 assertions" src="https://img.shields.io/badge/tests-139%20assertions-0f766e?style=flat-square">
+  <img alt="142 assertions" src="https://img.shields.io/badge/tests-142%20assertions-0f766e?style=flat-square">
   <img alt="Aucune dépendance" src="https://img.shields.io/badge/d%C3%A9pendances-aucune-64748b?style=flat-square">
 </p>
 
@@ -93,7 +93,7 @@ Tout est réglable : chaque surface peut être laissée ouverte depuis l’admin
 | Administration | Un champ texte | 5 onglets, aperçu, validation, journal d’activité |
 | Internationalisation | Anglais uniquement | Anglais source + **traduction française complète** |
 | Secours | Aucun | WP-CLI, constante `VAULTGATE_DISABLED`, désinstallation propre |
-| Qualité | Peu ou pas de tests | **139 assertions** exécutées sous PHP 8.3 et PHP 8.5 |
+| Qualité | Peu ou pas de tests | **142 assertions** exécutées sous PHP 8.3 et PHP 8.5 |
 | Empreinte | jQuery, polices, CDN | **Zéro dépendance**, zéro requête externe, zéro pistage |
 
 ---
@@ -330,7 +330,7 @@ pwsh -File tools/build-zip.ps1
 Résultat attendu des tests :
 
 ```text
-116 passed, 0 failed
+119 passed, 0 failed
 23 passed, 0 failed
 ```
 
@@ -447,7 +447,7 @@ Signaler une vulnérabilité : [SECURITY.md](SECURITY.md).
 - Requires WordPress 6.5+ and PHP 8.2+ (tested on WordPress 7.1 / PHP 8.5).
 - No third-party service, no tracking, no external assets, no Composer or npm build.
 - Password stored with `wp_hash_password()`; sessions are HMAC-signed cookies, never stored server-side.
-- 139 automated assertions across two suites; French translation included.
+- 142 automated assertions across two suites; French translation included.
 - Static files served directly by the web server cannot be protected by a plugin — see [Limites assumées](#8-limites-assumées).
 
 Install from [`dist/vaultgate-1.0.0.zip`](dist/vaultgate-1.0.0.zip), activate, then set a password under **Settings → VaultGate**.

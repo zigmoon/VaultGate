@@ -337,6 +337,17 @@ final class Settings {
 	}
 
 	/**
+	 * Reads a scalar input as a string. Arrays and objects yield an empty
+	 * string instead of a PHP "array to string" warning: a settings field is
+	 * always a single value, even when the request tries otherwise.
+	 *
+	 * @param mixed $value Raw value.
+	 */
+	private static function scalar( mixed $value ): string {
+		return is_scalar( $value ) ? (string) $value : '';
+	}
+
+	/**
 	 * Sanitises a full settings array.
 	 *
 	 * @param array<string, mixed> $input Raw input.
@@ -347,48 +358,49 @@ final class Settings {
 		$clean    = array();
 
 		foreach ( array( 'enabled', 'remember_enabled', 'trust_proxy', 'protect_rest', 'protect_feeds', 'protect_sitemaps', 'protect_ajax', 'protect_xmlrpc', 'log_enabled', 'delete_data' ) as $flag ) {
-			$clean[ $flag ] = ! empty( $input[ $flag ] );
+			$value        = $input[ $flag ] ?? null;
+			$clean[ $flag ] = is_scalar( $value ) && ! empty( $value );
 		}
 
-		$clean['gate_title'] = trim( sanitize_text_field( (string) ( $input['gate_title'] ?? '' ) ) );
+		$clean['gate_title'] = trim( sanitize_text_field( self::scalar( $input['gate_title'] ?? '' ) ) );
 		if ( '' === $clean['gate_title'] ) {
 			$clean['gate_title'] = $defaults['gate_title'];
 		}
 
-		$clean['gate_message'] = wp_kses_post( (string) ( $input['gate_message'] ?? '' ) );
-		$clean['footer_note']  = trim( sanitize_text_field( (string) ( $input['footer_note'] ?? '' ) ) );
+		$clean['gate_message'] = wp_kses_post( self::scalar( $input['gate_message'] ?? '' ) );
+		$clean['footer_note']  = trim( sanitize_text_field( self::scalar( $input['footer_note'] ?? '' ) ) );
 
-		$logo = esc_url_raw( trim( (string) ( $input['logo_url'] ?? '' ) ) );
+		$logo = esc_url_raw( trim( self::scalar( $input['logo_url'] ?? '' ) ) );
 		$logo_scheme = '' !== $logo ? strtolower( (string) wp_parse_url( $logo, PHP_URL_SCHEME ) ) : '';
 		if ( '' !== $logo && ! in_array( $logo_scheme, array( 'http', 'https' ), true ) ) {
 			$logo = '';
 		}
 		$clean['logo_url'] = $logo;
 
-		$support = esc_url_raw( trim( (string) ( $input['support_url'] ?? '' ) ) );
+		$support = esc_url_raw( trim( self::scalar( $input['support_url'] ?? '' ) ) );
 		$support_scheme = '' !== $support ? strtolower( (string) wp_parse_url( $support, PHP_URL_SCHEME ) ) : '';
 		if ( '' !== $support && ! in_array( $support_scheme, array( 'http', 'https', 'mailto' ), true ) ) {
 			$support = '';
 		}
 		$clean['support_url'] = $support;
 
-		$accent               = sanitize_hex_color( (string) ( $input['accent'] ?? '' ) );
+		$accent               = sanitize_hex_color( self::scalar( $input['accent'] ?? '' ) );
 		$clean['accent']      = self::normalize_hex( $accent ? $accent : $defaults['accent'] );
-		$theme                = sanitize_key( (string) ( $input['theme'] ?? '' ) );
+		$theme                = sanitize_key( self::scalar( $input['theme'] ?? '' ) );
 		$clean['theme']       = in_array( $theme, array( 'auto', 'light', 'dark' ), true ) ? $theme : 'auto';
-		$clean['session_days']  = min( 365, max( 1, absint( $input['session_days'] ?? $defaults['session_days'] ) ) );
-		$clean['remember_days'] = min( 365, max( 1, absint( $input['remember_days'] ?? $defaults['remember_days'] ) ) );
+		$clean['session_days']  = min( 365, max( 1, absint( self::scalar( $input['session_days'] ?? '' ) ) ?: (int) $defaults['session_days'] ) );
+		$clean['remember_days'] = min( 365, max( 1, absint( self::scalar( $input['remember_days'] ?? '' ) ) ?: (int) $defaults['remember_days'] ) );
 
-		$capability = sanitize_key( (string) ( $input['bypass_capability'] ?? '' ) );
+		$capability = sanitize_key( self::scalar( $input['bypass_capability'] ?? '' ) );
 		$clean['bypass_capability'] = array_key_exists( $capability, self::capabilities() )
 			? $capability
 			: $defaults['bypass_capability'];
 
-		$clean['ip_allowlist']  = self::sanitize_ip_list( (string) ( $input['ip_allowlist'] ?? '' ) );
-		$clean['exclude_paths'] = self::sanitize_path_list( (string) ( $input['exclude_paths'] ?? '' ) );
+		$clean['ip_allowlist']  = self::sanitize_ip_list( self::scalar( $input['ip_allowlist'] ?? '' ) );
+		$clean['exclude_paths'] = self::sanitize_path_list( self::scalar( $input['exclude_paths'] ?? '' ) );
 
-		$clean['max_attempts']    = min( 50, max( 1, absint( $input['max_attempts'] ?? $defaults['max_attempts'] ) ) );
-		$clean['lockout_minutes'] = min( 1440, max( 1, absint( $input['lockout_minutes'] ?? $defaults['lockout_minutes'] ) ) );
+		$clean['max_attempts']    = min( 50, max( 1, absint( self::scalar( $input['max_attempts'] ?? '' ) ) ?: (int) $defaults['max_attempts'] ) );
+		$clean['lockout_minutes'] = min( 1440, max( 1, absint( self::scalar( $input['lockout_minutes'] ?? '' ) ) ?: (int) $defaults['lockout_minutes'] ) );
 
 		return $clean;
 	}
