@@ -25,8 +25,8 @@
 <p align="center">
   <img alt="WordPress 6.5 → 7.1" src="https://img.shields.io/badge/WordPress-6.5%20%E2%86%92%207.1-0b0d10?style=flat-square">
   <img alt="PHP 8.2 → 8.5" src="https://img.shields.io/badge/PHP-8.2%20%E2%86%92%208.5-0b0d10?style=flat-square">
-  <img alt="Version 1.1.1" src="https://img.shields.io/badge/version-1.1.1-0a66ff?style=flat-square">
-  <img alt="181 assertions" src="https://img.shields.io/badge/tests-181%20assertions-0b0d10?style=flat-square">
+  <img alt="Version 1.1.1" src="https://img.shields.io/badge/version-1.1.2-0a66ff?style=flat-square">
+  <img alt="184 assertions" src="https://img.shields.io/badge/tests-184%20assertions-0b0d10?style=flat-square">
   <img alt="Licence GPL-2.0-or-later" src="https://img.shields.io/badge/licence-GPL--2.0--or--later-0b0d10?style=flat-square">
 </p>
 
@@ -55,14 +55,14 @@ One column, centred from 320 px up, and it works without JavaScript.
 
 ## Install
 
-1. Download `vaultgate-1.1.1.zip` from [Releases](https://github.com/zigmoon/passwordprotect/releases/latest).
+1. Download `VaultGate-1.1.2.zip` from [Releases](https://github.com/zigmoon/passwordprotect/releases/latest).
 2. **Plugins → Add New → Upload Plugin**, choose the ZIP, install, activate.
 3. **Settings → VaultGate**: set the password, then turn protection on.
 
 Or from a checkout:
 
 ```bash
-cp -r vaultgate /path/to/wp-content/plugins/
+cp -r VaultGate /path/to/wp-content/plugins/
 wp plugin activate vaultgate
 wp vaultgate password 'a long passphrase'
 wp vaultgate enable
@@ -75,7 +75,7 @@ WordPress 6.5+ and PHP 8.2+ — nothing else to install. The first activation sh
 ## Quality
 
 - **Latest WordPress, latest PHP.** WordPress 6.5 → 7.1, PHP 8.2 → 8.5, no deprecated call, no bundled library. Translations load on `init`, as WordPress 6.7+ requires.
-- **181 assertions.** Two suites (`php tests/run.php`, `php tests/smoke.php`) on PHP 8.3 and 8.5, with no WordPress installation.
+- **184 assertions.** Two suites (`php tests/run.php`, `php tests/smoke.php`) on PHP 8.3 and 8.5, with no WordPress installation.
 - **Checked on a real install.** Every surface probed on WordPress 7.1.3 / PHP 8.3: front, posts, feeds, sitemaps, REST, AJAX, XML-RPC, `robots.txt`, `wp-login.php`, admin, activation and deletion.
 - **Responsive back office.** The settings screen is usable down to 360 px; the gate is centred at every width.
 

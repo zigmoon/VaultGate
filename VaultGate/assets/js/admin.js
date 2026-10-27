@@ -87,6 +87,41 @@
 		activate(initial || tabs[0].getAttribute('data-vg-tab'), false);
 	}
 
+	/* ── Show / hide a password ─────────────────────────────────────────── */
+
+	Array.prototype.slice.call(root.querySelectorAll('[data-vg-reveal]')).forEach(function (button) {
+		var target = button.getAttribute('aria-controls');
+		var input = target ? document.getElementById(target) : null;
+
+		if (!input) {
+			return;
+		}
+
+		var showLabel = button.getAttribute('data-label-show') || 'Show password';
+		var hideLabel = button.getAttribute('data-label-hide') || 'Hide password';
+
+		button.addEventListener('click', function (event) {
+			event.preventDefault();
+
+			var show = input.type === 'password';
+
+			input.type = show ? 'text' : 'password';
+			button.setAttribute('aria-pressed', show ? 'true' : 'false');
+			button.setAttribute('aria-label', show ? hideLabel : showLabel);
+			button.setAttribute('title', show ? hideLabel : showLabel);
+
+			var position = input.value.length;
+
+			input.focus();
+
+			try {
+				input.setSelectionRange(position, position);
+			} catch (error) {
+				// Some input types do not expose a selection; ignore.
+			}
+		});
+	});
+
 	/* ── Accent colour ──────────────────────────────────────────────────── */
 
 	var accent = root.querySelector('[data-vg-accent]');

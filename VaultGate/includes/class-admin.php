@@ -55,7 +55,6 @@ final class Admin {
 		add_action( 'admin_notices', array( $this, 'notices' ) );
 		add_filter( 'plugin_action_links_' . VAULTGATE_BASENAME, array( $this, 'action_links' ) );
 		add_filter( 'plugin_row_meta', array( $this, 'row_meta' ), 10, 2 );
-		add_filter( 'admin_footer_text', array( $this, 'footer_text' ) );
 	}
 
 	/**
@@ -128,21 +127,6 @@ final class Admin {
 	}
 
 	/**
-	 * Replaces the "Thank you for creating with WordPress" line on the plugin
-	 * screen only, with the same credits as the settings footer.
-	 *
-	 * @param string $text Existing footer text.
-	 * @return string
-	 */
-	public function footer_text( $text ) {
-		if ( ! $this->is_plugin_screen() ) {
-			return $text;
-		}
-
-		return $this->credit_line();
-	}
-
-	/**
 	 * Dismisses the welcome notice.
 	 */
 	public function handle_dismiss_welcome(): void {
@@ -158,19 +142,6 @@ final class Admin {
 
 		wp_safe_redirect( '' !== $referer ? $referer : admin_url() );
 		exit;
-	}
-
-	/**
-	 * Is the current screen the VaultGate settings page?
-	 */
-	private function is_plugin_screen(): bool {
-		if ( ! function_exists( 'get_current_screen' ) ) {
-			return false;
-		}
-
-		$screen = get_current_screen();
-
-		return is_object( $screen ) && 'settings_page_vaultgate' === ( $screen->id ?? '' );
 	}
 
 	/**
@@ -543,12 +514,18 @@ final class Admin {
 					<div class="vg-grid vg-grid--2">
 						<div class="vg-field">
 							<label for="vg-new-password"><?php esc_html_e( 'New password', 'vaultgate' ); ?></label>
-							<input type="password" id="vg-new-password" name="vaultgate_new_password" value="" autocomplete="new-password" minlength="8" aria-describedby="vg-password-desc">
+							<div class="vg-input">
+								<input type="password" id="vg-new-password" name="vaultgate_new_password" value="" autocomplete="new-password" minlength="8" aria-describedby="vg-password-desc">
+								<?php $this->reveal_button( 'vg-new-password' ); ?>
+							</div>
 							<p class="vg-help" id="vg-password-desc"><?php esc_html_e( 'Minimum 8 characters. A long passphrase is best.', 'vaultgate' ); ?></p>
 						</div>
 						<div class="vg-field">
 							<label for="vg-confirm-password"><?php esc_html_e( 'Confirm password', 'vaultgate' ); ?></label>
-							<input type="password" id="vg-confirm-password" name="vaultgate_confirm_password" value="" autocomplete="new-password" minlength="8">
+							<div class="vg-input">
+								<input type="password" id="vg-confirm-password" name="vaultgate_confirm_password" value="" autocomplete="new-password" minlength="8">
+								<?php $this->reveal_button( 'vg-confirm-password' ); ?>
+							</div>
 						</div>
 					</div>
 
@@ -790,6 +767,39 @@ wp vaultgate password 'a-new-long-passphrase'</code></pre>
 			'<h2 class="vg-section"><span>%s</span></h2>',
 			esc_html( $label )
 		);
+	}
+
+	/**
+	 * The eye that shows or hides a password field. Both paths ship in the
+	 * markup and CSS picks one from `aria-pressed`, so the control is correct
+	 * before the script runs.
+	 *
+	 * @param string $target Id of the input it controls.
+	 */
+	private function reveal_button( string $target ): void {
+		?>
+		<button
+			type="button"
+			class="vg-reveal"
+			data-vg-reveal
+			aria-controls="<?php echo esc_attr( $target ); ?>"
+			aria-pressed="false"
+			aria-label="<?php esc_attr_e( 'Show password', 'vaultgate' ); ?>"
+			title="<?php esc_attr_e( 'Show password', 'vaultgate' ); ?>"
+			data-label-show="<?php echo esc_attr__( 'Show password', 'vaultgate' ); ?>"
+			data-label-hide="<?php echo esc_attr__( 'Hide password', 'vaultgate' ); ?>"
+		>
+			<svg class="vg-eye vg-eye--open" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true" focusable="false">
+				<path d="M2.2 12S5.8 5.8 12 5.8 21.8 12 21.8 12 18.2 18.2 12 18.2 2.2 12 2.2 12Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+				<circle cx="12" cy="12" r="2.9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+			</svg>
+			<svg class="vg-eye vg-eye--off" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true" focusable="false">
+				<path d="M2.2 12S5.8 5.8 12 5.8 21.8 12 21.8 12 18.2 18.2 12 18.2 2.2 12 2.2 12Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+				<circle cx="12" cy="12" r="2.9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+				<path d="M4 20 20 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+			</svg>
+		</button>
+		<?php
 	}
 
 	/**

@@ -25,8 +25,8 @@
 <p align="center">
   <img alt="WordPress 6.5 → 7.1" src="https://img.shields.io/badge/WordPress-6.5%20%E2%86%92%207.1-0b0d10?style=flat-square">
   <img alt="PHP 8.2 → 8.5" src="https://img.shields.io/badge/PHP-8.2%20%E2%86%92%208.5-0b0d10?style=flat-square">
-  <img alt="Version 1.1.1" src="https://img.shields.io/badge/version-1.1.1-0a66ff?style=flat-square">
-  <img alt="181 assertions" src="https://img.shields.io/badge/tests-181%20assertions-0b0d10?style=flat-square">
+  <img alt="Version 1.1.1" src="https://img.shields.io/badge/version-1.1.2-0a66ff?style=flat-square">
+  <img alt="184 assertions" src="https://img.shields.io/badge/tests-184%20assertions-0b0d10?style=flat-square">
   <img alt="Licence GPL-2.0-or-later" src="https://img.shields.io/badge/licence-GPL--2.0--or--later-0b0d10?style=flat-square">
 </p>
 
@@ -55,14 +55,14 @@ Une colonne, centrée dès 320 px, et elle fonctionne sans JavaScript.
 
 ## Installation
 
-1. Téléchargez `vaultgate-1.1.1.zip` depuis les [versions](https://github.com/zigmoon/passwordprotect/releases/latest).
+1. Téléchargez `VaultGate-1.1.2.zip` depuis les [versions](https://github.com/zigmoon/passwordprotect/releases/latest).
 2. **Extensions → Ajouter → Téléverser une extension**, choisissez le ZIP, installez, activez.
 3. **Réglages → VaultGate** : définissez le mot de passe, puis activez la protection.
 
 Ou depuis un dépôt :
 
 ```bash
-cp -r vaultgate /chemin/vers/wp-content/plugins/
+cp -r VaultGate /chemin/vers/wp-content/plugins/
 wp plugin activate vaultgate
 wp vaultgate password 'une longue phrase secrète'
 wp vaultgate enable
@@ -75,7 +75,7 @@ WordPress 6.5+ et PHP 8.2+ — rien d’autre à installer. La première activat
 ## Qualité
 
 - **Dernières versions.** WordPress 6.5 → 7.1, PHP 8.2 → 8.5, aucun appel déprécié, aucune bibliothèque embarquée. Les traductions se chargent sur `init`, comme l’exige WordPress 6.7+.
-- **181 assertions.** Deux suites (`php tests/run.php`, `php tests/smoke.php`) sur PHP 8.3 et 8.5, sans installation de WordPress.
+- **184 assertions.** Deux suites (`php tests/run.php`, `php tests/smoke.php`) sur PHP 8.3 et 8.5, sans installation de WordPress.
 - **Vérifiée sur une vraie installation.** Toutes les surfaces testées sur WordPress 7.1.3 / PHP 8.3 : accueil, articles, flux, sitemaps, REST, AJAX, XML-RPC, `robots.txt`, `wp-login.php`, administration, activation et suppression.
 - **Back office responsive.** L’écran de réglages reste utilisable jusqu’à 360 px ; la garde est centrée à toutes les largeurs.
 

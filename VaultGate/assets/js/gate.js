@@ -9,18 +9,15 @@
 	var input = document.getElementById('vg-password');
 
 	if (button && input) {
-		var label = button.querySelector('[data-vg-reveal-label]');
-		var showLabel = button.getAttribute('data-label-show') || 'Show';
-		var hideLabel = button.getAttribute('data-label-hide') || 'Hide';
+		var showLabel = button.getAttribute('data-label-show') || 'Show password';
+		var hideLabel = button.getAttribute('data-label-hide') || 'Hide password';
 
 		button.addEventListener('click', function () {
 			var show = input.type === 'password';
 			input.type = show ? 'text' : 'password';
 			button.setAttribute('aria-pressed', show ? 'true' : 'false');
-
-			if (label) {
-				label.textContent = show ? hideLabel : showLabel;
-			}
+			button.setAttribute('aria-label', show ? hideLabel : showLabel);
+			button.setAttribute('title', show ? hideLabel : showLabel);
 
 			var position = input.value.length;
 			input.focus();

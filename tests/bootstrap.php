@@ -7,8 +7,8 @@
 
 define( 'ABSPATH', __DIR__ . '/' );
 define( 'VAULTGATE_VERSION', '1.1.0' );
-define( 'VAULTGATE_URL', 'https://example.test/wp-content/plugins/vaultgate/' );
-define( 'VAULTGATE_DIR', dirname( __DIR__ ) . '/vaultgate/' );
+define( 'VAULTGATE_URL', 'https://example.test/wp-content/plugins/VaultGate/' );
+define( 'VAULTGATE_DIR', dirname( __DIR__ ) . '/VaultGate/' );
 define( 'MINUTE_IN_SECONDS', 60 );
 define( 'HOUR_IN_SECONDS', 3600 );
 define( 'DAY_IN_SECONDS', 86400 );
@@ -190,7 +190,7 @@ function plugin_dir_url( $file ) {
 }
 
 function plugin_basename( $file ) {
-	return 'vaultgate/vaultgate.php';
+	return 'VaultGate/vaultgate.php';
 }
 
 function __( $text, $domain = null ) {
@@ -324,6 +324,24 @@ function add_filter( $tag, $callback, $priority = 10, $accepted_args = 1 ) {
 	$GLOBALS['vg_filters'][ $tag ][ $priority ][] = $callback;
 
 	return true;
+}
+
+function has_filter( $tag, $callback = false ) {
+	if ( empty( $GLOBALS['vg_filters'][ $tag ] ) ) {
+		return false;
+	}
+
+	if ( false === $callback ) {
+		return true;
+	}
+
+	foreach ( $GLOBALS['vg_filters'][ $tag ] as $callbacks ) {
+		if ( in_array( $callback, $callbacks, true ) ) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 function do_action( $tag, ...$args ) {

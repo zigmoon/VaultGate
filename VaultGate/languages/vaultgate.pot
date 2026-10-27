@@ -10,742 +10,742 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Domain: vaultgate\n"
 
-#: vaultgate/includes/class-cli.php:59 vaultgate/includes/class-cli.php:60
+#: VaultGate/includes/class-cli.php:59 VaultGate/includes/class-cli.php:60
 msgid "%d days"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:595
+#: VaultGate/includes/class-admin.php:572
 msgid "Accent colour"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:495
+#: VaultGate/includes/class-admin.php:466
 msgid "Access"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:497
+#: VaultGate/includes/class-admin.php:468
 msgid "Activity"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:816
+#: VaultGate/includes/class-admin.php:826
 msgid "Activity log cleared"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:395 vaultgate/includes/class-cli.php:189
+#: VaultGate/includes/class-admin.php:366 VaultGate/includes/class-cli.php:189
 msgid "Activity log cleared."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:712
+#: VaultGate/includes/class-admin.php:689
 msgid "Add this line to wp-config.php to disable the gate without touching the database:"
 msgstr ""
 
-#: vaultgate/includes/class-settings.php:137
+#: VaultGate/includes/class-settings.php:137
 msgid "Administrators — manage_options"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:496
+#: VaultGate/includes/class-admin.php:467
 msgid "Advanced"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:806
+#: VaultGate/includes/class-admin.php:816
 msgid "All sessions revoked"
 msgstr ""
 
-#: vaultgate/includes/class-settings.php:95
+#: VaultGate/includes/class-settings.php:95
 msgid "Amber"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:688
+#: VaultGate/includes/class-admin.php:665
 msgid "Anonymous /wp-json requests return 401. Logged-in users above the bypass capability keep access."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:691
+#: VaultGate/includes/class-admin.php:668
 msgid "Anonymous AJAX"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:812
+#: VaultGate/includes/class-admin.php:822
 msgid "Anonymous AJAX blocked"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:813
+#: VaultGate/includes/class-admin.php:823
 msgid "Anonymous REST request blocked"
 msgstr ""
 
-#: vaultgate/includes/class-settings.php:140
+#: VaultGate/includes/class-settings.php:140
 msgid "Any logged-in user — read"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:698
+#: VaultGate/includes/class-admin.php:675
 msgid "Attempts before lock-out"
 msgstr ""
 
-#: vaultgate/includes/class-settings.php:139
+#: VaultGate/includes/class-settings.php:139
 msgid "Authors and above — edit_posts"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:692
+#: VaultGate/includes/class-admin.php:669
 msgid "Blocks xmlrpc.php until the visitor is authenticated."
 msgstr ""
 
-#: vaultgate/includes/class-settings.php:87
+#: VaultGate/includes/class-settings.php:87
 msgid "Blue"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:694
+#: VaultGate/includes/class-admin.php:671
 msgid "Brute force"
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:64
+#: VaultGate/includes/class-cli.php:64
 msgid "Bypass capability"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:760
+#: VaultGate/includes/class-admin.php:737
 msgid "Changes apply immediately to the whole site."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:92
+#: VaultGate/includes/class-admin.php:91
 msgid "Choose a logo"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:584
+#: VaultGate/includes/class-admin.php:561
 msgid "Choose image"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:653
+#: VaultGate/includes/class-admin.php:630
 msgid "Choose the minimum capability. Administrators always bypass."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:221
+#: VaultGate/includes/class-admin.php:192
 msgid "Choose the password that protects the site while you build it."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:727
+#: VaultGate/includes/class-admin.php:704
 msgid "Clear log"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:592
+#: VaultGate/includes/class-admin.php:569
 msgid "Colour"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:550
+#: VaultGate/includes/class-admin.php:524
 msgid "Confirm password"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:811
+#: VaultGate/includes/class-admin.php:821
 msgid "Cookie refused by the browser"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:613
+#: VaultGate/includes/class-admin.php:590
 msgid "Custom"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:452
+#: VaultGate/includes/class-admin.php:423
 msgid "Dark"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:738
+#: VaultGate/includes/class-admin.php:715
 msgid "Date"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:707
+#: VaultGate/includes/class-admin.php:684
 msgid "Delete all plugin data when the plugin is deleted"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:815
+#: VaultGate/includes/class-admin.php:825
 msgid "Direct endpoint blocked"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:225
+#: VaultGate/includes/class-admin.php:196
 msgid "Dismiss"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:125
+#: VaultGate/includes/class-admin.php:124
 msgid "Documentation"
 msgstr ""
 
-#: vaultgate/includes/class-settings.php:138
+#: VaultGate/includes/class-settings.php:138
 msgid "Editors and above — edit_others_posts"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:711
+#: VaultGate/includes/class-admin.php:688
 msgid "Emergency disable"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:534
+#: VaultGate/includes/class-admin.php:505
 msgid "Enable password protection"
 msgstr ""
 
-#: vaultgate/templates/gate.php:107
+#: VaultGate/templates/gate.php:127
 msgid "Enter site"
 msgstr ""
 
-#: vaultgate/templates/gate.php:78
+#: VaultGate/templates/gate.php:98
 msgid "Enter the password provided by the site owner."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:739
+#: VaultGate/includes/class-admin.php:716
 msgid "Event"
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:167
+#: VaultGate/includes/class-cli.php:167
 msgid "Every existing session has been revoked."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:536
+#: VaultGate/includes/class-admin.php:507
 msgid "Every front-end page, feed, sitemap and anonymous REST request will ask for the password."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:675
+#: VaultGate/includes/class-admin.php:652
 msgid "Excluded paths"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:809
+#: VaultGate/includes/class-admin.php:819
 msgid "Expired form token"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:689 vaultgate/includes/class-cli.php:62
+#: VaultGate/includes/class-admin.php:666 VaultGate/includes/class-cli.php:62
 msgid "Feeds"
 msgstr ""
 
-#: vaultgate/includes/class-guard.php:296
+#: VaultGate/includes/class-guard.php:296
 msgid "Forbidden"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:494
+#: VaultGate/includes/class-admin.php:465
 msgid "Gate page"
 msgstr ""
 
-#: vaultgate/includes/class-settings.php:91
+#: VaultGate/includes/class-settings.php:91
 msgid "Green"
 msgstr ""
 
-#: vaultgate/templates/gate.php:73
-msgid "Hide"
+#: VaultGate/includes/class-admin.php:790 VaultGate/templates/gate.php:85
+msgid "Hide password"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:810
+#: VaultGate/includes/class-admin.php:820
 msgid "Honeypot triggered"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:646
+#: VaultGate/includes/class-admin.php:623
 msgid "How long a visitor stays unlocked without ticking “keep me signed in”."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:647
+#: VaultGate/includes/class-admin.php:624
 msgid "How long the optional “keep me signed in” cookie lasts."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:740
+#: VaultGate/includes/class-admin.php:717
 msgid "IP"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:724
+#: VaultGate/includes/class-admin.php:701
 msgid "IP addresses are anonymised. This log never contains passwords."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:659
+#: VaultGate/includes/class-admin.php:636
 msgid "IP allowlist"
 msgstr ""
 
-#: vaultgate/includes/class-guard.php:619
+#: VaultGate/includes/class-guard.php:619
 msgid "Incorrect password. Please try again."
 msgstr ""
 
-#: vaultgate/includes/class-settings.php:79
+#: VaultGate/includes/class-settings.php:79
 msgid "Ink"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:560
+#: VaultGate/includes/class-admin.php:537
 msgid "Invalidates all gate cookies immediately. Your own admin access is not affected."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:706
+#: VaultGate/includes/class-admin.php:683
 msgid "Keep a small activity log"
 msgstr ""
 
-#: vaultgate/templates/gate.php:97
+#: VaultGate/templates/gate.php:117
 msgid "Keep me signed in for %d days"
 msgstr ""
 
-#: vaultgate/templates/gate.php:93
+#: VaultGate/templates/gate.php:113
 msgid "Keep me signed in for 1 day"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:541
+#: VaultGate/includes/class-admin.php:512
 msgid "Leave both fields empty to keep the current password. The password is stored as a one-way hash, never in clear text."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:451
+#: VaultGate/includes/class-admin.php:422
 msgid "Light"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:699
+#: VaultGate/includes/class-admin.php:676
 msgid "Lock-out duration (minutes)"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:471
+#: VaultGate/includes/class-admin.php:442
 msgid "Locked"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:566
+#: VaultGate/includes/class-admin.php:543
 msgid "Locked out?"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:805
+#: VaultGate/includes/class-admin.php:815
 msgid "Logged out"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:653
+#: VaultGate/includes/class-admin.php:630
 msgid "Logged-in users who bypass the gate"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:804
+#: VaultGate/includes/class-admin.php:814
 msgid "Login blocked (rate limit)"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:803
+#: VaultGate/includes/class-admin.php:813
 msgid "Login failed"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:802
+#: VaultGate/includes/class-admin.php:812
 msgid "Login succeeded"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:572
+#: VaultGate/includes/class-admin.php:549
 msgid "Logo"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:636
+#: VaultGate/includes/class-admin.php:613
 msgid "Main heading and browser tab title. Leave empty for “Private site”."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:637
+#: VaultGate/includes/class-admin.php:614
 msgid "Message"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:547
+#: VaultGate/includes/class-admin.php:521
 msgid "Minimum 8 characters. A long passphrase is best."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:655
+#: VaultGate/includes/class-admin.php:632
 msgid "Network rules"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:545
+#: VaultGate/includes/class-admin.php:516
 msgid "New password"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:732 vaultgate/includes/class-cli.php:197
+#: VaultGate/includes/class-admin.php:709 VaultGate/includes/class-cli.php:197
 msgid "No activity recorded yet."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:580
+#: VaultGate/includes/class-admin.php:557
 msgid "No logo selected"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:524
+#: VaultGate/includes/class-admin.php:495
 msgid "No password has been set yet."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:652
+#: VaultGate/includes/class-admin.php:629
 msgid "Offer “Keep me signed in”"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:661
+#: VaultGate/includes/class-admin.php:638
 msgid "One IP or CIDR range per line. These visitors skip the gate entirely. IPv4 and IPv6 are supported."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:475
+#: VaultGate/includes/class-admin.php:446
 msgid "One password for the whole site while you build it. No third-party service, no tracking, no external assets."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:677
+#: VaultGate/includes/class-admin.php:654
 msgid "One path per line. A path also covers its sub-paths; * is a wildcard. Useful for health checks, payment webhooks or a public API."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:670
+#: VaultGate/includes/class-admin.php:647
 msgid "Only enable this behind a trusted proxy or CDN. It reads X-Forwarded-For and X-Forwarded-Proto; enabling it on a directly exposed server lets visitors spoof their IP."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:471
+#: VaultGate/includes/class-admin.php:442
 msgid "Open"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:251
+#: VaultGate/includes/class-admin.php:222
 msgid "Open VaultGate settings"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:637
+#: VaultGate/includes/class-admin.php:614
 msgid "Optional. Basic HTML is allowed (links, bold, line breaks). Leave empty for a single, quiet gate page."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:707
+#: VaultGate/includes/class-admin.php:684
 msgid "Options, password hash, log and transients are removed. The plugin does nothing until you delete it."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:714
+#: VaultGate/includes/class-admin.php:691
 msgid "Or use WP-CLI:"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:539 vaultgate/templates/gate.php:72
+#: VaultGate/includes/class-admin.php:510 VaultGate/templates/gate.php:72
 msgid "Password"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:807
+#: VaultGate/includes/class-admin.php:817
 msgid "Password changed"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:520
+#: VaultGate/includes/class-admin.php:491
 msgid "Password last changed on %s."
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:57
+#: VaultGate/includes/class-cli.php:57
 msgid "Password set"
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:152
+#: VaultGate/includes/class-cli.php:152
 msgid "Password updated. Every existing session has been revoked."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:698
+#: VaultGate/includes/class-admin.php:675
 msgid "Per visitor, inside the lock-out window."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:586
+#: VaultGate/includes/class-admin.php:563
 msgid "Pick an image from the WordPress Media Library: it is stored in wp-content/uploads and comes back with your media backups. PNG, JPEG, WebP, GIF or SVG. A wide logo works best (max 168 × 56 px on the gate)."
 msgstr ""
 
-#: vaultgate/includes/class-guard.php:625
+#: VaultGate/includes/class-guard.php:625
 msgid "Please enter the password."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:703
+#: VaultGate/includes/class-admin.php:680
 msgid "Privacy and cleanup"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:636 vaultgate/includes/class-guard.php:485
+#: VaultGate/includes/class-admin.php:613 VaultGate/includes/class-guard.php:485
 msgid "Private site"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:493 vaultgate/includes/class-cli.php:56
+#: VaultGate/includes/class-admin.php:464 VaultGate/includes/class-cli.php:56
 msgid "Protection"
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:111
+#: VaultGate/includes/class-cli.php:111
 msgid "Protection disabled."
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:92
+#: VaultGate/includes/class-cli.php:92
 msgid "Protection enabled."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:419
+#: VaultGate/includes/class-admin.php:390
 msgid "Protection is enabled but no password is stored, so the site is currently not locked."
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:141
+#: VaultGate/includes/class-cli.php:141
 msgid "Provide a password, or use --stdin."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:688 vaultgate/includes/class-cli.php:61
+#: VaultGate/includes/class-admin.php:665 VaultGate/includes/class-cli.php:61
 msgid "REST API"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:689
+#: VaultGate/includes/class-admin.php:666
 msgid "RSS/Atom feeds are gated like normal pages."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:723
+#: VaultGate/includes/class-admin.php:700
 msgid "Recent activity"
 msgstr ""
 
-#: vaultgate/includes/class-settings.php:99
+#: VaultGate/includes/class-settings.php:99
 msgid "Red"
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:60
+#: VaultGate/includes/class-cli.php:60
 msgid "Remember me"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:647
+#: VaultGate/includes/class-admin.php:624
 msgid "Remembered duration (days)"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:585
+#: VaultGate/includes/class-admin.php:562
 msgid "Remove"
 msgstr ""
 
-#: vaultgate/includes/class-settings.php:107
+#: VaultGate/includes/class-settings.php:107
 msgid "Rose"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:761
+#: VaultGate/includes/class-admin.php:738
 msgid "Save changes"
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:59
+#: VaultGate/includes/class-cli.php:59
 msgid "Session duration"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:646
+#: VaultGate/includes/class-admin.php:623
 msgid "Session duration (days)"
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:58
+#: VaultGate/includes/class-cli.php:58
 msgid "Session version"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:642
+#: VaultGate/includes/class-admin.php:619
 msgid "Sessions"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:403
+#: VaultGate/includes/class-admin.php:374
 msgid "Set a password before enabling protection. Protection has been disabled."
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:81
+#: VaultGate/includes/class-cli.php:81
 msgid "Set a password first: wp vaultgate password <password>"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:223
+#: VaultGate/includes/class-admin.php:194
 msgid "Set the password"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:105
+#: VaultGate/includes/class-admin.php:104
 msgid "Settings"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:808
+#: VaultGate/includes/class-admin.php:818
 msgid "Settings saved"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:388
+#: VaultGate/includes/class-admin.php:359
 msgid "Settings saved."
 msgstr ""
 
-#: vaultgate/templates/gate.php:73 vaultgate/templates/gate.php:74
-msgid "Show"
+#: VaultGate/includes/class-admin.php:787 VaultGate/includes/class-admin.php:788 VaultGate/includes/class-admin.php:789 VaultGate/templates/gate.php:82 VaultGate/templates/gate.php:83 VaultGate/templates/gate.php:84
+msgid "Show password"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:652
+#: VaultGate/includes/class-admin.php:629
 msgid "Shows a checkbox on the gate page."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:558
+#: VaultGate/includes/class-admin.php:535
 msgid "Sign out every visitor"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:575
+#: VaultGate/includes/class-admin.php:552
 msgid "Site logo"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:690 vaultgate/includes/class-cli.php:63
+#: VaultGate/includes/class-admin.php:667 VaultGate/includes/class-cli.php:63
 msgid "Sitemaps"
 msgstr ""
 
-#: vaultgate/templates/gate.php:36
+#: VaultGate/templates/gate.php:36
 msgid "Skip to the password field"
 msgstr ""
 
-#: vaultgate/includes/class-settings.php:83
+#: VaultGate/includes/class-settings.php:83
 msgid "Slate"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:453
+#: VaultGate/includes/class-admin.php:424
 msgid "System"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:633
+#: VaultGate/includes/class-admin.php:610
 msgid "Text"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:512
+#: VaultGate/includes/class-admin.php:483
 msgid "The gate is off. The site is publicly visible."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:706
+#: VaultGate/includes/class-admin.php:683
 msgid "The last 20 events, with anonymised IP addresses, shown in the Activity tab."
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:148
+#: VaultGate/includes/class-cli.php:148
 msgid "The password could not be stored."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:401 vaultgate/includes/class-cli.php:145
+#: VaultGate/includes/class-admin.php:372 VaultGate/includes/class-cli.php:145
 msgid "The password must be at least 8 characters long."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:511
+#: VaultGate/includes/class-admin.php:482
 msgid "The site is locked. Visitors must enter the password."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:402
+#: VaultGate/includes/class-admin.php:373
 msgid "The two passwords do not match."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:699
+#: VaultGate/includes/class-admin.php:676
 msgid "The visitor must wait this long after too many failures."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:621
+#: VaultGate/includes/class-admin.php:598
 msgid "Theme"
 msgstr ""
 
-#: vaultgate/includes/class-guard.php:248
+#: VaultGate/includes/class-guard.php:248
 msgid "This site is password protected."
 msgstr ""
 
-#: vaultgate/includes/class-guard.php:443
+#: VaultGate/includes/class-guard.php:443
 msgid "This site is password protected. Authenticate on the site before using the REST API."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:636
+#: VaultGate/includes/class-admin.php:613
 msgid "Title"
 msgstr ""
 
-#: vaultgate/includes/class-guard.php:639
+#: VaultGate/includes/class-guard.php:639
 msgid "Too many attempts. Please try again later."
 msgstr ""
 
-#: vaultgate/includes/class-guard.php:635
+#: VaultGate/includes/class-guard.php:635
 msgid "Too many attempts. Try again in %d minutes."
 msgstr ""
 
-#: vaultgate/includes/class-guard.php:631
+#: VaultGate/includes/class-guard.php:631
 msgid "Too many attempts. Try again in 1 minute."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:668
+#: VaultGate/includes/class-admin.php:645
 msgid "Trust reverse-proxy headers"
 msgstr ""
 
-#: vaultgate/templates/gate.php:106
+#: VaultGate/templates/gate.php:126
 msgid "Try again in %s"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:93
+#: VaultGate/includes/class-admin.php:92
 msgid "Use this image"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:617
+#: VaultGate/includes/class-admin.php:594
 msgid "Used for the button, the focus ring and the rule under the title. The text colour of the button is chosen automatically for contrast."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:741
+#: VaultGate/includes/class-admin.php:718
 msgid "User agent"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:66 vaultgate/includes/class-admin.php:67
+#: VaultGate/includes/class-admin.php:65 VaultGate/includes/class-admin.php:66
 msgid "VaultGate"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:182
+#: VaultGate/includes/class-admin.php:153
 msgid "VaultGate %1$s — a plugin by %2$s, dev by %3$s."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:220
+#: VaultGate/includes/class-admin.php:191
 msgid "VaultGate is active."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:371 vaultgate/includes/class-admin.php:426
+#: VaultGate/includes/class-admin.php:342 VaultGate/includes/class-admin.php:397
 msgid "VaultGate is disabled by the VAULTGATE_DISABLED constant in wp-config.php."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:492
+#: VaultGate/includes/class-admin.php:463
 msgid "VaultGate sections"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:247
+#: VaultGate/includes/class-admin.php:218
 msgid "VaultGate · active"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:248
+#: VaultGate/includes/class-admin.php:219
 msgid "VaultGate · inactive"
 msgstr ""
 
-#: vaultgate/includes/class-settings.php:103
+#: VaultGate/includes/class-settings.php:103
 msgid "Violet"
 msgstr ""
 
-#: vaultgate/templates/gate.php:111
+#: VaultGate/templates/gate.php:131
 msgid "Website"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:685
+#: VaultGate/includes/class-admin.php:662
 msgid "What is protected"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:692
+#: VaultGate/includes/class-admin.php:669
 msgid "XML-RPC"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:814
+#: VaultGate/includes/class-admin.php:824
 msgid "XML-RPC request blocked"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:150 vaultgate/includes/class-admin.php:262 vaultgate/includes/class-admin.php:338
+#: VaultGate/includes/class-admin.php:134 VaultGate/includes/class-admin.php:233 VaultGate/includes/class-admin.php:309
 msgid "You are not allowed to change these settings."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:567
+#: VaultGate/includes/class-admin.php:544
 msgid "You can still log in through wp-login.php: administrator sessions always bypass the gate. As a last resort, add the emergency constant or use WP-CLI (see the Advanced tab)."
 msgstr ""
 
-#: vaultgate/includes/class-guard.php:655
+#: VaultGate/includes/class-guard.php:655
 msgid "Your browser refused the session cookie. Enable cookies and try again."
 msgstr ""
 
-#: vaultgate/includes/class-guard.php:649
+#: VaultGate/includes/class-guard.php:649
 msgid "Your session expired. Please try again."
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:56
+#: VaultGate/includes/class-cli.php:56
 msgid "active"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:691
+#: VaultGate/includes/class-admin.php:668
 msgid "admin-ajax.php requests from visitors without a valid gate cookie return 401."
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:124
+#: VaultGate/includes/class-admin.php:123
 msgid "dev by zigmoon"
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:60
+#: VaultGate/includes/class-cli.php:60
 msgid "disabled"
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:56
+#: VaultGate/includes/class-cli.php:56
 msgid "inactive"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:521
+#: VaultGate/includes/class-admin.php:492
 msgid "never"
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:57
+#: VaultGate/includes/class-cli.php:57
 msgid "no"
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:61 vaultgate/includes/class-cli.php:62 vaultgate/includes/class-cli.php:63
+#: VaultGate/includes/class-cli.php:61 VaultGate/includes/class-cli.php:62 VaultGate/includes/class-cli.php:63
 msgid "open"
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:61 vaultgate/includes/class-cli.php:62 vaultgate/includes/class-cli.php:63
+#: VaultGate/includes/class-cli.php:61 VaultGate/includes/class-cli.php:62 VaultGate/includes/class-cli.php:63
 msgid "protected"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:483
+#: VaultGate/includes/class-admin.php:454
 msgid "v%s · PHP %s+ · WordPress %s+"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:690
+#: VaultGate/includes/class-admin.php:667
 msgid "wp-sitemap.xml and its children are gated."
 msgstr ""
 
-#: vaultgate/includes/class-cli.php:57
+#: VaultGate/includes/class-cli.php:57
 msgid "yes"
 msgstr ""
 
-#: vaultgate/includes/class-admin.php:630
+#: VaultGate/includes/class-admin.php:607
 msgid "“System” follows the visitor’s operating system preference."
 msgstr ""

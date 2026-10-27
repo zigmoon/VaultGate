@@ -50,7 +50,7 @@ $vg_markup = (string) ob_get_clean();
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>VaultGate — settings preview</title>
-	<link rel="stylesheet" href="/vaultgate/assets/css/admin.css">
+	<link rel="stylesheet" href="/VaultGate/assets/css/admin.css">
 	<style>
 		html { background: #f0f0f1; }
 		body {

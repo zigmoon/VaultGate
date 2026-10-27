@@ -3,6 +3,21 @@
 All notable changes to VaultGate are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.2] — 27 October 2026
+
+### Changed
+
+- **The plugin folder is now `VaultGate/`** (was `vaultgate/`), like the plugin name. WordPress notices and moves the folder automatically on update; `wp-content/plugins/VaultGate/` is the expected path.
+- **One credit line, not two.** The `admin_footer_text` filter is gone: the credits live inside the settings page only.
+
+### Added
+
+- **An eye on every password field** — the gate and the two admin fields. Two SVG paths switched by `aria-pressed`, so the state is right before the script runs, and the label is translated for assistive technology.
+
+### Fixed
+
+- The gate no longer prints a redundant text "Show" toggle in the label row.
+
 ## [1.1.1] — 27 October 2026
 
 ### Added
@@ -77,6 +92,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - Opt-in, multisite-aware uninstall cleanup.
 - Reproducible tooling: translations, images and archive with SHA-256 verification.
 
+[1.1.2]: https://github.com/zigmoon/passwordprotect/releases/tag/v1.1.2
 [1.1.1]: https://github.com/zigmoon/passwordprotect/releases/tag/v1.1.1
 [1.1.0]: https://github.com/zigmoon/passwordprotect/releases/tag/v1.1.0
 [1.0.0]: https://github.com/zigmoon/passwordprotect/releases/tag/v1.0.0

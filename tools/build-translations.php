@@ -2,7 +2,7 @@
 /**
  * Builds the translation catalogue from the source strings.
  *
- * Outputs, in vaultgate/languages/:
+ * Outputs, in VaultGate/languages/:
  *   vaultgate.pot          the template (English)
  *   vaultgate-fr_FR.po/.mo French
  *   vaultgate-es_ES.po/.mo Spanish
@@ -20,7 +20,7 @@ $locales = array(
 );
 
 $files = new RecursiveIteratorIterator(
-	new RecursiveDirectoryIterator( $root . '/vaultgate', FilesystemIterator::SKIP_DOTS )
+	new RecursiveDirectoryIterator( $root . '/VaultGate', FilesystemIterator::SKIP_DOTS )
 );
 
 $pattern = '#\b(__|esc_html__|esc_attr__|esc_html_e|esc_attr_e|_e|_x|_n)\s*\(\s*([\'"])((?:\\\\.|(?!\2).)*)\2#s';
@@ -34,7 +34,7 @@ foreach ( $files as $file ) {
 
 	$path   = $file->getPathname();
 	$source = (string) file_get_contents( $path );
-	$rel    = 'vaultgate/' . ltrim( str_replace( '\\', '/', substr( $path, strlen( $root . '/vaultgate/' ) ) ), '/' );
+	$rel    = 'VaultGate/' . ltrim( str_replace( '\\', '/', substr( $path, strlen( $root . '/VaultGate/' ) ) ), '/' );
 
 	if ( ! preg_match_all( $pattern, $source, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE ) ) {
 		continue;
@@ -118,7 +118,7 @@ function vg_po_escape( string $value ): string {
 function vg_po_header( string $locale ): string {
 	$header = "msgid \"\"\n"
 		. "msgstr \"\"\n"
-		. "\"Project-Id-Version: VaultGate 1.1.0\\n\"\n"
+		. "\"Project-Id-Version: VaultGate 1.1.2\\n\"\n"
 		. "\"Report-Msgid-Bugs-To: https://github.com/zigmoon/passwordprotect/issues\\n\"\n"
 		. "\"POT-Creation-Date: 2026-10-27T00:00:00+00:00\\n\"\n";
 
@@ -145,7 +145,7 @@ foreach ( array_keys( $strings ) as $text ) {
 	$pot      .= "\n" . $reference . 'msgid "' . vg_po_escape( $text ) . "\"\nmsgstr \"\"\n";
 }
 
-file_put_contents( $root . '/vaultgate/languages/vaultgate.pot', $pot );
+file_put_contents( $root . '/VaultGate/languages/vaultgate.pot', $pot );
 
 /**
  * Compiles a PO catalogue to the binary MO format.
@@ -199,9 +199,9 @@ foreach ( $locales as $locale => $catalogue ) {
 		$po       .= "\n" . $reference . 'msgid "' . vg_po_escape( $text ) . "\"\nmsgstr \"" . vg_po_escape( $catalogue[ $text ] ) . "\"\n";
 	}
 
-	file_put_contents( $root . '/vaultgate/languages/vaultgate-' . $locale . '.po', $po );
+	file_put_contents( $root . '/VaultGate/languages/vaultgate-' . $locale . '.po', $po );
 
-	$mo_header = "Project-Id-Version: VaultGate 1.1.0\n"
+	$mo_header = "Project-Id-Version: VaultGate 1.1.2\n"
 		. "Report-Msgid-Bugs-To: https://github.com/zigmoon/passwordprotect/issues\n"
 		. "PO-Revision-Date: 2026-10-27T00:00:00+00:00\n"
 		. "Last-Translator: zigmoon\n"
@@ -216,10 +216,10 @@ foreach ( $locales as $locale => $catalogue ) {
 	$entries = array_merge( array( '' => $mo_header ), $catalogue );
 	uksort( $entries, 'strcmp' );
 
-	vg_compile_mo( $entries, $root . '/vaultgate/languages/vaultgate-' . $locale . '.mo' );
+	vg_compile_mo( $entries, $root . '/VaultGate/languages/vaultgate-' . $locale . '.mo' );
 
 	// Read the compiled catalogue back: a broken MO is worse than no MO at all.
-	$raw    = (string) file_get_contents( $root . '/vaultgate/languages/vaultgate-' . $locale . '.mo' );
+	$raw    = (string) file_get_contents( $root . '/VaultGate/languages/vaultgate-' . $locale . '.mo' );
 	$header = unpack( 'Vmagic/Vrevision/Vcount/Voriginals/Vtranslations/Vhash_size/Vhash_offset', $raw );
 
 	if ( 0x950412de !== $header['magic'] || count( $entries ) !== $header['count'] ) {

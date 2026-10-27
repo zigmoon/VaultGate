@@ -225,20 +225,54 @@
 }
 
 .vg-reveal {
-	padding: 2px 0;
+	position: absolute;
+	top: 1px;
+	right: 1px;
+	bottom: 1px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	padding: 0;
 	border: 0;
+	border-left: 1px solid var(--vg-line);
+	border-radius: 0 2px 2px 0;
 	background: none;
 	color: var(--vg-dim);
 	font: inherit;
-	font-size: 0.6875rem;
-	font-weight: 600;
-	letter-spacing: 0.1em;
-	text-transform: uppercase;
 	cursor: pointer;
+	transition: color 0.14s ease, background 0.14s ease;
 }
 
 .vg-reveal:hover {
+	background: var(--vg-field-hover);
 	color: var(--vg-ink);
+}
+
+.vg-input {
+	position: relative;
+	display: block;
+}
+
+.vg-field .vg-input input[type="password"],
+.vg-field .vg-input input[type="text"] {
+	padding-right: 52px;
+}
+
+.vg-reveal .vg-eye {
+	display: block;
+}
+
+.vg-reveal .vg-eye--off {
+	display: none;
+}
+
+.vg-reveal[aria-pressed="true"] .vg-eye--open {
+	display: none;
+}
+
+.vg-reveal[aria-pressed="true"] .vg-eye--off {
+	display: block;
 }
 
 .vg-reveal:focus-visible {

@@ -8,7 +8,7 @@
  */
 
 require_once __DIR__ . '/bootstrap.php';
-require_once dirname( __DIR__ ) . '/vaultgate/vaultgate.php';
+require_once dirname( __DIR__ ) . '/VaultGate/vaultgate.php';
 
 $GLOBALS['vg_smoke_pass'] = 0;
 $GLOBALS['vg_smoke_fail'] = 0;
@@ -120,7 +120,7 @@ vg_smoke_assert( str_contains( $notices_html, 'do not match' ), 'password mismat
 
 $admin = new VaultGate\Admin( $settings );
 
-$row_meta = $admin->row_meta( array(), 'vaultgate/vaultgate.php' );
+$row_meta = $admin->row_meta( array(), 'VaultGate/vaultgate.php' );
 $row_html = implode( ' ', $row_meta );
 
 vg_smoke_assert( 3 === count( $row_meta ), 'the plugin row gains author, developer and documentation links' );
@@ -130,14 +130,11 @@ vg_smoke_assert( str_contains( $row_html, 'rel="noopener noreferrer"' ), 'outbou
 vg_smoke_assert( array() === $admin->row_meta( array(), 'other/other.php' ), 'other plugins keep their own row' );
 
 $GLOBALS['vg_screen_id'] = 'dashboard';
-vg_smoke_assert( 'WordPress' === $admin->footer_text( 'WordPress' ), 'the dashboard footer is left untouched' );
-
-$GLOBALS['vg_screen_id'] = 'settings_page_vaultgate';
-$footer                  = (string) $admin->footer_text( 'WordPress' );
-vg_smoke_assert( str_contains( $footer, '2points13.fr' ) && str_contains( $footer, 'zigmoon.com' ), 'the plugin footer carries both credits' );
+vg_smoke_assert( ! has_filter( 'admin_footer_text' ) , 'the WordPress footer is left untouched (one credit line only)' );
 
 vg_smoke_assert( str_contains( $admin_html, 'vg-credits' ), 'the settings page ends with the credits block' );
 vg_smoke_assert( str_contains( $admin_html, '2points13.fr' ) && str_contains( $admin_html, 'zigmoon.com' ), 'the credits block shows both sites' );
+vg_smoke_assert( 1 === substr_count( $admin_html, 'a plugin by' ), 'the credits are printed exactly once' );
 
 /* ── Welcome notice ─────────────────────────────────────────────────────── */
 

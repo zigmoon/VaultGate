@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-	Builds dist/vaultgate-<version>.zip from the vaultgate/ folder.
+	Builds dist/VaultGate-<version>.zip from the VaultGate/ folder.
 
 .DESCRIPTION
-	The archive contains a single top-level folder, vaultgate/, which is what
+	The archive contains a single top-level folder, VaultGate/, which is what
 	WordPress expects when the ZIP is uploaded from "Add New → Upload Plugin".
 	Development files (tests, tools, docs, assets) are deliberately excluded.
 
@@ -21,7 +21,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$pluginDir = Join-Path $Root 'vaultgate'
+$pluginDir = Join-Path $Root 'VaultGate'
 $mainFile  = Join-Path $pluginDir 'vaultgate.php'
 
 if (-not (Test-Path $mainFile)) {
@@ -37,7 +37,7 @@ if (-not $match.Success) {
 
 $version = $match.Groups[1].Value
 $distDir = Join-Path $Root 'dist'
-$zipPath = Join-Path $distDir "vaultgate-$version.zip"
+$zipPath = Join-Path $distDir "VaultGate-$version.zip"
 
 New-Item -ItemType Directory -Force -Path $distDir | Out-Null
 
@@ -50,11 +50,11 @@ Compress-Archive -Path $pluginDir -DestinationPath $zipPath -CompressionLevel Op
 # ── Verification: every source file must be present and identical ──────────
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
-$staging = Join-Path ([System.IO.Path]::GetTempPath()) ("vaultgate-verify-" + [guid]::NewGuid().ToString('n'))
+$staging = Join-Path ([System.IO.Path]::GetTempPath()) ("VaultGate-verify-" + [guid]::NewGuid().ToString('n'))
 [System.IO.Compression.ZipFile]::ExtractToDirectory($zipPath, $staging)
 
 try {
-	$extracted = Join-Path $staging 'vaultgate'
+	$extracted = Join-Path $staging 'VaultGate'
 	$source    = (Resolve-Path $pluginDir).Path
 	$problems  = @()
 
@@ -88,7 +88,7 @@ try {
 	$hash = (Get-FileHash $zipPath -Algorithm SHA256).Hash
 
 	Write-Host ''
-	Write-Host "Built: dist/vaultgate-$version.zip"
+	Write-Host "Built: dist/VaultGate-$version.zip"
 	Write-Host "  files : $archivedCount"
 	Write-Host "  size  : $size KB"
 	Write-Host "  sha256: $hash"

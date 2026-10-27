@@ -348,7 +348,10 @@ vg_assert( str_contains( $html, 'vg-theme-auto' ), 'template applies the theme c
 vg_assert( str_contains( $html, 'nonce="abc123"' ), 'template uses the CSP nonce' );
 vg_assert( str_contains( $html, 'href="https://example.test/gate.css"' ), 'template links the local stylesheet' );
 vg_assert( str_contains( $html, 'src="https://example.test/gate.js"' ), 'template links the local script' );
-vg_assert( str_contains( $html, 'data-label-show="Show"' ), 'template passes translated reveal labels' );
+vg_assert( str_contains( $html, 'data-label-show="Show password"' ), 'template passes translated reveal labels' );
+vg_assert( str_contains( $html, 'class="vg-eye vg-eye--open"' ) && str_contains( $html, 'vg-eye--off' ), 'the reveal control is an eye, both states in the markup' );
+vg_assert( str_contains( $html, 'aria-label="Show password"' ), 'the eye is labelled for assistive technology' );
+vg_assert( ! str_contains( $html, 'data-vg-reveal-label' ), 'the old text toggle is gone' );
 vg_assert( ! str_contains( $html, '<script>alert' ), 'template never echoes unescaped scripts' );
 vg_assert( 1 === substr_count( $html, '<script' ), 'template contains only the external script tag' );
 vg_assert( str_contains( $html, '&lt;script&gt;' ), 'title is HTML-escaped' );

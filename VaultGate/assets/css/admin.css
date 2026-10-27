@@ -324,6 +324,62 @@
 	outline: 2px solid transparent;
 }
 
+.vg-input {
+	position: relative;
+	max-width: 520px;
+}
+
+.vg-field .vg-input input[type="password"],
+.vg-field .vg-input input[type="text"] {
+	padding-right: 42px;
+}
+
+.vg-reveal {
+	position: absolute;
+	top: 1px;
+	right: 1px;
+	bottom: 1px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 38px;
+	padding: 0;
+	border: 0;
+	border-left: 1px solid var(--vg-line);
+	border-radius: 0 2px 2px 0;
+	background: #fff;
+	color: var(--vg-dim);
+	cursor: pointer;
+	transition: color 0.14s ease, background 0.14s ease;
+}
+
+.vg-reveal:hover {
+	background: var(--vg-surface-2);
+	color: var(--vg-ink);
+}
+
+.vg-reveal:focus-visible {
+	color: var(--vg-ink);
+	outline: 2px solid var(--vg-ink);
+	outline-offset: 1px;
+}
+
+.vg-reveal .vg-eye {
+	display: block;
+}
+
+.vg-reveal .vg-eye--off {
+	display: none;
+}
+
+.vg-reveal[aria-pressed="true"] .vg-eye--open {
+	display: none;
+}
+
+.vg-reveal[aria-pressed="true"] .vg-eye--off {
+	display: block;
+}
+
 .vg-grid {
 	display: grid;
 	gap: 0 26px;

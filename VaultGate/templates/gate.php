@@ -70,11 +70,31 @@ $vg_theme_class = 'light' === (string) $vg['theme'] ? 'vg-theme-light' : ( 'dark
 			<div class="vg-field">
 				<div class="vg-label-row">
 					<label for="vg-password"><?php esc_html_e( 'Password', 'vaultgate' ); ?></label>
-					<button class="vg-reveal" type="button" data-vg-reveal aria-controls="vg-password" aria-pressed="false" data-label-show="<?php echo esc_attr__( 'Show', 'vaultgate' ); ?>" data-label-hide="<?php echo esc_attr__( 'Hide', 'vaultgate' ); ?>">
-						<span data-vg-reveal-label><?php esc_html_e( 'Show', 'vaultgate' ); ?></span>
+				</div>
+				<div class="vg-input">
+					<input id="vg-password" name="vaultgate_password" type="password" autocomplete="current-password" autocapitalize="none" spellcheck="false" enterkeyhint="go" required autofocus aria-describedby="vg-password-hint<?php echo ! empty( $vg['invalid'] ) ? ' vg-notice' : ''; ?>"<?php echo ! empty( $vg['invalid'] ) ? ' aria-invalid="true"' : ''; ?>>
+					<button
+						class="vg-reveal"
+						type="button"
+						data-vg-reveal
+						aria-controls="vg-password"
+						aria-pressed="false"
+						aria-label="<?php esc_attr_e( 'Show password', 'vaultgate' ); ?>"
+						title="<?php esc_attr_e( 'Show password', 'vaultgate' ); ?>"
+						data-label-show="<?php echo esc_attr__( 'Show password', 'vaultgate' ); ?>"
+						data-label-hide="<?php echo esc_attr__( 'Hide password', 'vaultgate' ); ?>"
+					>
+						<svg class="vg-eye vg-eye--open" viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" focusable="false">
+							<path d="M2.2 12S5.8 5.8 12 5.8 21.8 12 21.8 12 18.2 18.2 12 18.2 2.2 12 2.2 12Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+							<circle cx="12" cy="12" r="2.9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+						</svg>
+						<svg class="vg-eye vg-eye--off" viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" focusable="false">
+							<path d="M2.2 12S5.8 5.8 12 5.8 21.8 12 21.8 12 18.2 18.2 12 18.2 2.2 12 2.2 12Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+							<circle cx="12" cy="12" r="2.9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+							<path d="M4 20 20 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+						</svg>
 					</button>
 				</div>
-				<input id="vg-password" name="vaultgate_password" type="password" autocomplete="current-password" autocapitalize="none" spellcheck="false" enterkeyhint="go" required autofocus aria-describedby="vg-password-hint<?php echo ! empty( $vg['invalid'] ) ? ' vg-notice' : ''; ?>"<?php echo ! empty( $vg['invalid'] ) ? ' aria-invalid="true"' : ''; ?>>
 				<p id="vg-password-hint" class="vg-hint"><?php esc_html_e( 'Enter the password provided by the site owner.', 'vaultgate' ); ?></p>
 			</div>
 

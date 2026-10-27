@@ -4,7 +4,7 @@ Tags: password protection, maintenance mode, coming soon, access control, privac
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -123,6 +123,12 @@ Yes, it is empty by default. The gate is then a single quiet column: logo, title
 
 == Changelog ==
 
+= 1.1.2 =
+* The plugin folder is now `VaultGate/`.
+* One credit line only: the WordPress footer is no longer replaced.
+* An eye on every password field (gate and settings), with a translated label.
+* The text "Show" toggle is gone from the gate.
+
 = 1.1.1 =
 * Credits: 2.13 (2points13.fr) and dev by zigmoon (zigmoon.com) in the settings footer, the plugin-screen footer, the Plugins row and the welcome notice.
 * Welcome notice after activation, dismissable, pointing at the password field.
@@ -153,6 +159,9 @@ Yes, it is empty by default. The gate is then a single quiet column: logo, title
 * WP-CLI commands and opt-in uninstall cleanup.
 
 == Upgrade Notice ==
+
+= 1.1.2 =
+The plugin folder is renamed VaultGate/. One credit line instead of two, and an eye to show the password. Existing settings are kept.
 
 = 1.1.1 =
 Credits and origin links, a welcome notice after activation, clean removal by default, a responsive settings screen and a fix for the WordPress 6.7+ translation notice. Existing settings are kept.
