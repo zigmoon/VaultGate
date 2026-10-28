@@ -125,7 +125,7 @@ if ( $next -ne $current ) {
 	Write-Step "Bumping to $next"
 
 	$text = Get-Content $mainFile -Raw
-	$text = $text -replace "(?m)^(\s*\*\s*Version:\s*)$([regex]::Escape( $current ))`$", "`${1}$next"
+	$text = $text -replace "(?m)^(\s*\*\s*Version:[ \t]*)$([regex]::Escape( $current ))[ \t]*\r?`$", "`${1}$next"
 	$text = $text -replace "define\( '$($slug.ToUpper())_VERSION', '$([regex]::Escape( $current ))' \);", "define( '$($slug.ToUpper())_VERSION', '$next' );"
 	Set-Content $mainFile -Value $text -NoNewline
 
@@ -144,8 +144,8 @@ if ( $next -ne $current ) {
 		$today = Get-Date -Format 'yyyy-MM-dd'
 		$heading = "## [$next] — $today"
 		$bullet = if ( $Summary ) { $Summary } else { 'Maintenance release.' }
-		$text = Replace-First $text '(?m)^## \[' "$heading`n`n### Changed`n`n- $bullet`n`n"
-		$text = Replace-First $text '(?m)^\[1\.' "[$next]: https://github.com/$repo/releases/tag/v$next`n"
+		$text = Replace-First $text '(?m)^## \[' "$heading`n`n### Changed`n`n- $bullet`n`n## ["
+		$text = Replace-First $text '(?m)^\[1\.' "[$next]: https://github.com/$repo/releases/tag/v$next`n[1."
 		Set-Content $changelog -Value $text -NoNewline
 	}
 }
