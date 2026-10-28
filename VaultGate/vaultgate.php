@@ -4,7 +4,7 @@
  * Plugin URI:        https://github.com/zigmoon/VaultGate
  * Update URI:        https://github.com/zigmoon/VaultGate
  * Description:       Password-protects an entire WordPress site with a quiet, Swiss-designed gate page, granular access rules and no third-party dependencies.
- * Version:           1.1.8
+ * Version:           1.1.9
  * Requires at least: 6.5
  * Tested up to:      7.1
  * Requires PHP:      8.2
@@ -23,7 +23,7 @@ namespace VaultGate;
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'VAULTGATE_VERSION' ) ) {
-	define( 'VAULTGATE_VERSION', '1.1.8' );
+	define( 'VAULTGATE_VERSION', '1.1.9' );
 }
 if ( ! defined( 'VAULTGATE_FILE' ) ) {
 	define( 'VAULTGATE_FILE', __FILE__ );

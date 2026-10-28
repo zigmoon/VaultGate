@@ -487,6 +487,21 @@ vg_same( '1.1.8', $parsed['version'] ?? '', 'the release version comes from the 
 vg_assert( str_ends_with( $parsed['package'] ?? '', '/VaultGate-1.1.8.zip' ), 'the installable archive is chosen, not the complete project' );
 vg_assert( ! str_contains( $parsed['package'] ?? '', 'projet-complet' ), 'the complete-project archive is never offered' );
 vg_assert( str_contains( $parsed['notice'] ?? '', 'French and Spanish' ), 'the upgrade notice takes the first paragraph' );
+
+vg_same( '', Updater::first_paragraph( "### Added
+
+- one
+- two
+" ), 'a section heading is not an upgrade notice' );
+vg_same( '', Updater::first_paragraph( "**Added**
+
+- one
+" ), 'a bolded heading is not an upgrade notice either' );
+vg_same( '', Updater::first_paragraph( 'First release.' ), 'the first-release formula is skipped' );
+vg_same( 'A real sentence here.', Updater::first_paragraph( "### Added
+
+A real sentence here.
+" ), 'the first real sentence wins' );
 vg_assert( str_contains( $parsed['changelog'] ?? '', '<li>Fixed the catalog header.</li>' ), 'the changelog renders list items' );
 
 $draft = $release;

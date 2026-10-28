@@ -20,8 +20,8 @@
 <p align="center">
   <img alt="WordPress 6.5 to 7.1" src="https://img.shields.io/badge/WordPress-6.5%20%E2%86%92%207.1-0b0d10?style=flat-square">
   <img alt="PHP 8.2 to 8.5" src="https://img.shields.io/badge/PHP-8.2%20%E2%86%92%208.5-0b0d10?style=flat-square">
-  <img alt="Version 1.1.8" src="https://img.shields.io/badge/version-1.1.8-0a66ff?style=flat-square">
-  <img alt="258 assertions" src="https://img.shields.io/badge/tests-258%20assertions-0b0d10?style=flat-square">
+  <img alt="version 1.1.9" src="https://img.shields.io/badge/version-1.1.9-0a66ff?style=flat-square">
+  <img alt="262 assertions" src="https://img.shields.io/badge/tests-262%20assertions-0b0d10?style=flat-square">
   <img alt="Licence GPL-2.0-or-later" src="https://img.shields.io/badge/licence-GPL--2.0--or--later-0b0d10?style=flat-square">
 </p>
 
@@ -72,7 +72,7 @@ Click a panel for the full-size view.
 
 ## Install
 
-1. Download `VaultGate-1.1.8.zip` from [Releases](https://github.com/zigmoon/VaultGate/releases/latest).
+1. Download `VaultGate-1.1.9.zip` from [Releases](https://github.com/zigmoon/VaultGate/releases/latest).
 2. **Plugins → Add New → Upload Plugin**, choose the ZIP, install, activate.
 3. **Settings → VaultGate**: set the password, then turn protection on.
 
@@ -123,7 +123,7 @@ The plugin lives on GitHub, not in the WordPress.org directory, so it brings its
 ## Quality
 
 - **Latest WordPress, latest PHP.** WordPress 6.5 → 7.1, PHP 8.2 → 8.5, no deprecated call, no bundled library. Translations load on `init`, as WordPress 6.7+ requires.
-- **258 assertions.** Two suites on PHP 8.3 and 8.5, with no WordPress installation: `206 passed, 0 failed` and `52 passed, 0 failed`.
+- **262 assertions.** Two suites on PHP 8.3 and 8.5, with no WordPress installation: `210 passed, 0 failed` and `52 passed, 0 failed`.
 - **Checked on a real install.** Every surface probed on WordPress 7.1.3 / PHP 8.3: front, posts, feeds, sitemaps, REST, AJAX, XML-RPC, `robots.txt`, `wp-login.php`, admin, activation and deletion.
 - **Responsive back office.** The settings screen holds up down to 360 px; the gate is centred at every width.
 
@@ -138,7 +138,7 @@ php tools/build-translations.php  # .pot + fr_FR + es_ES, compiled and verified
 pwsh -File tools/build-zip.ps1    # dist/VaultGate-<version>.zip, hash-verified
 ```
 
-Expected output: `206 passed, 0 failed` and `52 passed, 0 failed`. The suites use a small set of WordPress stubs (`tests/bootstrap.php`): no database, no web server, no WordPress installation needed.
+Expected output: `210 passed, 0 failed` and `52 passed, 0 failed`. The suites use a small set of WordPress stubs (`tests/bootstrap.php`): no database, no web server, no WordPress installation needed.
 
 ## Credits
 

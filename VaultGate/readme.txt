@@ -4,7 +4,7 @@ Tags: password protection, maintenance mode, coming soon, access control, privac
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.1.8
+Stable tag: 1.1.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -34,7 +34,7 @@ VaultGate protects an entire WordPress installation while it is being built or k
 
 * Strictly escaped output, sanitised input, capability checks and nonces on every admin action.
 * Small, single-responsibility classes: settings, access rules, tokens, rate limiter, guard, admin, CLI.
-* 181 automated assertions ship in the `tests/` directory (unit tests plus a boot/render smoke test).
+* 262 automated assertions ship in the `tests/` directory (unit tests plus a boot/render smoke test).
 * English source strings, complete French and Spanish translations, `.pot` catalogue.
 * Data cleanup on uninstall is on by default, multisite-aware, and also removes transients; deactivation revokes every issued cookie.
 

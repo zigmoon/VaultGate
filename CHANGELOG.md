@@ -3,6 +3,12 @@
 All notable changes to VaultGate are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.9] — 28 October 2026
+
+### Changed
+
+- The upgrade notice keeps a real sentence: a section heading from the release notes no longer becomes the notice. A fragment shorter than three words is skipped, so "Added" or "Fixed" can never be shown as the notice.
+
 ## [1.1.8] — 28 October 2026
 
 ### Added
@@ -158,6 +164,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - Opt-in, multisite-aware uninstall cleanup.
 - Reproducible tooling: translations, images and archive with SHA-256 verification.
 
+[1.1.9]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.9
 [1.1.8]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.8
 [1.1.7]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.7
 [1.1.6]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.6
