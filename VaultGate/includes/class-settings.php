@@ -64,6 +64,7 @@ final class Settings {
 			'lockout_minutes'    => 15,
 			'log_enabled'        => true,
 			'delete_data'        => true,
+			'check_updates'      => true,
 		);
 	}
 
@@ -440,7 +441,7 @@ final class Settings {
 		$defaults = self::defaults();
 		$clean    = array();
 
-		foreach ( array( 'enabled', 'remember_enabled', 'trust_proxy', 'protect_rest', 'protect_feeds', 'protect_sitemaps', 'protect_ajax', 'protect_xmlrpc', 'log_enabled', 'delete_data' ) as $flag ) {
+		foreach ( array( 'enabled', 'remember_enabled', 'trust_proxy', 'protect_rest', 'protect_feeds', 'protect_sitemaps', 'protect_ajax', 'protect_xmlrpc', 'log_enabled', 'delete_data', 'check_updates' ) as $flag ) {
 			$value        = $input[ $flag ] ?? null;
 			$clean[ $flag ] = is_scalar( $value ) && ! empty( $value );
 		}

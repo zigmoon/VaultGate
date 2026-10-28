@@ -6,6 +6,9 @@
  */
 
 return array(
+	'Asks github.com for the latest release once every 12 hours, and shows it on the Plugins and Updates screens. It is the only outbound request the plugin makes: switch it off to keep the plugin fully offline and update by hand.' => 'Consulta github.com una vez cada 12 horas para conocer la última versión y la muestra en las pantallas de Plugins y Actualizaciones. Es la única petición saliente del plugin: desactívala para mantenerlo totalmente sin conexión y actualizar a mano.',
+	'Check GitHub for updates' => 'Buscar actualizaciones en GitHub',
+	'Password-protects an entire WordPress site with a quiet, Swiss-designed gate page.' => 'Protege con contraseña todo un sitio WordPress con una página de acceso sobria y suiza.',
 	'%d days' => '%d días',
 	'Accent colour' => 'Color de acento',
 	'Access' => 'Acceso',

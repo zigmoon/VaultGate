@@ -2,8 +2,9 @@
 /**
  * Plugin Name:       VaultGate
  * Plugin URI:        https://github.com/zigmoon/VaultGate
+ * Update URI:        https://github.com/zigmoon/VaultGate
  * Description:       Password-protects an entire WordPress site with a quiet, Swiss-designed gate page, granular access rules and no third-party dependencies.
- * Version:           1.1.7
+ * Version:           1.1.8
  * Requires at least: 6.5
  * Tested up to:      7.1
  * Requires PHP:      8.2
@@ -22,7 +23,7 @@ namespace VaultGate;
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'VAULTGATE_VERSION' ) ) {
-	define( 'VAULTGATE_VERSION', '1.1.7' );
+	define( 'VAULTGATE_VERSION', '1.1.8' );
 }
 if ( ! defined( 'VAULTGATE_FILE' ) ) {
 	define( 'VAULTGATE_FILE', __FILE__ );
@@ -39,7 +40,7 @@ if ( ! defined( 'VAULTGATE_BASENAME' ) ) {
 
 require_once VAULTGATE_DIR . 'includes/class-settings.php';
 require_once VAULTGATE_DIR . 'includes/class-access-rules.php';
-require_once VAULTGATE_DIR . 'includes/class-token.php';
+require_once VAULTGATE_DIR . 'includes/class-updater.php';require_once VAULTGATE_DIR . 'includes/class-token.php';
 require_once VAULTGATE_DIR . 'includes/class-rate-limiter.php';
 require_once VAULTGATE_DIR . 'includes/class-guard.php';
 require_once VAULTGATE_DIR . 'includes/class-admin.php';

@@ -20,8 +20,8 @@
 <p align="center">
   <img alt="WordPress 6.5 to 7.1" src="https://img.shields.io/badge/WordPress-6.5%20%E2%86%92%207.1-0b0d10?style=flat-square">
   <img alt="PHP 8.2 to 8.5" src="https://img.shields.io/badge/PHP-8.2%20%E2%86%92%208.5-0b0d10?style=flat-square">
-  <img alt="Version 1.1.7" src="https://img.shields.io/badge/version-1.1.7-0a66ff?style=flat-square">
-  <img alt="228 assertions" src="https://img.shields.io/badge/tests-228%20assertions-0b0d10?style=flat-square">
+  <img alt="Version 1.1.8" src="https://img.shields.io/badge/version-1.1.8-0a66ff?style=flat-square">
+  <img alt="258 assertions" src="https://img.shields.io/badge/tests-258%20assertions-0b0d10?style=flat-square">
   <img alt="Licence GPL-2.0-or-later" src="https://img.shields.io/badge/licence-GPL--2.0--or--later-0b0d10?style=flat-square">
 </p>
 
@@ -42,7 +42,7 @@ One column, centred from 320 px up. It works without JavaScript; the eye that re
 - **Your favicon, even on the gate.** The browser tab keeps the WordPress Site Icon; a site that never set one falls back to the VaultGate mark instead of a blank tab.
 - **Switches, not checkboxes.** Every on/off setting is a real switch — native input, keyboard-navigable, exposed as `role="switch"`.
 - **Nothing you did not write.** No marketing sentence, no support link, no footer on the gate. A logo, a title, a field, a button.
-- **No third party.** Fonts, icons and styles live inside the plugin. No Google Fonts, no CDN, no analytics, no outbound request.
+- **No third party.** Fonts, icons and styles live inside the plugin. No Google Fonts, no CDN, no analytics. The only outbound request is the update check against GitHub, once every 12 hours, and it has a switch.
 - **Built to be removed.** No table, no `.htaccess`, no rewrite rule. Deactivate and the site is public again.
 - **English, French, Spanish.** Source strings in English; the interface follows the site language.
 
@@ -72,7 +72,7 @@ Click a panel for the full-size view.
 
 ## Install
 
-1. Download `VaultGate-1.1.7.zip` from [Releases](https://github.com/zigmoon/VaultGate/releases/latest).
+1. Download `VaultGate-1.1.8.zip` from [Releases](https://github.com/zigmoon/VaultGate/releases/latest).
 2. **Plugins → Add New → Upload Plugin**, choose the ZIP, install, activate.
 3. **Settings → VaultGate**: set the password, then turn protection on.
 
@@ -112,10 +112,18 @@ The folder must be named `VaultGate`. WordPress 6.5+ and PHP 8.2+ — nothing el
 
 Deactivating makes the site public again and revokes every issued cookie. Deleting the plugin removes its settings, hash and log — **on by default** — so nothing is left behind. If you ever get stuck: `define( 'VAULTGATE_DISABLED', true );` in `wp-config.php`, or `wp vaultgate disable`.
 
+## Updates
+
+The plugin lives on GitHub, not in the WordPress.org directory, so it brings its own update check. It declares `Update URI` — the header WordPress 5.8 added for exactly this — and answers the filter core then calls; the new version appears on **Plugins** and **Updates**, "Update now" installs it, and automatic updates can be enabled like any other plugin.
+
+- The check runs at most once every 12 hours, and the answer is cached in a site transient. A failed check is cached for an hour, so an offline site never waits on a timeout.
+- **Settings → VaultGate → Advanced → "Check GitHub for updates"** switches it off. Off means no request at all.
+- A release is only offered when it is a real release (not a draft, not a pre-release) and carries an installable ZIP. The complete-project archive is never offered.
+
 ## Quality
 
 - **Latest WordPress, latest PHP.** WordPress 6.5 → 7.1, PHP 8.2 → 8.5, no deprecated call, no bundled library. Translations load on `init`, as WordPress 6.7+ requires.
-- **228 assertions.** Two suites on PHP 8.3 and 8.5, with no WordPress installation: `176 passed, 0 failed` and `52 passed, 0 failed`.
+- **258 assertions.** Two suites on PHP 8.3 and 8.5, with no WordPress installation: `206 passed, 0 failed` and `52 passed, 0 failed`.
 - **Checked on a real install.** Every surface probed on WordPress 7.1.3 / PHP 8.3: front, posts, feeds, sitemaps, REST, AJAX, XML-RPC, `robots.txt`, `wp-login.php`, admin, activation and deletion.
 - **Responsive back office.** The settings screen holds up down to 360 px; the gate is centred at every width.
 
@@ -124,13 +132,13 @@ Deactivating makes the site public again and revokes every issued cookie. Deleti
 ## Development
 
 ```bash
-php tests/run.php                 # unit tests
+php tests/run.php                 # unit tests, including the release payload
 php tests/smoke.php               # boot, guard, REST, admin render
 php tools/build-translations.php  # .pot + fr_FR + es_ES, compiled and verified
 pwsh -File tools/build-zip.ps1    # dist/VaultGate-<version>.zip, hash-verified
 ```
 
-Expected output: `176 passed, 0 failed` and `52 passed, 0 failed`. The suites use a small set of WordPress stubs (`tests/bootstrap.php`): no database, no web server, no WordPress installation needed.
+Expected output: `206 passed, 0 failed` and `52 passed, 0 failed`. The suites use a small set of WordPress stubs (`tests/bootstrap.php`): no database, no web server, no WordPress installation needed.
 
 ## Credits
 

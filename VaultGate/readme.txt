@@ -4,7 +4,7 @@ Tags: password protection, maintenance mode, coming soon, access control, privac
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.1.7
+Stable tag: 1.1.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,7 @@ VaultGate protects an entire WordPress installation while it is being built or k
 
 **Your logo, from the media library** — pick any image in Settings → VaultGate → Gate page. It is stored in the WordPress Media Library (`wp-content/uploads/YYYY/MM/`), so it is included in your media backups and reused by any other theme or plugin. Wide logos work best; the gate caps them at 168 × 56 px.
 
-**Built for the current stack** — WordPress 6.5 through 7.1, PHP 8.2 through 8.5. Only maintained WordPress APIs, no deprecated calls, no Composer or npm build step, no external request. The test suite runs on PHP 8.3 and PHP 8.5.
+**Built for the current stack** — WordPress 6.5 through 7.1, PHP 8.2 through 8.5. Only maintained WordPress APIs, no deprecated calls, no Composer or npm build step. The single outbound request is the update check against GitHub, once every 12 hours, and it can be switched off. The test suite runs on PHP 8.3 and PHP 8.5.
 
 **Security**
 
@@ -125,7 +125,14 @@ It uses semantic HTML, a skip link, visible focus rings, a properly labelled pas
 
 Yes, it is empty by default. The gate is then a single quiet column: logo, title, password field and button.
 
+= How do updates work? =
+
+The plugin is published on GitHub rather than in the WordPress.org directory, so it brings its own update check: it reads its latest release from github.com and reports it on the Plugins and Updates screens, where "Update now" and automatic updates work exactly as they do for a directory plugin. The check runs every 12 hours at most and can be switched off in Settings → VaultGate → Advanced, for a site that must stay fully offline.
+
 == Changelog ==
+
+= 1.1.8 =
+* The plugin now updates itself from its GitHub releases: the dashboard shows the new version, "Update now" installs it, and automatic updates can be enabled as for any other plugin. The check runs once every 12 hours and can be switched off in Advanced.
 
 = 1.1.7 =
 * Fix: the compiled French and Spanish catalogs could not be loaded by WordPress, so the interface stayed English. The binary header now stores the correct string-area pointer, and both catalogs are rebuilt and verified at build time.
@@ -185,6 +192,9 @@ Yes, it is empty by default. The gate is then a single quiet column: logo, title
 * WP-CLI commands and opt-in uninstall cleanup.
 
 == Upgrade Notice ==
+
+= 1.1.8 =
+Adds the update check, so the next release arrives without a manual upload. Nothing to reconfigure.
 
 = 1.1.7 =
 Update if you run the plugin in French or Spanish: their translations were not loading. Nothing to reconfigure.

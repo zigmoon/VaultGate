@@ -11,13 +11,14 @@ use VaultGate\AccessRules;
 use VaultGate\RateLimiter;
 use VaultGate\Settings;
 use VaultGate\Token;
+use VaultGate\Updater;
 
 require_once __DIR__ . '/bootstrap.php';
 require_once VAULTGATE_DIR . 'includes/class-settings.php';
 require_once VAULTGATE_DIR . 'includes/class-access-rules.php';
 require_once VAULTGATE_DIR . 'includes/class-token.php';
 require_once VAULTGATE_DIR . 'includes/class-rate-limiter.php';
-
+require_once VAULTGATE_DIR . 'includes/class-updater.php';
 $GLOBALS['vg_pass'] = 0;
 $GLOBALS['vg_fail'] = 0;
 
@@ -457,6 +458,103 @@ vg_assert( ! str_contains( $html, 'vg-message' ), 'an empty message renders no p
 vg_assert( ! str_contains( $html, 'vg-alert' ), 'no notice renders no alert' );
 vg_assert( ! str_contains( $html, 'class="vg-logo"' ), 'no logo renders no image' );
 vg_assert( str_contains( $html, 'class="vg-mark"' ), 'no logo falls back to the built-in mark' );
+
+/* -------------------------------------------------------------------------
+ * Updates: the release payload, the archive choice and the filter answer.
+ * ---------------------------------------------------------------------- */
+
+vg_same( '1.1.7', Updater::normalise_version( 'v1.1.7' ), 'a tag drops its v prefix' );
+vg_same( '1.1.7', Updater::normalise_version( '1.1.7' ), 'a plain tag is kept' );
+vg_same( '1.1.7', Updater::normalise_version( 'release/VaultGate-1.1.7' ), 'the digits are found inside a decorated tag' );
+vg_same( '', Updater::normalise_version( 'nightly' ), 'a tag without digits is refused' );
+
+$release = array(
+	'tag_name'     => 'v1.1.8',
+	'html_url'     => 'https://github.com/zigmoon/VaultGate/releases/tag/v1.1.8',
+	'published_at' => '2026-10-28T09:00:00Z',
+	'draft'        => false,
+	'prerelease'   => false,
+	'body'         => "The French and Spanish interfaces now load.\n\n- Fixed the catalog header.\n- Rebuilt both catalogs.\n",
+	'assets'       => array(
+		array( 'name' => 'VaultGate-1.1.8-projet-complet.zip', 'browser_download_url' => 'https://github.com/zigmoon/VaultGate/releases/download/v1.1.8/VaultGate-1.1.8-projet-complet.zip' ),
+		array( 'name' => 'VaultGate-1.1.8.zip', 'browser_download_url' => 'https://github.com/zigmoon/VaultGate/releases/download/v1.1.8/VaultGate-1.1.8.zip' ),
+		array( 'name' => 'notes.txt', 'browser_download_url' => 'https://github.com/zigmoon/VaultGate/releases/download/v1.1.8/notes.txt' ),
+	),
+);
+
+$parsed = Updater::parse_release( $release );
+vg_same( '1.1.8', $parsed['version'] ?? '', 'the release version comes from the tag' );
+vg_assert( str_ends_with( $parsed['package'] ?? '', '/VaultGate-1.1.8.zip' ), 'the installable archive is chosen, not the complete project' );
+vg_assert( ! str_contains( $parsed['package'] ?? '', 'projet-complet' ), 'the complete-project archive is never offered' );
+vg_assert( str_contains( $parsed['notice'] ?? '', 'French and Spanish' ), 'the upgrade notice takes the first paragraph' );
+vg_assert( str_contains( $parsed['changelog'] ?? '', '<li>Fixed the catalog header.</li>' ), 'the changelog renders list items' );
+
+$draft = $release;
+$draft['draft'] = true;
+vg_same( null, Updater::parse_release( $draft ), 'a draft release is ignored' );
+
+$pre = $release;
+$pre['prerelease'] = true;
+vg_same( null, Updater::parse_release( $pre ), 'a pre-release is ignored' );
+
+$no_zip = $release;
+$no_zip['assets'] = array( array( 'name' => 'VaultGate-1.1.8-projet-complet.zip', 'browser_download_url' => 'https://github.com/x/y.zip' ) );
+vg_same( null, Updater::parse_release( $no_zip ), 'no installable archive means no update at all' );
+
+$no_assets = $release;
+unset( $no_assets['assets'] );
+vg_same( null, Updater::parse_release( $no_assets ), 'a release without assets is refused' );
+
+vg_same( '', Updater::pick_asset( array( array( 'name' => 'theme.zip', 'browser_download_url' => 'https://example.test/theme.zip' ) ) ), 'an archive for another plugin is refused' );
+vg_same( '', Updater::pick_asset( array( array( 'name' => 'VaultGate-1.1.8.zip', 'browser_download_url' => 'ftp://example.test/x.zip' ) ) ), 'a non-http archive is refused' );
+vg_same( '', Updater::pick_asset( array( array( 'name' => 'vaultgate-1.1.8.zip' ) ), '1.1.8' ), 'an asset without a download URL is refused' );
+
+$fixture = array(
+	'response' => array( 'code' => 200 ),
+	'body'     => wp_json_encode( $release ),
+);
+
+$checking = new Updater( new Settings() );
+$GLOBALS['vg_http'] = $fixture;
+$answer = $checking->inject( false, array( 'Version' => '1.1.7', 'Tested up to' => '7.1', 'Requires PHP' => '8.2' ), VAULTGATE_BASENAME );
+vg_assert( is_array( $answer ), 'a newer release is offered to the dashboard' );
+vg_same( '1.1.8', $answer['version'] ?? '', 'the offered version is the release version' );
+vg_same( '7.1', $answer['tested'] ?? '', 'the tested version comes from the plugin header, not a second declaration' );
+vg_same( '8.2', $answer['requires_php'] ?? '', 'the PHP requirement comes from the plugin header' );
+vg_same( 'vaultgate', $answer['slug'] ?? '', 'the update carries the plugin slug' );
+
+vg_same( false, $checking->inject( false, array(), 'other/other.php' ), 'another plugin is left alone' );
+vg_same( false, $checking->inject( false, array(), 'Duplikate/duplikate.php' ), 'a sibling plugin is left alone' );
+
+// The answer is cached: a second call must not reach github.com again.
+$calls = count( $GLOBALS['vg_http_calls'] ?? array() );
+$checking->inject( false, array( 'Version' => '1.1.7' ), VAULTGATE_BASENAME );
+vg_same( $calls, count( $GLOBALS['vg_http_calls'] ?? array() ), 'the answer is served from the transient, not from a second request' );
+
+// Once the switch is off, nothing is asked at all.
+delete_site_transient( Updater::TRANSIENT );
+$GLOBALS['vg_options']['vaultgate_settings'] = array_merge( Settings::defaults(), array( 'check_updates' => false ) );
+$silent = new Updater( new Settings() );
+$before = count( $GLOBALS['vg_http_calls'] ?? array() );
+vg_same( false, $silent->inject( false, array( 'Version' => '1.1.7' ), VAULTGATE_BASENAME ), 'the switch off means no update is offered' );
+vg_same( $before, count( $GLOBALS['vg_http_calls'] ?? array() ), 'the switch off means no request is made' );
+$GLOBALS['vg_options']['vaultgate_settings'] = array_merge( Settings::defaults(), array( 'check_updates' => true ) );
+
+// A failing API must be silent, and remembered so the site is not slowed down.
+delete_site_transient( Updater::TRANSIENT );
+$GLOBALS['vg_http'] = new WP_Error( 'http_request_failed', 'offline' );
+$offline = new Updater( new Settings() );
+vg_same( false, $offline->inject( false, array( 'Version' => '1.1.7' ), VAULTGATE_BASENAME ), 'an unreachable API offers nothing' );
+$cached = get_site_transient( Updater::TRANSIENT );
+vg_assert( is_array( $cached ) && array_key_exists( 'release', $cached ) && null === $cached['release'], 'a failure is cached as an empty answer' );
+
+// Updating the plugin drops the cache so the next screen tells the truth.
+delete_site_transient( Updater::TRANSIENT );
+set_site_transient( Updater::TRANSIENT, array( 'release' => $parsed ), 3600 );
+$checking->flush( new stdClass(), array( 'plugins' => array( 'akismet/akismet.php' ) ) );
+vg_assert( false !== get_site_transient( Updater::TRANSIENT ), 'an unrelated upgrade keeps the cache' );
+$checking->flush( new stdClass(), array( 'plugins' => array( VAULTGATE_BASENAME ) ) );
+vg_same( false, get_site_transient( Updater::TRANSIENT ), 'updating the plugin drops the cache' );
 
 /* -------------------------------------------------------------------------
  * Report.

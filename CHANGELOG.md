@@ -3,6 +3,23 @@
 All notable changes to VaultGate are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.8] — 28 October 2026
+
+### Added
+
+- **The plugin updates itself from its GitHub releases.** WordPress only ever asks `api.wordpress.org` for updates, so a plugin distributed through GitHub was invisible to the dashboard: every release had to be downloaded and uploaded by hand. The plugin now declares `Update URI` — the mechanism WordPress added in 5.8 for exactly this — so core skips the directory for it and asks us instead. The new version appears on the Plugins and Updates screens, "Update now" installs it, and automatic updates can be enabled like any other plugin.
+- The check runs at most once every 12 hours, the answer is cached in a site transient, and a failed check is cached for an hour so an offline site never pays a 10 second timeout on every page load. The cache is dropped when the plugin is updated, so the screen never shows a version that has just been replaced.
+- **A switch to turn it off**, in Settings → VaultGate → Advanced, for a site that must stay fully offline. Off means no request at all, not a cached answer.
+- The "View details" modal is filled from the release: version, changelog, download link.
+
+### Changed
+
+- **The privacy claim is now accurate.** The README said "no outbound request", which stops being true the moment an update check exists. It now says what actually happens: one request to `github.com` every 12 hours, switchable off.
+
+### Tests
+
+- 30 new assertions over a recorded GitHub payload: tag normalisation, draft and pre-release rejection, archive choice (the complete-project ZIP is never offered), caching, the switch, and the failure path. 206 unit assertions in total.
+
 ## [1.1.7] — 28 October 2026
 
 ### Fixed
@@ -141,6 +158,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - Opt-in, multisite-aware uninstall cleanup.
 - Reproducible tooling: translations, images and archive with SHA-256 verification.
 
+[1.1.8]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.8
 [1.1.7]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.7
 [1.1.6]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.6
 [1.1.5]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.5

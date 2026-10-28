@@ -7,6 +7,7 @@
 
 define( 'ABSPATH', __DIR__ . '/' );
 define( 'VAULTGATE_VERSION', '1.1.0' );
+define( 'VAULTGATE_BASENAME', 'VaultGate/vaultgate.php' );
 define( 'VAULTGATE_URL', 'https://example.test/wp-content/plugins/VaultGate/' );
 define( 'VAULTGATE_DIR', dirname( __DIR__ ) . '/VaultGate/' );
 define( 'MINUTE_IN_SECONDS', 60 );
@@ -73,6 +74,50 @@ function delete_transient( $name ) {
 	unset( $GLOBALS['vg_transients'][ $name ] );
 
 	return true;
+}
+
+/* Site transients share the store, with the same key prefix WordPress uses. */
+
+function get_site_transient( $name ) {
+	return get_transient( 'site_' . $name );
+}
+
+function set_site_transient( $name, $value, $ttl = 0 ) {
+	return set_transient( 'site_' . $name, $value, $ttl );
+}
+
+function delete_site_transient( $name ) {
+	return delete_transient( 'site_' . $name );
+}
+
+/* HTTP: the response is whatever the test put in $GLOBALS['vg_http']. */
+
+function wp_remote_get( $url, $args = array() ) {
+	$GLOBALS['vg_http_calls'][] = array( 'url' => $url, 'args' => $args );
+
+	return $GLOBALS['vg_http'] ?? new WP_Error( 'http_request_failed', 'no stub response' );
+}
+
+function wp_remote_retrieve_response_code( $response ) {
+	return is_array( $response ) ? ( $response['response']['code'] ?? 0 ) : 0;
+}
+
+function wp_remote_retrieve_body( $response ) {
+	return is_array( $response ) ? (string) ( $response['body'] ?? '' ) : '';
+}
+
+function wp_http_validate_url( $url ) {
+	$parts = wp_parse_url( (string) $url );
+
+	if ( ! is_array( $parts ) || empty( $parts['scheme'] ) || empty( $parts['host'] ) ) {
+		return false;
+	}
+
+	return in_array( strtolower( $parts['scheme'] ), array( 'http', 'https' ), true ) ? $url : false;
+}
+
+function wp_strip_all_tags( $text, $remove_breaks = false ) {
+	return trim( strip_tags( (string) $text ) );
 }
 
 function wp_salt( $scheme = 'auth' ) {

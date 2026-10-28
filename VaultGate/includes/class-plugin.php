@@ -50,6 +50,7 @@ final class Plugin {
 		$this->settings = new Settings();
 
 		( new Guard( $this->settings ) )->hooks();
+		( new Updater( $this->settings ) )->hooks();
 
 		if ( function_exists( 'is_admin' ) && is_admin() ) {
 			( new Admin( $this->settings ) )->hooks();

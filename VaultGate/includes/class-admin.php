@@ -240,6 +240,7 @@ final class Admin {
 			: array();
 
 		$was_enabled = $this->settings->is_enabled();
+		$was_checking = (bool) $this->settings->get( 'check_updates' );
 		$clean       = Settings::sanitize( $input );
 		$errors      = array();
 
@@ -281,6 +282,12 @@ final class Admin {
 
 		if ( $was_enabled !== $this->settings->is_enabled() ) {
 			$this->settings->bump_auth_version();
+		}
+
+		// The plugin list is rebuilt from this transient: dropping it makes the
+		// switch take effect on the next screen instead of in twelve hours.
+		if ( $was_checking !== (bool) $this->settings->get( 'check_updates' ) ) {
+			delete_site_transient( Updater::TRANSIENT );
 		}
 
 		if ( $changed ) {
@@ -691,6 +698,7 @@ final class Admin {
 					<?php
 					$this->field_checkbox( 'log_enabled', __( 'Keep a small activity log', 'vaultgate' ), (bool) $settings['log_enabled'], __( 'The last 20 events, with anonymised IP addresses, shown in the Activity tab.', 'vaultgate' ) );
 					$this->field_checkbox( 'delete_data', __( 'Delete all plugin data when the plugin is deleted', 'vaultgate' ), (bool) $settings['delete_data'], __( 'Options, password hash, log and transients are removed. The plugin does nothing until you delete it.', 'vaultgate' ) );
+					$this->field_checkbox( 'check_updates', __( 'Check GitHub for updates', 'vaultgate' ), (bool) $settings['check_updates'], __( 'Asks github.com for the latest release once every 12 hours, and shows it on the Plugins and Updates screens. It is the only outbound request the plugin makes: switch it off to keep the plugin fully offline and update by hand.', 'vaultgate' ) );
 					?>
 
 					<div class="vg-note vg-note--warn">
