@@ -4,7 +4,7 @@ Tags: password protection, maintenance mode, coming soon, access control, privac
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,6 +127,10 @@ Yes, it is empty by default. The gate is then a single quiet column: logo, title
 
 == Changelog ==
 
+= 1.1.7 =
+* Fix: the compiled French and Spanish catalogs could not be loaded by WordPress, so the interface stayed English. The binary header now stores the correct string-area pointer, and both catalogs are rebuilt and verified at build time.
+* The build script reads every compiled catalog back before writing it, so a broken catalog fails the build instead of shipping.
+
 = 1.1.6 =
 * New icon: the arch mark is now drawn in black on a near-white card instead of white on a black plate, in the same style as the banners.
 
@@ -181,6 +185,9 @@ Yes, it is empty by default. The gate is then a single quiet column: logo, title
 * WP-CLI commands and opt-in uninstall cleanup.
 
 == Upgrade Notice ==
+
+= 1.1.7 =
+Update if you run the plugin in French or Spanish: their translations were not loading. Nothing to reconfigure.
 
 = 1.1.6 =
 A new icon and the same plugin: nothing to reconfigure. Existing settings are kept.

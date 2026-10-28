@@ -3,6 +3,13 @@
 All notable changes to VaultGate are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.7] — 28 October 2026
+
+### Fixed
+
+- **French and Spanish now actually load.** The compiled `.mo` catalogs stored `0` as the hash-table offset, and WordPress derives the start of the string area from that value: it computed a negative length and rejected the whole file, so the interface stayed English (and Spanish) no matter the site language. The offset is now written past both tables, and the build re-reads every catalog with WordPress's own `MO` class before declaring success.
+- The same bug was present in the shared translation builder that both VaultGate and Duplikate use; both catalogs are rebuilt.
+
 ## [1.1.6] — 28 October 2026
 
 ### Changed
@@ -134,6 +141,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - Opt-in, multisite-aware uninstall cleanup.
 - Reproducible tooling: translations, images and archive with SHA-256 verification.
 
+[1.1.7]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.7
 [1.1.6]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.6
 [1.1.5]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.5
 [1.1.4]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.4
