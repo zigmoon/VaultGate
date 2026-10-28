@@ -14,6 +14,11 @@
 
 $root = dirname( __DIR__ );
 
+// The version embedded in the catalogue header is read from the plugin, so a
+// release can never ship a catalogue that announces the previous version.
+$header  = (string) file_get_contents( $root . '/VaultGate/vaultgate.php' );
+$version = preg_match( '/^\s*\*\s*Version:\s*([\d.]+)/m', $header, $version_match ) ? $version_match[1] : '0.0.0';
+
 $locales = array(
 	'fr_FR' => require __DIR__ . '/fr-translations.php',
 	'es_ES' => require __DIR__ . '/es-translations.php',
@@ -116,9 +121,11 @@ function vg_po_escape( string $value ): string {
  * @param string $locale Locale code, or an empty string for the template.
  */
 function vg_po_header( string $locale ): string {
+	global $version;
+
 	$header = "msgid \"\"\n"
 		. "msgstr \"\"\n"
-		. "\"Project-Id-Version: VaultGate 1.1.7\\n\"\n"
+		. "\"Project-Id-Version: VaultGate {$version}\\n\"\n"
 		. "\"Report-Msgid-Bugs-To: https://github.com/zigmoon/VaultGate/issues\\n\"\n"
 		. "\"POT-Creation-Date: 2026-10-27T00:00:00+00:00\\n\"\n";
 
@@ -203,7 +210,7 @@ foreach ( $locales as $locale => $catalogue ) {
 
 	file_put_contents( $root . '/VaultGate/languages/vaultgate-' . $locale . '.po', $po );
 
-	$mo_header = "Project-Id-Version: VaultGate 1.1.7\n"
+	$mo_header = "Project-Id-Version: VaultGate {$version}\n"
 		. "Report-Msgid-Bugs-To: https://github.com/zigmoon/VaultGate/issues\n"
 		. "PO-Revision-Date: 2026-10-27T00:00:00+00:00\n"
 		. "Last-Translator: zigmoon\n"
