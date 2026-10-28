@@ -3,6 +3,13 @@
 All notable changes to VaultGate are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [1.1.6] — 28 October 2026
+
+### Changed
+
+- **The icon is now black on light.** It was a white gate on a black square, which sat badly on the README: the black plate dominated and the mark read as a white blob. The mark is the same idea — an arch, a threshold, a keyhole — redrawn as a black outline on a near-white card, with a heavier stroke so it holds up at 32 px. The banners and the social preview follow the same drawing.
+- **The icon renders deterministically.** The raster sizes are drawn from the geometry in `assets/icon.svg` (`tools/build-icon-master.ps1`) instead of being downsampled from a browser screenshot, so no size depends on a device-pixel ratio.
+
 ## [1.1.5] — 28 October 2026
 
 ### Added
@@ -127,6 +134,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - Opt-in, multisite-aware uninstall cleanup.
 - Reproducible tooling: translations, images and archive with SHA-256 verification.
 
+[1.1.6]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.6
 [1.1.5]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.5
 [1.1.4]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.4
 [1.1.3]: https://github.com/zigmoon/VaultGate/releases/tag/v1.1.3

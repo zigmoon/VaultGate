@@ -20,7 +20,7 @@
 <p align="center">
   <img alt="WordPress 6.5 to 7.1" src="https://img.shields.io/badge/WordPress-6.5%20%E2%86%92%207.1-0b0d10?style=flat-square">
   <img alt="PHP 8.2 to 8.5" src="https://img.shields.io/badge/PHP-8.2%20%E2%86%92%208.5-0b0d10?style=flat-square">
-  <img alt="Version 1.1.5" src="https://img.shields.io/badge/version-1.1.5-0a66ff?style=flat-square">
+  <img alt="Version 1.1.6" src="https://img.shields.io/badge/version-1.1.6-0a66ff?style=flat-square">
   <img alt="228 assertions" src="https://img.shields.io/badge/tests-228%20assertions-0b0d10?style=flat-square">
   <img alt="Licence GPL-2.0-or-later" src="https://img.shields.io/badge/licence-GPL--2.0--or--later-0b0d10?style=flat-square">
 </p>
@@ -72,7 +72,7 @@ Click a panel for the full-size view.
 
 ## Install
 
-1. Download `VaultGate-1.1.5.zip` from [Releases](https://github.com/zigmoon/VaultGate/releases/latest).
+1. Download `VaultGate-1.1.6.zip` from [Releases](https://github.com/zigmoon/VaultGate/releases/latest).
 2. **Plugins → Add New → Upload Plugin**, choose the ZIP, install, activate.
 3. **Settings → VaultGate**: set the password, then turn protection on.
 

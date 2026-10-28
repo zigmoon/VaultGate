@@ -4,7 +4,7 @@ Tags: password protection, maintenance mode, coming soon, access control, privac
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,6 +127,9 @@ Yes, it is empty by default. The gate is then a single quiet column: logo, title
 
 == Changelog ==
 
+= 1.1.6 =
+* New icon: the arch mark is now drawn in black on a near-white card instead of white on a black plate, in the same style as the banners.
+
 = 1.1.5 =
 * The gate page prints the WordPress Site Icon (and an Apple touch icon), so the browser tab is no longer blank while the plugin is active. Without a Site Icon, the VaultGate mark is used.
 * Every boolean setting is a switch instead of a checkbox, still a native input exposed as role="switch".
@@ -178,6 +181,9 @@ Yes, it is empty by default. The gate is then a single quiet column: logo, title
 * WP-CLI commands and opt-in uninstall cleanup.
 
 == Upgrade Notice ==
+
+= 1.1.6 =
+A new icon and the same plugin: nothing to reconfigure. Existing settings are kept.
 
 = 1.1.5 =
 The tab keeps its favicon on the gate page, and the settings use real switches. Existing settings are kept.
